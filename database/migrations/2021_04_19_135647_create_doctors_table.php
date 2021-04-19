@@ -23,7 +23,6 @@ class CreateDoctorsTable extends Migration
             $table->string('email',30);
             $table->integer('phone');
             $table->foreignId('spec_id')->references('spec_id')->on('specialisations');
-            $table->foreignId('sec_id')->references('sec_id')->on('secretaries');
             $table->timestamps();
         });
     }
