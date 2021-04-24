@@ -1,0 +1,61 @@
+/****** START SIDEBAR ******/
+.my_sidebar{
+    font-size: 18px;
+}
+.sidebar_width{
+    width: 180px;
+    margin-right: 18px;
+}
+
+/****** START GENERAL ******/
+body{
+    background-color: #f7fafc;
+}
+
+fieldset.scheduler-border {
+    /* border: 1px groove #ddd !important; */
+    border: 3px double #17a2b8 !important;
+    padding: 0 1.4em 1.4em 1.4em !important;
+    margin: 0 0 1.5em 0 !important;
+    -webkit-box-shadow: 0px 0px 0px 0px #000;
+    box-shadow: 0px 0px 0px 0px #000;
+}
+legend.scheduler-border {
+    color: white;
+    width: inherit; /* Or auto */
+    padding: 3px 10px; /* To give a bit of padding on the left and right */
+    border-bottom: none;
+    font-size: 1.2em !important;
+    font-weight: bold !important;
+    text-align: right !important;
+    margin-top: -15px;
+}
+/****** END GENERALE ******/
+
+/****** START INDEX PAGE ******/
+.index_page .my_card{
+    padding: 20px;
+    margin-right: 12px;
+    margin-left: 12px;
+}
+.index_page .my_card .my_card_title{
+    position: relative;
+    margin-top: -10px;
+}
+.index_page .my_card .my_card_icon{
+    position: relative;
+    text-align: center;
+    margin-top: -50px;
+    color: #ffffff;
+    background-color: lightpink;
+}
+.index_page .my_card_header{
+    background-color: cornflowerblue;
+    color: #ffffff;
+}
+.index_page .my_flex{
+    --bs-gutter-x: 1.5rem;
+}
+/****** END INDEX PAGE ******/
+
+

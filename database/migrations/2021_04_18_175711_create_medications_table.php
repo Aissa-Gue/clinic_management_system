@@ -14,10 +14,10 @@ class CreateMedicationsTable extends Migration
     public function up()
     {
         Schema::create('medications', function (Blueprint $table) {
-            $table->id('medic_id');
-            $table->string('scientific_name',100);
-            $table->string('commercial_name',100);
-            $table->string('description');
+            $table->id('id');
+            $table->string('scientific_name',100)->nullable();
+            $table->string('commercial_name',100)->nullable();
+            $table->string('description')->nullable();
             $table->timestamps();
         });
     }
