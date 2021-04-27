@@ -38,8 +38,8 @@
                     <select name="speciality" class="form-select" id="speciality" required>
                         <option disabled selected>- select Speciality -</option>
                         @foreach($speciality as $spec)
-                            <option value="{{$spec->id}}" @if($doctor->spec_id == $spec->id) {{'selected'}} @endif>
-                                {{$spec->id}}- {{$spec->speciality}}
+                            <option value="{{$spec}}" @if($doctor->speciality == $spec) {{'selected'}} @endif>
+                                {{$spec}}
                             </option>
                         @endforeach
                     </select>
@@ -80,8 +80,8 @@
                     <input type="text" pattern="\d*" maxlength="10" name="phone" class="form-control" id="phone" value="{{$doctor->phone}}">
                 </div>
                 <div class="col-md-2">
-                    <label for="phone" class="form-label">&puncsp;</label>
-                    <input type="submit" class="form-control btn btn-success" value="Submit">
+                    <label for="" class="form-label">&puncsp;</label>
+                    <input type="submit" class="form-control btn btn-success" value="SAVE">
                 </div>
             </div>
         </fieldset>

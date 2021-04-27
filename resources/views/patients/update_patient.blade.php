@@ -69,8 +69,8 @@
                     <input type="text" pattern="\d*" maxlength="10" name="phone" class="form-control" id="phone" value="{{$patient->phone}}">
                 </div>
                 <div class="col-md-2">
-                    <label for="phone" class="form-label">&puncsp;</label>
-                    <input type="submit" class="form-control btn btn-success" value="Submit">
+                    <label for="" class="form-label">&puncsp;</label>
+                    <input type="submit" class="form-control btn btn-success" value="SAVE">
                 </div>
             </div>
         </fieldset>

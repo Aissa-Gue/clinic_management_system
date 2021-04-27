@@ -25,7 +25,7 @@ class CreatePatientsTable extends Migration
             $table->string('blood pressure',3)->nullable();
             $table->string('diabetes',3)->nullable();
             $table->string('email')->unique()->nullable();
-            $table->integer('phone')->unique()->nullable();
+            $table->integer('phone')->unique();
             $table->timestamps();
             $table->charset = 'utf8';
             $table->collation = 'utf8_general_ci';

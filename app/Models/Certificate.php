@@ -5,10 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Doctor extends Model
+class certificate extends Model
 {
     use HasFactory;
-    public function city(){
-        return $this->hasOne(City::class,'id','city_id');
-    }
 }

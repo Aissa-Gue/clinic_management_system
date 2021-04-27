@@ -20,8 +20,6 @@ class CreateAppointmentsTable extends Migration
             $table->date('date');
             $table->time('time');
             $table->timestamps();
-            $table->charset = 'utf8';
-            $table->collation = 'utf8_general_ci';
         });
     }
 

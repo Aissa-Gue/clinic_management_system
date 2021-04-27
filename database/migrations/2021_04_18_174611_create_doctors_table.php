@@ -21,9 +21,10 @@ class CreateDoctorsTable extends Migration
             $table->date('birthdate')->nullable();
             $table->string('address',50)->nullable();
             $table->foreignId('city_id')->references('id')->on('cities');
-            $table->string('email',30)->nullable();
-            $table->integer('phone')->nullable();
-            $table->foreignId('spec_id')->references('id')->on('specialisations');
+            $table->string('speciality',50);
+            $table->string('email',30)->unique();
+            $table->integer('phone')->unique();
+            $table->string('password',32)->default('admin');
             $table->timestamps();
             $table->charset = 'utf8';
             $table->collation = 'utf8_general_ci';

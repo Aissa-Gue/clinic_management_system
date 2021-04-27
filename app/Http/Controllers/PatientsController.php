@@ -9,17 +9,17 @@ use App\Models\City;
 class PatientsController extends Controller
 {
     public function showAllData(){
-        return view('patients')->with('patient',Patient::all());
+        return view('patients.patients')->with('patient',Patient::all());
     }
     public function show($id){
         //$patient = Patient::where('id', '=', $id)->firstOrFail();//same as where 'id' = 1
         $patient = Patient::findOrFail($id);//same as where 'id' = 1
-        return view('preview_patient')->with('patient',$patient);
+        return view('patients.preview_patient')->with('patient',$patient);
     }
 
 
     public function insertPatient(){
-        return view('add_patient')->with('city',City::all());
+        return view('patients.add_patient')->with('city',City::all());
     }
     public function store(){
         $patient = new Patient();
@@ -39,7 +39,8 @@ class PatientsController extends Controller
 
     public function updatePatient($id){
         $patient = Patient::where('id', '=', $id)->firstOrFail();
-        return view('update_patient')->with('patient',$patient)->with('city',City::all());
+        return view('patients.update_patient')->with('patient',$patient)
+                                          ->with('city',City::all());
     }
     public function update(Request $req){
         $patient = Patient::where('id', '=', $req->id)
@@ -57,6 +58,6 @@ class PatientsController extends Controller
 
     public function destroy($id){
         $patient = Patient::where('id', '=', $id)->delete();
-        return redirect('/patients');
+        return redirect('patients');
     }
 }

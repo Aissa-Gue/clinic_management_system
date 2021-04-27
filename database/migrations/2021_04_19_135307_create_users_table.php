@@ -15,11 +15,15 @@ class CreateUsersTable extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id('id');
-            $table->foreignId('doc_id')->references('id')->on('doctors');
-            $table->string('user_name',25)->unique();
-            $table->string('password',32);
+            $table->string('last_name',50);
+            $table->string('first_name',50);
+            $table->string('email',30)->unique();
+            $table->integer('phone')->unique();
             $table->string('role',3);
+            $table->string('password',32)->default('admin');;
             $table->timestamps();
+            $table->charset = 'utf8';
+            $table->collation = 'utf8_general_ci';
         });
     }
 

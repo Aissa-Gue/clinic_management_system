@@ -40,6 +40,23 @@ Route::post('update_doctor/{id}', '\App\Http\Controllers\DoctorsController@updat
 
 Route::get('delete_doctor/{id}', '\App\Http\Controllers\DoctorsController@destroy');
 
+//**** Medications ****//
+Route::get('medications', '\App\Http\Controllers\MedicationsController@showAllData');
+Route::get('preview_medication/{id}', '\App\Http\Controllers\MedicationsController@show');
+
+Route::get('add_medication', '\App\Http\Controllers\MedicationsController@insertMedication');
+Route::post('add_medication', '\App\Http\Controllers\MedicationsController@store');
+
+Route::get('update_medication/{id}', '\App\Http\Controllers\MedicationsController@updateMedication');
+Route::post('update_medication/{id}', '\App\Http\Controllers\MedicationsController@update');
+
+Route::get('delete_medication/{id}', '\App\Http\Controllers\MedicationsController@destroy');
+
+//**** Planning ****//
+Route::get('planning', '\App\Http\Controllers\AgendasController@showAllData');
+Route::post('add_time', '\App\Http\Controllers\AgendasController@store');
+Route::post('update_time/{id}', '\App\Http\Controllers\AgendasController@update');
+Route::get('delete_time/{id}', '\App\Http\Controllers\AgendasController@destroy');
 
 
 

@@ -15,11 +15,8 @@ class CreateAgendasTable extends Migration
     {
         Schema::create('agendas', function (Blueprint $table) {
             $table->id('id');
-            $table->time('time_at');
-            $table->time('time_to');
+            $table->time('time');
             $table->timestamps();
-            $table->charset = 'utf8';
-            $table->collation = 'utf8_general_ci';
         });
     }
 

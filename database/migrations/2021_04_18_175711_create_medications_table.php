@@ -19,6 +19,8 @@ class CreateMedicationsTable extends Migration
             $table->string('commercial_name',100)->nullable();
             $table->string('description')->nullable();
             $table->timestamps();
+            $table->charset = 'utf8';
+            $table->collation = 'utf8_general_ci';
         });
     }
 

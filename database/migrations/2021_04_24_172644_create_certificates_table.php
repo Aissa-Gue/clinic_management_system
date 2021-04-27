@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePrescriptionsTable extends Migration
+class CreateCertificatesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,10 @@ class CreatePrescriptionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('prescriptions', function (Blueprint $table) {
-            $table->foreignId('cons_id')->references('id')->on('consultations');
-            $table->foreignId('medic_id')->references('id')->on('medications');
+        Schema::create('certificates', function (Blueprint $table) {
+            $table->id();
+            $table->date('from_date');
+            $table->date('to_date');
             $table->timestamps();
         });
     }
@@ -27,6 +28,6 @@ class CreatePrescriptionsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('prescriptions');
+        Schema::dropIfExists('certificates');
     }
 }

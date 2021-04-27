@@ -16,11 +16,15 @@ class CreateConsultationsTable extends Migration
         Schema::create('consultations', function (Blueprint $table) {
             $table->id('id');
             $table->foreignId('app_id')->references('id')->on('appointments')->onDelete('cascade');
-            $table->integer('weight')->nullable();
+            $table->foreignId('pres_id')->references('id')->on('prescriptions')->onDelete('cascade');;
             $table->integer('length')->nullable();
+            $table->integer('weight')->nullable();
+            $table->float('temperature')->nullable();
             $table->string('description')->nullable();
             $table->integer('paid_amount')->nullable();
             $table->timestamps();
+            $table->charset = 'utf8';
+            $table->collation = 'utf8_general_ci';
         });
     }
 
