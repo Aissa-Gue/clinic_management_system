@@ -11,6 +11,17 @@ class MedicationsController extends Controller
     public function showAllData(){
         return view('medications.medications')->with('medication',Medication::all());
     }
+
+    public function search(Request $request){
+        $commercial_name = $request->get('com_name');
+        $scientific_name = $request->get('sci_name');
+
+        $medication = Medication::where('commercial_name','LIKE','%'.$commercial_name.'%')
+            ->where('scientific_name','LIKE','%'.$scientific_name.'%')
+            ->paginate(5);
+        return view('medications.medications')->with('medication',$medication);
+    }
+
     public function show($id){
         $medication = Medication::findOrFail($id);//same as where 'id' = 1
         return view('medications.preview_medication')->with('medication',$medication);

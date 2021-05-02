@@ -9,13 +9,13 @@
         <legend class="scheduler-border bg-info">Personal informations</legend>
         <div class="row justify-content-md-end">
             <div class="col-md-auto">
-                <a href="/update_patient/{{$patient->id}}" class="text-success">
+                <a href="/patients/update_patient/{{$patient->id}}" class="text-success">
                     <i class="fas fa-user-edit fs-3"></i><br>
                     <strong>Edit</strong>
                 </a>
             </div>
             <div class="col-md-auto">
-                <a href="/delete_patient/{{$patient->id}}" class="text-danger">
+                <a href="/patients/delete_patient/{{$patient->id}}" class="text-danger">
                     <i class="fas fa-times fs-3"></i><br>
                     <strong>Del</strong>
                 </a>
@@ -48,7 +48,7 @@
 
         <dl class="row">
             <dt class="col-md-2">Age:</dt>
-            <dd class="col-md-4">{{$patient->birthdate}} ans</dd>
+            <dd class="col-md-4">{{\Carbon\Carbon::parse($patient->birthdate)->age}} years old</dd>
 
             <dt class="col-md-2">Phone:</dt>
             <dd class="col-md-4">0{{$patient->phone}}</dd>

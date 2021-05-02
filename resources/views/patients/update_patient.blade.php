@@ -4,7 +4,7 @@
     <div class="alert alert-info text-center mb-4" role="alert">
         <h5>Update Patient</h5>
     </div>
-    <form action="/update_patient/{{$patient->id}}" method="post">
+    <form action="/patients/update_patient/{{$patient->id}}" method="post">
         @csrf
         <fieldset class="scheduler-border">
             <legend class="scheduler-border bg-info">Personal informations</legend>

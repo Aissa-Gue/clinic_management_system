@@ -9,13 +9,13 @@
         <legend class="scheduler-border bg-info">General informations</legend>
         <div class="row justify-content-md-end">
             <div class="col-md-auto">
-                <a href="/update_medication/{{$medication->id}}" class="text-success">
+                <a href="/medications/update_medication/{{$medication->id}}" class="text-success">
                     <i class="fas fa-user-edit fs-3"></i><br>
                     <strong>Edit</strong>
                 </a>
             </div>
             <div class="col-md-auto">
-                <a href="/delete_medication/{{$medication->id}}" class="text-danger">
+                <a href="/medications/delete_medication/{{$medication->id}}" class="text-danger">
                     <i class="fas fa-times fs-3"></i><br>
                     <strong>Del</strong>
                 </a>

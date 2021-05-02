@@ -18,45 +18,59 @@ Route::get('/', '\App\Http\Controllers\Controller@showAllData');
 
 //**** Patients ****//
 Route::get('patients', '\App\Http\Controllers\PatientsController@showAllData');
-Route::get('preview_patient/{id}', '\App\Http\Controllers\PatientsController@show');
+Route::get('patients', '\App\Http\Controllers\PatientsController@search');
+Route::get('patients/preview_patient/{id}', '\App\Http\Controllers\PatientsController@show');
 
-Route::get('add_patient', '\App\Http\Controllers\PatientsController@insertPatient');
-Route::post('add_patient', '\App\Http\Controllers\PatientsController@store');
+Route::get('patients/add_patient', '\App\Http\Controllers\PatientsController@insertPatient');
+Route::post('patients/add_patient', '\App\Http\Controllers\PatientsController@store');
 
-Route::get('update_patient/{id}', '\App\Http\Controllers\PatientsController@updatePatient');
-Route::post('update_patient/{id}', '\App\Http\Controllers\PatientsController@update');
+Route::get('patients/update_patient/{id}', '\App\Http\Controllers\PatientsController@updatePatient');
+Route::post('patients/update_patient/{id}', '\App\Http\Controllers\PatientsController@update');
 
-Route::get('delete_patient/{id}', '\App\Http\Controllers\PatientsController@destroy');
+Route::get('patients/delete_patient/{id}', '\App\Http\Controllers\PatientsController@destroy');
 
 //**** Doctors ****//
 Route::get('doctors', '\App\Http\Controllers\DoctorsController@showAllData');
-Route::get('preview_doctor/{id}', '\App\Http\Controllers\DoctorsController@show');
+Route::get('doctors', '\App\Http\Controllers\DoctorsController@search');
+Route::get('doctors/preview_doctor/{id}', '\App\Http\Controllers\DoctorsController@show');
 
-Route::get('add_doctor', '\App\Http\Controllers\DoctorsController@insertDoctor');
-Route::post('add_doctor', '\App\Http\Controllers\DoctorsController@store');
+Route::get('doctors/add_doctor', '\App\Http\Controllers\DoctorsController@insertDoctor');
+Route::post('doctors/add_doctor', '\App\Http\Controllers\DoctorsController@store');
 
-Route::get('update_doctor/{id}', '\App\Http\Controllers\DoctorsController@updateDoctor');
-Route::post('update_doctor/{id}', '\App\Http\Controllers\DoctorsController@update');
+Route::get('doctors/update_doctor/{id}', '\App\Http\Controllers\DoctorsController@updateDoctor');
+Route::post('doctors/update_doctor/{id}', '\App\Http\Controllers\DoctorsController@update');
 
-Route::get('delete_doctor/{id}', '\App\Http\Controllers\DoctorsController@destroy');
+Route::get('doctors/delete_doctor/{id}', '\App\Http\Controllers\DoctorsController@destroy');
 
 //**** Medications ****//
 Route::get('medications', '\App\Http\Controllers\MedicationsController@showAllData');
-Route::get('preview_medication/{id}', '\App\Http\Controllers\MedicationsController@show');
+Route::get('medications', '\App\Http\Controllers\MedicationsController@search');
+Route::get('medications/preview_medication/{id}', '\App\Http\Controllers\MedicationsController@show');
 
-Route::get('add_medication', '\App\Http\Controllers\MedicationsController@insertMedication');
-Route::post('add_medication', '\App\Http\Controllers\MedicationsController@store');
+Route::get('medications/add_medication', '\App\Http\Controllers\MedicationsController@insertMedication');
+Route::post('medications/add_medication', '\App\Http\Controllers\MedicationsController@store');
 
-Route::get('update_medication/{id}', '\App\Http\Controllers\MedicationsController@updateMedication');
-Route::post('update_medication/{id}', '\App\Http\Controllers\MedicationsController@update');
+Route::get('medications/update_medication/{id}', '\App\Http\Controllers\MedicationsController@updateMedication');
+Route::post('medications/update_medication/{id}', '\App\Http\Controllers\MedicationsController@update');
 
-Route::get('delete_medication/{id}', '\App\Http\Controllers\MedicationsController@destroy');
+Route::get('medications/delete_medication/{id}', '\App\Http\Controllers\MedicationsController@destroy');
 
 //**** Planning ****//
 Route::get('planning', '\App\Http\Controllers\AgendasController@showAllData');
-Route::post('add_time', '\App\Http\Controllers\AgendasController@store');
-Route::post('update_time/{id}', '\App\Http\Controllers\AgendasController@update');
-Route::get('delete_time/{id}', '\App\Http\Controllers\AgendasController@destroy');
+Route::post('planning/add_time', '\App\Http\Controllers\AgendasController@store');
+Route::post('planning/update_time/{id}', '\App\Http\Controllers\AgendasController@update');
+Route::get('planning/delete_time/{id}', '\App\Http\Controllers\AgendasController@destroy');
+
+//**** Appointments ****//
+Route::get('appointments', '\App\Http\Controllers\AppointmentsController@showAllData');
+Route::get('appointments/{doc_id}', '\App\Http\Controllers\AppointmentsController@showSpeciality');
+Route::get('appointments/skin', '\App\Http\Controllers\AppointmentsController@showSkin');
+
+
+Route::post('add_appointment', '\App\Http\Controllers\AppointmentsController@store');
+Route::post('update_appointment/{id}', '\App\Http\Controllers\AppointmentsController@update');
+Route::get('delete_appointment/{id}', '\App\Http\Controllers\AppointmentsController@destroy');
+
 
 
 

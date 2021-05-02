@@ -3,13 +3,13 @@
 @section('content')
     <div class="row mb-2">
         <nav class="navbar navbar-dark bg-light">
-                <form class="d-flex">
-                    <input class="form-control me-1" type="text" placeholder="First name">
-                    <input class="form-control me-1" type="text" placeholder="Last name">
+                <form action="/doctors" method="GET" class="d-flex">
+                    <input class="form-control me-1" type="text" name="lname" placeholder="Last name" value="{{request()->get('lname')}}">
+                    <input class="form-control me-1" type="text" name="fname" placeholder="First name" value="{{request()->get('fname')}}">
                     <button class="btn btn-outline-primary" type="submit"><i class="fas fa-search"></i></button>
                 </form>
                 <div class="d-flex">
-                    <a href="/add_doctor" class="btn btn-success">NEW <i class="fa fa-plus"></i></a>
+                    <a href="/doctors/add_doctor" class="btn btn-success">NEW <i class="fa fa-plus"></i></a>
                 </div>
         </nav>
     </div>
@@ -28,6 +28,15 @@
             </tr>
             </thead>
             <tbody>
+
+            @forelse($doctor as $doc)
+            @empty
+                <div class="alert alert-danger text-center" role="alert">
+                    No results found for query
+                    <strong>{{request()->get('lname')}} {{request()->get('fname')}}</strong>
+                </div>
+            @endforelse
+
             @foreach($doctor as $doc)
             <tr>
                 <th scope="row">{{$doc->id}}</th>
@@ -36,14 +45,14 @@
                 <td>{{$doc->gender}}</td>
                 <td>{{$doc->birthdate}}</td>
                 <td class="text-center">
-                    <a class="btn btn-outline-success" href="/preview_doctor/{{$doc->id}}">
+                    <a class="btn btn-outline-success" href="/doctors/preview_doctor/{{$doc->id}}">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-lines-fill" viewBox="0 0 16 16">
                             <path d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm-5 6s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H1zM11 3.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 1-.5-.5zm.5 2.5a.5.5 0 0 0 0 1h4a.5.5 0 0 0 0-1h-4zm2 3a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1h-2zm0 3a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1h-2z"/>
                         </svg>
                     </a>
                 </td>
                 <td class="text-center">
-                    <a class="btn btn-outline-primary" href="/update_doctor/{{$doc->id}}">
+                    <a class="btn btn-outline-primary" href="/doctors/update_doctor/{{$doc->id}}">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                              fill="currentColor" class="bi bi-pencil-fill" viewBox="0 0 16 16">
                             <path
@@ -52,7 +61,7 @@
                     </a>
                 </td>
                 <td class="text-center">
-                    <a class="btn btn-outline-danger" href="/delete_doctor/{{$doc->id}}">
+                    <a class="btn btn-outline-danger" href="/doctors/delete_doctor/{{$doc->id}}">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                              fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
                             <path

@@ -4,7 +4,7 @@
     <div class="alert alert-info text-center" role="alert">
         <h5>Insert New Doctor</h5>
     </div>
-    <form action="/add_doctor" method="post">
+    <form action="/doctors/add_doctor" method="post">
         @csrf
         <fieldset class="scheduler-border">
             <legend class="scheduler-border bg-info">Doctor informations</legend>
@@ -35,10 +35,10 @@
 
                 <div class="col-md-3">
                     <label for="speciality" class="form-label">speciality</label>
-                    <select name="speciality" class="form-select" id="speciality" required>
+                    <select name="spec_id" class="form-select" id="speciality" required>
                         <option disabled selected>- select Speciality -</option>
                         @foreach($speciality as $spec)
-                            <option value="{{$spec}}">{{$spec}}</option>
+                            <option value="{{$spec->id}}">{{$spec->speciality}}</option>
                         @endforeach
                     </select>
                 </div>

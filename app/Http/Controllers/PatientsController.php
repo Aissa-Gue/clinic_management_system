@@ -5,12 +5,24 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Patient;
 use App\Models\City;
+use PhpParser\Builder\Property;
 
 class PatientsController extends Controller
 {
     public function showAllData(){
         return view('patients.patients')->with('patient',Patient::all());
     }
+
+    public function search(Request $request){
+        $first_name = $request->get('fname');
+        $last_name = $request->get('lname');
+
+        $patient = Patient::where('first_name','LIKE','%'.$first_name.'%')
+                          ->where('last_name','LIKE','%'.$last_name.'%')
+                          ->paginate(5);
+        return view('patients.patients')->with('patient',$patient);
+    }
+
     public function show($id){
         //$patient = Patient::where('id', '=', $id)->firstOrFail();//same as where 'id' = 1
         $patient = Patient::findOrFail($id);//same as where 'id' = 1

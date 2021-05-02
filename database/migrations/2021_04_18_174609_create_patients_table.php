@@ -22,8 +22,8 @@ class CreatePatientsTable extends Migration
             $table->string('address',50)->nullable();
             $table->foreignId('city_id')->references('id')->on('cities');
             $table->string('blood_type',3)->nullable();
-            $table->string('blood pressure',3)->nullable();
-            $table->string('diabetes',3)->nullable();
+            $table->boolean('blood_pressure')->nullable();
+            $table->boolean('diabetes')->nullable();
             $table->string('email')->unique()->nullable();
             $table->integer('phone')->unique();
             $table->timestamps();

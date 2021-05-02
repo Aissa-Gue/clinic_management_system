@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCitiesTable extends Migration
+class CreateSpecialisationsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,10 @@ class CreateCitiesTable extends Migration
      */
     public function up()
     {
-        Schema::create('cities', function (Blueprint $table) {
-            $table->id('id');
-            $table->string('city',30)->unique();
-            $table->integer('zip_code')->unique();
+        Schema::create('specialisations', function (Blueprint $table) {
+            $table->id();
+            $table->string('speciality',80)->unique();
             $table->timestamps();
-            $table->charset = 'utf8';
-            $table->collation = 'utf8_general_ci';
         });
     }
 
@@ -30,6 +27,6 @@ class CreateCitiesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('cities');
+        Schema::dropIfExists('specialisations');
     }
 }

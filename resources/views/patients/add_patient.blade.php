@@ -4,7 +4,7 @@
     <div class="alert alert-info text-center" role="alert">
         <h5>Insert New Patient</h5>
     </div>
-    <form action="/add_patient" method="post">
+    <form action="/patients/add_patient" method="post">
         @csrf
         <fieldset class="scheduler-border">
             <legend class="scheduler-border bg-info">Patient informations</legend>
@@ -46,9 +46,9 @@
                         @foreach($city as $cit)
                         <option value="{{$cit->id}}">
                             @if($cit->id < 10)
-                                0{{$cit->id}}# {{$cit->city}}
+                                0{{$cit->id}}- {{$cit->city}}
                             @else
-                                {{$cit->id}}# {{$cit->city}}
+                                {{$cit->id}}- {{$cit->city}}
                             @endif
                         </option>
                         @endforeach

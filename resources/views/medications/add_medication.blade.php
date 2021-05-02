@@ -4,7 +4,7 @@
     <div class="alert alert-info text-center" role="alert">
         <h5>Insert New Medication</h5>
     </div>
-    <form action="/add_medication" method="post">
+    <form action="/medications/add_medication" method="post">
         @csrf
         <fieldset class="scheduler-border">
             <legend class="scheduler-border bg-info">Medication informations</legend>

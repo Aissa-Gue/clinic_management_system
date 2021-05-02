@@ -4,7 +4,7 @@
     <div class="alert alert-info text-center mb-4" role="alert">
         <h5>Update Doctor</h5>
     </div>
-    <form action="/update_doctor/{{$doctor->id}}" method="post">
+    <form action="/doctors/update_doctor/{{$doctor->id}}" method="post">
         @csrf
         <fieldset class="scheduler-border">
             <legend class="scheduler-border bg-info">Personal informations</legend>
@@ -38,8 +38,8 @@
                     <select name="speciality" class="form-select" id="speciality" required>
                         <option disabled selected>- select Speciality -</option>
                         @foreach($speciality as $spec)
-                            <option value="{{$spec}}" @if($doctor->speciality == $spec) {{'selected'}} @endif>
-                                {{$spec}}
+                            <option value="{{$spec->id}}" @if($doctor->spec_id == $spec->id) {{'selected'}} @endif>
+                                {{$spec->speciality}}
                             </option>
                         @endforeach
                     </select>

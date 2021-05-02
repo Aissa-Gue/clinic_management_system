@@ -11,4 +11,7 @@ class Doctor extends Model
     public function city(){
         return $this->hasOne(City::class,'id','city_id');
     }
+    public function speciality(){
+        return $this->hasOne(specialisation::class,'id','spec_id');
+    }
 }
