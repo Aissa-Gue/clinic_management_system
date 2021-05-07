@@ -17,7 +17,6 @@ class CreateCitiesTable extends Migration
             $table->id('id');
             $table->string('city',30)->unique();
             $table->integer('zip_code')->unique();
-            $table->timestamps();
             $table->charset = 'utf8';
             $table->collation = 'utf8_general_ci';
         });

@@ -12,6 +12,6 @@ class Controller extends BaseController
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
     public function showAllData(){
-        return view('index');
+        return view('welcome');
     }
 }

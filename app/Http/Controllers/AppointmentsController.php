@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\DB;
 use Validator;
 use Redirect;
+use Carbon\Carbon;
 
 use App\Models\Appointment;
 use Illuminate\Http\Request;
@@ -30,7 +31,8 @@ class AppointmentsController extends Controller
                 $query->select(DB::raw(1))
                     ->from('appointments')
                     ->whereColumn('appointments.time','=','agendas.time')
-                    ->where('doc_id','=',$doc_id);
+                    ->where('doc_id','=',$doc_id)
+                    ->where('date','=', Carbon::today());
             })
             ->select('agendas.time')
             ->get();
@@ -60,7 +62,7 @@ class AppointmentsController extends Controller
                 'patient_id' => 'required|numeric:appointments',
                 'doctor_id' => 'required|numeric:appointments',
                 'date' => 'required|date:appointments',
-                'time' => 'required|date_format:H:i|:appointments'
+                'time' => 'required|date_format:H:i:s|:appointments'
             )
         );
         if ($validator->fails())
