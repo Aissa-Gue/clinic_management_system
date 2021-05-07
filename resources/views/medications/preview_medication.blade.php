@@ -10,12 +10,12 @@
         <div class="row justify-content-md-end">
             <div class="col-md-auto">
                 <a href="/medications/update_medication/{{$medication->id}}" class="text-success">
-                    <i class="fas fa-user-edit fs-3"></i><br>
+                    <i class="fas fa-edit fs-3"></i><br>
                     <strong>Edit</strong>
                 </a>
             </div>
             <div class="col-md-auto">
-                <a href="/medications/delete_medication/{{$medication->id}}" class="text-danger">
+                <a href="/medications/delete_medication/{{$medication->id}}" class="text-danger" onclick="return confirm('Are you sure?')">
                     <i class="fas fa-times fs-3"></i><br>
                     <strong>Del</strong>
                 </a>

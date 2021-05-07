@@ -2,41 +2,71 @@
 
 @section('content')
     <ul class="nav nav-pills mt-2" id="pills-tab" role="tablist">
-        <li class="nav-link fw-bold">DOCTORS: </li>
+        <li class="nav-link fw-bold">SPECIALITIES: </li>
         @foreach($doctor as $doc)
             <li class="nav-item fw-bold" role="presentation">
-                <a href="/appointments/{{$doc->id}}" class="nav-link {{Request::is('appointments/'.$doc->id) ? 'active':''}}" type="button" aria-selected="false">{{$doc->first_name}} {{$doc->last_name}} {{$doc->spec_id}}</a>
+                <a href="/appointments/{{$doc->id}}" class="nav-link {{Request::is('appointments/'.$doc->id) ? 'active':''}}" type="button" aria-selected="false">{{$doc->speciality->speciality}}</a>
             </li>
         @endforeach
     </ul>
 
+    <div class="alert alert-primary text-center fw-bold mt-2" role="alert">
+        Dr: {{$currentDoc->first_name}} {{$currentDoc->last_name}}
+    </div>
+
     <div class="row mb-2">
-        <nav class="navbar navbar-dark bg-light mt-3">
-            <form action="/add_appointment" method="post" class="d-flex col-md-9">
+        <nav class="navbar navbar-dark bg-light">
+            <form action="/appointments/add_appointment" method="post" class="d-flex col-md-9">
                 @csrf
-                <input list="patients" name="patient_name" class="form-control me-1" placeholder="Patient name">
-                <datalist id="patients">
-                    @foreach($patient as $pat)
-                        <option value="{{$pat->id}} - {{$pat->first_name}} {{$pat->last_name}}"></option>
-                    @endforeach
-                </datalist>
+                <div class="col-md-3">
+                    <input list="patients" name="patient_name" class="form-control me-1" placeholder="Patient name">
+                    <datalist id="patients">
+                        @foreach($patient as $pat)
+                            <option value="{{$pat->id}} - {{$pat->first_name}} {{$pat->last_name}}"></option>
+                        @endforeach
+                    </datalist>
+                    @if(!empty($errors))
+                        @foreach ($errors->get('patient_id') as $message)
+                            <div class="form-text text-danger">{{$message}}</div>
+                        @endforeach
+                    @endif
+                </div>
 
-                <input type="hidden" name="doctor_id" class="form-control me-1" value="{{$currentDocId->id}}">
+                <input type="hidden" name="doctor_id" class="form-control me-1" value="{{$currentDoc->id}}">
 
-                <input type="date" name="date" class="form-control me-1">
-                <select name="time" class="form-select" id="time" required>
+                <div class="col-md-3">
+                    <input type="date" name="date" class="form-control me-1">
+                    @if(!empty($errors))
+                        @foreach ($errors->get('date') as $message)
+                            <div class="form-text text-danger">{{$message}}</div>
+                        @endforeach
+                    @endif
+                </div>
 
-                    <option disabled selected>- select time -</option>
-                    @foreach($agenda as $tim)
-                        <option value="{{$tim->time}}">
-                            {{\Carbon\Carbon::parse($tim->time)->format('H:i')}}
-                        </option>
-                    @endforeach
-                </select>
-                <button class="btn btn-success" type="submit"><i class="fa fa-plus"></i></button>
+                <div class="col-md-3">
+                    <select name="time" class="form-select" id="time" required>
+                        <option disabled selected>- select time -</option>
+                        @foreach($agenda as $tim)
+                            <option value="{{$tim->time}}">
+                                {{\Carbon\Carbon::parse($tim->time)->format('H:i')}}
+                            </option>
+                        @endforeach
+                    </select>
+                    @if(!empty($errors))
+                        @foreach ($errors->get('time') as $message)
+                            <div class="form-text text-danger">{{$message}}</div>
+                        @endforeach
+                    @endif
+                </div>
+                <div class="col-md-2">
+                    <button class="btn btn-success col-md-auto" type="submit">NEW <i class="fa fa-plus"></i></button>
+                </div>
             </form>
         </nav>
     </div>
+
+
+
     <div class="row">
         <table class="table table-hover">
             <thead>
@@ -44,7 +74,6 @@
                 <th scope="col">Id</th>
                 <th scope="col">Patient</th>
                 <th scope="col">Birthdate</th>
-                <th scope="col">Doctor</th>
                 <th scope="col">Date</th>
                 <th scope="col">Time</th>
                 <th scope="col" class="text-center">Preview</th>
@@ -58,18 +87,17 @@
                     <th scope="row">{{$app->id}}</th>
                     <td>{{$app->patient->first_name}} {{$app->patient->last_name}}</td>
                     <td>{{$app->patient->birthdate}}</td>
-                    <td>{{$app->doctor->first_name}} {{$app->doctor->last_name}}</td>
                     <td>{{$app->date}}</td>
-                    <td>{{$app->time}}</td>
+                    <td>{{\Carbon\Carbon::parse($app->time)->format('H:i')}}</td>
                     <td class="text-center">
-                        <a class="btn btn-outline-success" href="/preview_appointment/{{$app->id}}">
+                        <a class="btn btn-outline-success" href="/patients/preview_patient/{{$app->patient->id}}">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-lines-fill" viewBox="0 0 16 16">
                                 <path d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm-5 6s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H1zM11 3.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 1-.5-.5zm.5 2.5a.5.5 0 0 0 0 1h4a.5.5 0 0 0 0-1h-4zm2 3a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1h-2zm0 3a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1h-2z"/>
                             </svg>
                         </a>
                     </td>
                     <td class="text-center">
-                        <a class="btn btn-outline-primary" href="/update_appointment/{{$app->id}}">
+                        <a class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editAppModal{{$app->id}}">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                  fill="currentColor" class="bi bi-pencil-fill" viewBox="0 0 16 16">
                                 <path
@@ -78,7 +106,7 @@
                         </a>
                     </td>
                     <td class="text-center">
-                        <a class="btn btn-outline-danger" href="/delete_appointment/{{$app->id}}">
+                        <a class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteAppModal{{$app->id}}">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                  fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
                                 <path
@@ -86,9 +114,14 @@
                             </svg>
                         </a>
                     </td>
+                    @include('appointments.edit_appointment')
+                    @include('appointments.delete_appointment')
                 </tr>
             @endforeach
             </tbody>
         </table>
     </div>
 @stop
+
+
+

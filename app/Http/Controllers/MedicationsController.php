@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Medication;
-
+use Validator;
 
 class MedicationsController extends Controller
 {
@@ -18,7 +18,7 @@ class MedicationsController extends Controller
 
         $medication = Medication::where('commercial_name','LIKE','%'.$commercial_name.'%')
             ->where('scientific_name','LIKE','%'.$scientific_name.'%')
-            ->paginate(5);
+            ->paginate(90);
         return view('medications.medications')->with('medication',$medication);
     }
 
@@ -32,6 +32,22 @@ class MedicationsController extends Controller
         return view('medications.add_medication');
     }
     public function store(){
+        $validator = Validator::make(
+            array(
+                'scientific_name' => request('scientific_name'),
+                'commercial_name' => request('commercial_name')
+            ),
+            array(
+                'scientific_name' => 'required|unique:medications',
+                'commercial_name' => 'required|unique:medications'
+            )
+        );
+        if ($validator->fails())
+        {
+            $messages = $validator->messages();
+            return view('medications.add_medication')->with('messages',$messages);
+        }
+
         $medication = new Medication();
         $medication->scientific_name = request('scientific_name');
         $medication->commercial_name = request('commercial_name');

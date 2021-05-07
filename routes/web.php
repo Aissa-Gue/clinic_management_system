@@ -42,6 +42,14 @@ Route::post('doctors/update_doctor/{id}', '\App\Http\Controllers\DoctorsControll
 
 Route::get('doctors/delete_doctor/{id}', '\App\Http\Controllers\DoctorsController@destroy');
 
+//**** Specialisations ****//
+Route::get('specialisations', '\App\Http\Controllers\SpecialisationsController@showAllData');
+Route::get('specialisations', '\App\Http\Controllers\SpecialisationsController@search');
+
+Route::post('specialisations/add_specialisation', '\App\Http\Controllers\SpecialisationsController@store');
+Route::post('specialisations/update_specialisation/{id}', '\App\Http\Controllers\SpecialisationsController@update');
+Route::get('specialisations/delete_specialisation/{id}', '\App\Http\Controllers\SpecialisationsController@destroy');
+
 //**** Medications ****//
 Route::get('medications', '\App\Http\Controllers\MedicationsController@showAllData');
 Route::get('medications', '\App\Http\Controllers\MedicationsController@search');
@@ -64,12 +72,10 @@ Route::get('planning/delete_time/{id}', '\App\Http\Controllers\AgendasController
 //**** Appointments ****//
 Route::get('appointments', '\App\Http\Controllers\AppointmentsController@showAllData');
 Route::get('appointments/{doc_id}', '\App\Http\Controllers\AppointmentsController@showSpeciality');
-Route::get('appointments/skin', '\App\Http\Controllers\AppointmentsController@showSkin');
 
-
-Route::post('add_appointment', '\App\Http\Controllers\AppointmentsController@store');
-Route::post('update_appointment/{id}', '\App\Http\Controllers\AppointmentsController@update');
-Route::get('delete_appointment/{id}', '\App\Http\Controllers\AppointmentsController@destroy');
+Route::post('appointments/add_appointment', '\App\Http\Controllers\AppointmentsController@store');
+Route::post('appointments/update_appointment/{id}', '\App\Http\Controllers\AppointmentsController@update');
+Route::get('appointments/delete_appointment/{id}', '\App\Http\Controllers\AppointmentsController@destroy');
 
 
 

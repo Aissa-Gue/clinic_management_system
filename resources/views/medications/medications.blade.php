@@ -1,18 +1,22 @@
 @extends('layouts.master')
 
 @section('content')
+    <div class="alert alert-primary text-center fw-bold mt-2" role="alert">
+        <h5>Medications List</h5>
+    </div>
     <div class="row mb-2">
         <nav class="navbar navbar-dark bg-light">
-                <form action="/medications" method="GET" class="d-flex">
-                    <input class="form-control me-1" type="text" name="com_name" placeholder="Commercial name" value="{{request()->get('com_name')}}">
-                    <input class="form-control me-1" type="text" name="sci_name" placeholder="Scientific name" value="{{request()->get('sci_name')}}">
-                    <button class="btn btn-outline-primary" type="submit"><i class="fas fa-search"></i></button>
-                </form>
-                <div class="d-flex">
-                    <a href="/medications/add_medication" class="btn btn-success">NEW <i class="fa fa-plus"></i></a>
-                </div>
+            <form action="/medications" method="GET" class="d-flex">
+                <input class="form-control me-1" type="text" name="com_name" placeholder="Commercial name" value="{{request()->get('com_name')}}">
+                <input class="form-control me-1" type="text" name="sci_name" placeholder="Scientific name" value="{{request()->get('sci_name')}}">
+                <button class="btn btn-outline-primary" type="submit"><i class="fas fa-search"></i></button>
+            </form>
+            <div class="d-flex">
+                <a href="/medications/add_medication" class="btn btn-success">NEW <i class="fa fa-plus"></i></a>
+            </div>
         </nav>
     </div>
+
     <div class="row">
         <table class="table table-hover">
             <thead>
@@ -30,7 +34,7 @@
             @forelse($medication as $med)
             @empty
                 <div class="alert alert-danger text-center" role="alert">
-                    No results found for query
+                    No results found for:
                     <strong>{{request()->get('com_name')}} {{request()->get('sci_name')}}</strong>
                 </div>
             @endforelse
@@ -43,8 +47,9 @@
                 <td >{{$med->description}}</td>
                 <td class="text-center">
                     <a class="btn btn-outline-success" href="/medications/preview_medication/{{$med->id}}">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-lines-fill" viewBox="0 0 16 16">
-                            <path d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm-5 6s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H1zM11 3.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 1-.5-.5zm.5 2.5a.5.5 0 0 0 0 1h4a.5.5 0 0 0 0-1h-4zm2 3a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1h-2zm0 3a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1h-2z"/>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
+                            <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z"/>
+                            <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z"/>
                         </svg>
                     </a>
                 </td>
@@ -58,7 +63,7 @@
                     </a>
                 </td>
                 <td class="text-center">
-                    <a class="btn btn-outline-danger" href="/medications/delete_medication/{{$med->id}}">
+                    <a class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteMedModal{{$med->id}}">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                              fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
                             <path
@@ -66,6 +71,7 @@
                         </svg>
                     </a>
                 </td>
+                @include('medications.delete_medication')
             </tr>
             @endforeach
             </tbody>

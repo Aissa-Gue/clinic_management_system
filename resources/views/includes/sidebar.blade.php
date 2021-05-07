@@ -9,6 +9,9 @@
         <a href="/doctors" class="list-group-item list-group-item-action py-3 {{Request::is('doctors') || Request::is('doctors/*') ? 'active' : ''}}">
             <i class="fas fa-user-md fs-5"></i> Doctors
         </a>
+        <a href="/specialisations" class="list-group-item list-group-item-action py-3 {{Request::is('specialisations') || Request::is('specialisations/*') ? 'active' : ''}}">
+            <i class="fas fa-tags fs-5"></i> Specialisations
+        </a>
         <a href="/medications" class="list-group-item list-group-item-action py-3 {{Request::is('medications') || Request::is('medications/*') ? 'active' : ''}}">
             <i class="fas fa-capsules fs-5"></i> Medications
         </a>

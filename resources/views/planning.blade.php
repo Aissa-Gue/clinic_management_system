@@ -1,9 +1,10 @@
 @extends('layouts.master')
 
 @section('content')
-    <div class="alert alert-info text-center mb-4" role="alert">
+    <div class="alert alert-primary text-center fw-bold mt-2" role="alert">
         <h5>Time Planning</h5>
     </div>
+
     <div class="row mb-2">
         <nav class="navbar navbar-dark bg-light">
             <form action="/planning/add_time" method="post" class="d-flex">
@@ -23,8 +24,12 @@
                     @csrf
                     <div class="input-group mb-3">
                         <input type="time" class="form-control" name="time" value="{{$age->time}}">
-                        <button type="submit" class="btn btn-outline-success"><i class="fas fa-edit"></i></button>
-                        <a href="/planning/delete_time/{{$age->id}}" class="btn btn-outline-danger"><i class="fas fa-trash-alt"></i></a>
+                        <button type="submit" class="btn btn-outline-success" onclick="return confirm('Are you sure?')">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <a href="/planning/delete_time/{{$age->id}}" class="btn btn-outline-danger" onclick="return confirm('Are you sure?')">
+                            <i class="fas fa-trash-alt"></i>
+                        </a>
                     </div>
                 </form>
             </div>

@@ -1,6 +1,9 @@
 @extends('layouts.master')
 
 @section('content')
+    <div class="alert alert-primary text-center fw-bold mt-2" role="alert">
+        <h5>Doctors List</h5>
+    </div>
     <div class="row mb-2">
         <nav class="navbar navbar-dark bg-light">
                 <form action="/doctors" method="GET" class="d-flex">
@@ -32,7 +35,7 @@
             @forelse($doctor as $doc)
             @empty
                 <div class="alert alert-danger text-center" role="alert">
-                    No results found for query
+                    No results found for:
                     <strong>{{request()->get('lname')}} {{request()->get('fname')}}</strong>
                 </div>
             @endforelse
@@ -61,7 +64,7 @@
                     </a>
                 </td>
                 <td class="text-center">
-                    <a class="btn btn-outline-danger" href="/doctors/delete_doctor/{{$doc->id}}">
+                    <a class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteDocModal{{$doc->id}}">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                              fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
                             <path
@@ -69,6 +72,7 @@
                         </svg>
                     </a>
                 </td>
+                @include('doctors.delete_doctor')
             </tr>
             @endforeach
             </tbody>

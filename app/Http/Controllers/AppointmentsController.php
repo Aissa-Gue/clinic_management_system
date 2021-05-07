@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 use Illuminate\Support\Facades\DB;
+use Validator;
+use Redirect;
 
 use App\Models\Appointment;
 use Illuminate\Http\Request;
@@ -34,32 +36,39 @@ class AppointmentsController extends Controller
             ->get();
 
         return view('appointments.appointments')
-            ->with('appointment',Appointment::all()->where('doc_id','=',$doc_id))
+            ->with('appointment',Appointment::all()->where('doc_id','=',$doc_id)->sortByDesc('time')->sortByDesc('date'))
             ->with('patient',Patient::all('id','first_name','last_name'))
-            ->with('doctor',Doctor::all('id','first_name','last_name'))
-            ->with('currentDocId',Doctor::all('id')->where('id',$doc_id)->first())
+            ->with('doctor',Doctor::all('id','first_name','last_name','spec_id'))
+            ->with('currentDoc',Doctor::all('id','first_name','last_name')->where('id',$doc_id)->first())
             ->with('agenda',$agenda)
             ->with('speciality',Specialisation::all());
     }
 
 
-    public function show($id){
-        $appointment = Appointment::findOrFail($id);//same as where 'id' = 1
-        return view('appointments.preview_appointment')
-            ->with('appointment',$appointment)
-            ->with('patient',Patient::all())
-            ->with('doctor',Doctor::all())
-            ->with('agenda',Agenda::all());
-    }
-
-
-    public function insertAppointment(){
-        return view('appointments.add_appointment')
-            ->with('patient',Patient::all())
-            ->with('doctor',Doctor::all())
-            ->with('agenda',Agenda::all());
-    }
     public function store(){
+        $patient_name = explode(' - ' ,request('patient_name'));
+        $doc_id = request('doctor_id');
+
+        $validator = Validator::make(
+            array(
+                'patient_id' => $patient_name[0],
+                'doctor_id' => request('doctor_id'),
+                'date' => request('date'),
+                'time' => request('time')
+            ),
+            array(
+                'patient_id' => 'required|numeric:appointments',
+                'doctor_id' => 'required|numeric:appointments',
+                'date' => 'required|date:appointments',
+                'time' => 'required|date_format:H:i|:appointments'
+            )
+        );
+        if ($validator->fails())
+        {
+            //$messages = $validator->messages();
+            return Redirect::to('appointments/'.$doc_id)->withErrors($validator);
+        }
+
         $appointment = new Appointment();
         $patient_name = explode(' - ' ,request('patient_name'));
 
@@ -72,26 +81,20 @@ class AppointmentsController extends Controller
         return redirect('appointments/'.$appointment->doc_id);
     }
 
-    public function updateAppointment($id){
-        $appointment = Appointment::where('id', '=', $id)->firstOrFail();
-        return view('appointments.update_appointment')
-            ->with('appointment',$appointment)
-            ->with('patient',Patient::all())
-            ->with('doctor',Doctor::all())
-            ->with('agenda',Agenda::all());
-    }
-    public function update(Request $req){
-        $appointment = Appointment::where('id', '=', $req->id)
-            ->update(['pat_id' => $req->patient_name,
-                'doc_id' => $req->doctor_name,
+
+    public function update($id,Request $req){
+        $appointment = Appointment::where('id', '=', $id)
+            ->update([
                 'date' => $req->date,
-                'time' => $req->time]);
-        return redirect('appointments');
+                'time' => $req->time
+            ]);
+        return redirect('appointments/'.$req->doctor_id);
     }
 
 
     public function destroy($id){
-        $doctor = Appointment::where('id', '=', $id)->delete();
-        return redirect('appointments');
+        $appDoctor = Appointment::all('id','doc_id')->where('id', '=', $id)->first();
+        $appointment = Appointment::where('id', '=', $id)->delete();
+        return redirect('appointments/'.$appDoctor->doc_id);
     }
 }

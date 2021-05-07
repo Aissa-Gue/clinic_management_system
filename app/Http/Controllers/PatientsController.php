@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Patient;
 use App\Models\City;
-use PhpParser\Builder\Property;
+use Validator;
 
 class PatientsController extends Controller
 {
@@ -19,7 +19,7 @@ class PatientsController extends Controller
 
         $patient = Patient::where('first_name','LIKE','%'.$first_name.'%')
                           ->where('last_name','LIKE','%'.$last_name.'%')
-                          ->paginate(5);
+                          ->paginate(90);
         return view('patients.patients')->with('patient',$patient);
     }
 
@@ -29,11 +29,38 @@ class PatientsController extends Controller
         return view('patients.preview_patient')->with('patient',$patient);
     }
 
-
     public function insertPatient(){
         return view('patients.add_patient')->with('city',City::all());
     }
+
     public function store(){
+        $validator = Validator::make(
+            array(
+                'first_name' => request('first_name'),
+                'last_name' => request('last_name'),
+                'birthdate' => request('birthdate'),
+                'gender' => request('gender'),
+                'city' => request('city'),
+                'email' => request('email'),
+                'phone' => request('phone')
+            ),
+            array(
+                'first_name' => 'required:patients',
+                'last_name' => 'required:patients',
+                'birthdate' => 'required|date:patients',
+                'gender' => 'required:patients',
+                'city' => 'required:patients',
+                'email' => 'required|email|unique:patients',
+                'phone' => 'required|numeric|digits:10|unique:patients'
+            )
+        );
+        if ($validator->fails())
+        {
+            $messages = $validator->messages();
+            return view('patients.add_patient')->with('messages',$messages)
+                ->with('city',City::all());
+        }
+
         $patient = new Patient();
         $patient->last_name = request('last_name');
         $patient->first_name = request('first_name');

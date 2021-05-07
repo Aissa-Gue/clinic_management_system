@@ -15,7 +15,7 @@
                 </a>
             </div>
             <div class="col-md-auto">
-                <a href="/doctors/delete_doctor/{{$doctor->id}}" class="text-danger">
+                <a href="/doctors/delete_doctor/{{$doctor->id}}" class="text-danger" onclick="return confirm('Are you sure?')">
                     <i class="fas fa-times fs-3"></i><br>
                     <strong>Del</strong>
                 </a>

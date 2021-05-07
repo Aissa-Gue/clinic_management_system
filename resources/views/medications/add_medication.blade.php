@@ -11,15 +11,25 @@
             <div class="row mb-3">
                 <div class="col-md-4">
                     <label for="commercial_name" class="form-label">Commercial name</label>
-                    <input type="text" name="commercial_name" class="form-control" id="commercial_name">
+                    <input type="text" name="commercial_name" class="form-control" id="commercial_name" value="{{request()->get('commercial_name')}}">
                 </div>
+                @if(!empty($messages))
+                    @foreach ($messages->get('commercial_name') as $message)
+                        <div class="form-text text-danger">{{$message}}</div>
+                    @endforeach
+                @endif
             </div>
 
             <div class="row mb-3">
                 <div class="col-md-4">
                     <label for="scientific_name" class="form-label">Scientific name</label>
-                    <input type="text" name="scientific_name" class="form-control" id="scientific_name">
+                    <input type="text" name="scientific_name" class="form-control" id="scientific_name" value="{{request()->get('scientific_name')}}">
                 </div>
+                @if(!empty($messages))
+                    @foreach ($messages->get('scientific_name') as $message)
+                        <div class="form-text text-danger">{{$message}}</div>
+                    @endforeach
+                @endif
             </div>
 
             <div class="row">

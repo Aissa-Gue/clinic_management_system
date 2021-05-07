@@ -81,7 +81,7 @@
                 </div>
                 <div class="col-md-2">
                     <label for="" class="form-label">&puncsp;</label>
-                    <input type="submit" class="form-control btn btn-success" value="SAVE">
+                    <input type="submit" class="form-control btn btn-success" value="SAVE" onclick="return confirm('Are you sure?')">
                 </div>
             </div>
         </fieldset>

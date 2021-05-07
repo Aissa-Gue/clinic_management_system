@@ -6,6 +6,7 @@ use App\Models\Specialisation;
 use Illuminate\Http\Request;
 use App\Models\Doctor;
 use App\Models\City;
+use Validator;
 
 
 class DoctorsController extends Controller
@@ -20,7 +21,7 @@ class DoctorsController extends Controller
 
         $doctor = Doctor::where('first_name','LIKE','%'.$first_name.'%')
             ->where('last_name','LIKE','%'.$last_name.'%')
-            ->paginate(5);
+            ->paginate(90);
         return view('doctors.doctors')->with('doctor',$doctor);
     }
 
@@ -35,6 +36,36 @@ class DoctorsController extends Controller
                                       ->with('speciality',specialisation::all('id','speciality'));
     }
     public function store(){
+        $validator = Validator::make(
+            array(
+                'first_name' => request('first_name'),
+                'last_name' => request('last_name'),
+                'birthdate' => request('birthdate'),
+                'spec_id' => request('spec_id'),
+                'gender' => request('gender'),
+                'city' => request('city'),
+                'email' => request('email'),
+                'phone' => request('phone')
+            ),
+            array(
+                'first_name' => 'required:doctors',
+                'last_name' => 'required:doctors',
+                'birthdate' => 'required|date:doctors',
+                'spec_id' => 'required:doctors',
+                'gender' => 'required:doctors',
+                'city' => 'required:doctors',
+                'email' => 'required|email|unique:doctors',
+                'phone' => 'required|numeric|digits:10|unique:doctors'
+            )
+        );
+        if ($validator->fails())
+        {
+            $messages = $validator->messages();
+            return view('doctors.add_doctor')->with('messages',$messages)
+                ->with('city',City::all())
+                ->with('speciality',specialisation::all('id','speciality'));
+        }
+
         $doctor = new Doctor();
         $doctor->last_name = request('last_name');
         $doctor->first_name = request('first_name');

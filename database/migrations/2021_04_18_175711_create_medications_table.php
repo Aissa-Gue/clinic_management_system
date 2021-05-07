@@ -15,9 +15,9 @@ class CreateMedicationsTable extends Migration
     {
         Schema::create('medications', function (Blueprint $table) {
             $table->id('id');
-            $table->string('scientific_name',100)->nullable();
-            $table->string('commercial_name',100)->nullable();
-            $table->string('description')->nullable();
+            $table->string('scientific_name',100)->unique();
+            $table->string('commercial_name',100)->unique();
+            $table->string('description');
             $table->timestamps();
             $table->charset = 'utf8';
             $table->collation = 'utf8_general_ci';

@@ -2,27 +2,29 @@
 
 @section('content')
     <div class="alert alert-primary text-center fw-bold mt-2" role="alert">
-        <h5>Medications List</h5>
+        <h5>Specialisations List</h5>
     </div>
+
     <div class="row mb-2">
         <nav class="navbar navbar-dark bg-light">
-                <form action="/medications" method="GET" class="d-flex">
-                    <input class="form-control me-1" type="text" name="com_name" placeholder="Commercial name" value="{{request()->get('com_name')}}">
-                    <input class="form-control me-1" type="text" name="sci_name" placeholder="Scientific name" value="{{request()->get('sci_name')}}">
-                    <button class="btn btn-outline-primary" type="submit"><i class="fas fa-search"></i></button>
-                </form>
-                <div class="d-flex">
-                    <a href="/medications/add_medication" class="btn btn-success">NEW <i class="fa fa-plus"></i></a>
-                </div>
+            <form action="/specialisations" method="GET" class="d-flex">
+                <input class="form-control me-1" type="text" name="speciality" placeholder="Speciality" value="{{request()->get('speciality')}}">
+                <input class="form-control me-1" type="text" name="description" placeholder="Description" value="{{request()->get('description')}}">
+                <button class="btn btn-outline-primary" type="submit"><i class="fas fa-search"></i></button>
+            </form>
+            <div class="d-flex">
+                <a data-bs-toggle="modal" data-bs-target="#addSpecModal" class="btn btn-success">NEW <i class="fa fa-plus"></i></a>
+            </div>
         </nav>
     </div>
+
+
     <div class="row">
         <table class="table table-hover">
             <thead>
             <tr>
                 <th scope="col">Id</th>
-                <th scope="col">Commercial name</th>
-                <th scope="col">Scientific name</th>
+                <th scope="col">Speciality</th>
                 <th scope="col">Description</th>
                 <th scope="col" class="text-center">Preview</th>
                 <th scope="col" class="text-center">Edit</th>
@@ -30,22 +32,21 @@
             </tr>
             </thead>
             <tbody>
-            @forelse($medication as $med)
+            @forelse($specialisation as $spec)
             @empty
                 <div class="alert alert-danger text-center" role="alert">
-                    No results found for query:
-                    <strong>{{request()->get('com_name')}} {{request()->get('sci_name')}}</strong>
+                    No results found for:
+                    <strong>{{request()->get('speciality')}}</strong>
                 </div>
             @endforelse
 
-            @foreach($medication as $med)
+            @foreach($specialisation as $spec)
             <tr>
-                <th scope="row">{{$med->id}}</th>
-                <td>{{$med->commercial_name}}</td>
-                <td>{{$med->scientific_name}}</td>
-                <td >{{$med->description}}</td>
+                <th scope="row">{{$spec->id}}</th>
+                <td>{{$spec->speciality}}</td>
+                <td>{{$spec->description}}</td>
                 <td class="text-center">
-                    <a class="btn btn-outline-success" href="/medications/preview_medication/{{$med->id}}">
+                    <a class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#previewSpecModal{{$spec->id}}"">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
                             <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z"/>
                             <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z"/>
@@ -53,7 +54,7 @@
                     </a>
                 </td>
                 <td class="text-center">
-                    <a class="btn btn-outline-primary" href="/medications/update_medication/{{$med->id}}">
+                    <a class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editSpecModal{{$spec->id}}">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                              fill="currentColor" class="bi bi-pencil-fill" viewBox="0 0 16 16">
                             <path
@@ -62,7 +63,7 @@
                     </a>
                 </td>
                 <td class="text-center">
-                    <a class="btn btn-outline-danger" href="/medications/delete_medication/{{$med->id}}" onclick="return confirm('Are you sure?')">
+                    <a class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteSpecModal{{$spec->id}}">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                              fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
                             <path
@@ -71,6 +72,10 @@
                     </a>
                 </td>
             </tr>
+                @include('specialisations.preview_specialisation')
+                @include('specialisations.add_specialisation')
+                @include('specialisations.edit_specialisation')
+                @include('specialisations.delete_specialisation')
             @endforeach
             </tbody>
         </table>
