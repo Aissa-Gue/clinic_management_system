@@ -8,7 +8,7 @@ use App\Models\Agenda;
 class AgendasController extends Controller
 {
     public function showAllData(){
-        return view('planning')->with('agenda',Agenda::all());
+        return view('planning/planning')->with('agenda',Agenda::all());
     }
     public function store(){
         $agenda = new Agenda();
