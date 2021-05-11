@@ -1,13 +1,14 @@
 <?php
 
 namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Validator;
 use Redirect;
 use Carbon\Carbon;
 
 use App\Models\Appointment;
-use Illuminate\Http\Request;
 use App\Models\Doctor;
 use App\Models\Specialisation;
 use App\Models\Patient;
@@ -32,7 +33,7 @@ class AppointmentsController extends Controller
                     ->from('appointments')
                     ->whereColumn('appointments.time','=','agendas.time')
                     ->where('doc_id','=',$doc_id)
-                    ->where('date','=', Carbon::today());
+                    ->where('date', Carbon::today());
             })
             ->select('agendas.time')
             ->get();

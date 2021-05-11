@@ -5,7 +5,7 @@
         <li class="nav-link fw-bold">SPECIALITIES: </li>
         @foreach($doctor as $doc)
             <li class="nav-item fw-bold" role="presentation">
-                <a href="/appointments/{{$doc->id}}" class="nav-link {{Request::is('appointments/'.$doc->id) ? 'active':''}}" type="button" aria-selected="false">{{$doc->speciality->speciality}}</a>
+                <a href="/consultations/{{$doc->id}}" class="nav-link {{Request::is('consultations/'.$doc->id) ? 'active':''}}" type="button" aria-selected="false">{{$doc->speciality->speciality}}</a>
             </li>
         @endforeach
     </ul>
@@ -14,15 +14,18 @@
         Dr: {{$currentDoc->first_name}} {{$currentDoc->last_name}}
     </div>
 
+
     <div class="row mb-2">
         <nav class="navbar navbar-dark bg-light">
-            <form action="/appointments/add_appointment" method="post" class="d-flex col-md-9">
+            <form action="/consultations/add_consultation" method="post" class="d-flex col-md-4">
                 @csrf
-                <div class="col-md-4">
-                    <input list="patients" name="patient_name" class="form-control me-1" placeholder="Patient name">
+                <input type="hidden" name="doctor_id" class="form-control" value="{{$currentDoc->id}}">
+
+                <div class="input-group mb-3">
+                    <input list="patients" name="patient_name" class="form-control" placeholder="Patient name">
                     <datalist id="patients">
-                        @foreach($patient as $pat)
-                            <option value="{{$pat->id}} - {{$pat->first_name}} {{$pat->last_name}}"></option>
+                        @foreach($appointment as $app)
+                            <option value="{{$app->patient->id}} - {{$app->patient->first_name}} {{$app->patient->last_name}}"></option>
                         @endforeach
                     </datalist>
                     @if(!empty($errors))
@@ -30,41 +33,11 @@
                             <div class="form-text text-danger">{{$message}}</div>
                         @endforeach
                     @endif
-                </div>
-
-                <input type="hidden" name="doctor_id" class="form-control me-1" value="{{$currentDoc->id}}">
-
-                <div class="col-md-auto">
-                    <input type="date" name="date" class="form-control me-1">
-                    @if(!empty($errors))
-                        @foreach ($errors->get('date') as $message)
-                            <div class="form-text text-danger">{{$message}}</div>
-                        @endforeach
-                    @endif
-                </div>
-
-                <div class="col-md-auto">
-                    <select name="time" class="form-select" id="time" required>
-                        <option disabled selected>- select time -</option>
-                        @foreach($agenda as $tim)
-                            <option value="{{$tim->time}}">
-                                {{\Carbon\Carbon::parse($tim->time)->format('H:i')}}
-                            </option>
-                        @endforeach
-                    </select>
-                    @if(!empty($errors))
-                        @foreach ($errors->get('time') as $message)
-                            <div class="form-text text-danger">{{$message}}</div>
-                        @endforeach
-                    @endif
-                </div>
-                <div class="col-md-2">
                     <button class="btn btn-success col-md-auto" type="submit">NEW <i class="fa fa-plus"></i></button>
                 </div>
             </form>
         </nav>
     </div>
-
 
 
     <div class="row">
@@ -83,25 +56,25 @@
             </tr>
             </thead>
             <tbody>
-            @foreach($appointment as $app)
+            @foreach($consultation as $cons)
                 <tr>
-                    <th scope="row">{{$app->id}}</th>
-                    <td>{{$app->patient->first_name}} {{$app->patient->last_name}}</td>
-                    <td class="text-center">{{$app->patient->birthdate}}</td>
+                    <th scope="row">{{$cons->id}}</th>
+                    <td>{{$cons->appointment->patient->first_name}} {{$cons->appointment->patient->last_name}}</td>
+                    <td class="text-center">{{$cons->appointment->patient->birthdate}}</td>
                     <td class="text-success text-center"><i class="fa fa-check-circle"></i> Done</td>
-                    <!-- <td class="text-warning"><i class="fa fa-pause-circle"></i> Waiting</td>
+                    <!--<td class="text-warning"><i class="fa fa-pause-circle"></i> Waiting</td>
                     <td class="text-danger"><i class="fa fa-times-circle"></i> Canceled</td>-->
-                    <td class="text-center">{{$app->date}}</td>
-                    <td class="text-center">{{\Carbon\Carbon::parse($app->time)->format('H:i')}}</td>
+                    <td class="text-center">{{$cons->appointment->date}}</td>
+                    <td class="text-center">{{\Carbon\Carbon::parse($cons->appointment->time)->format('H:i')}}</td>
                     <td class="text-center">
-                        <a class="btn btn-outline-success" href="/patients/preview_patient/{{$app->patient->id}}">
+                        <a class="btn btn-outline-success" href="/patients/preview_patient/{{$cons->appointment->patient->id}}">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-lines-fill" viewBox="0 0 16 16">
                                 <path d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm-5 6s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H1zM11 3.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 1-.5-.5zm.5 2.5a.5.5 0 0 0 0 1h4a.5.5 0 0 0 0-1h-4zm2 3a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1h-2zm0 3a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1h-2z"/>
                             </svg>
                         </a>
                     </td>
                     <td class="text-center">
-                        <a class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editAppModal{{$app->id}}">
+                        <a class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editAppModal{{$cons->id}}">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                  fill="currentColor" class="bi bi-pencil-fill" viewBox="0 0 16 16">
                                 <path
@@ -110,7 +83,7 @@
                         </a>
                     </td>
                     <td class="text-center">
-                        <a class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteAppModal{{$app->id}}">
+                        <a class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteAppModal{{$cons->id}}">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                  fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
                                 <path
@@ -118,8 +91,6 @@
                             </svg>
                         </a>
                     </td>
-                    @include('appointments.edit_appointment')
-                    @include('appointments.delete_appointment')
                 </tr>
             @endforeach
             </tbody>

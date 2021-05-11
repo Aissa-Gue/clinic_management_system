@@ -1,13 +1,13 @@
 @extends('layouts.master')
 
 @section('content')
-    <div class="alert alert-info text-center" role="alert">
-        <h5>Insert New Doctor</h5>
+    <div class="alert alert-danger text-center" role="alert">
+        <h5>Add New Doctor</h5>
     </div>
     <form action="/doctors/add_doctor" method="post">
         @csrf
         <fieldset class="scheduler-border">
-            <legend class="scheduler-border bg-info">Doctor informations</legend>
+            <legend class="scheduler-border bg-danger">Doctor informations</legend>
             <div class="row mb-3">
                 <div class="col-md-3">
                     <label for="first_name" class="form-label">First name</label>
@@ -99,7 +99,7 @@
             <div class="row mb-3">
                 <div class="col-md-4">
                     <label for="email" class="form-label">Email</label>
-                    <input type="email" name="email" class="form-control" id="email" value="{{request()->get('email')}}">
+                    <input type="text" name="email" class="form-control" id="email" value="{{request()->get('email')}}">
                     @if(!empty($messages))
                         @foreach ($messages->get('email') as $message)
                             <div class="form-text text-danger">{{$message}}</div>

@@ -1,13 +1,13 @@
 @extends('layouts.master')
 
 @section('content')
-    <div class="alert alert-info text-center" role="alert">
+    <div class="alert alert-danger text-center" role="alert">
         <h5>Update Medication</h5>
     </div>
     <form action="/medications/update_medication/{{$medication->id}}" method="post">
         @csrf
         <fieldset class="scheduler-border">
-            <legend class="scheduler-border bg-info">Medication informations</legend>
+            <legend class="scheduler-border bg-danger">Medication informations</legend>
             <div class="row mb-3">
                 <div class="col-md-4">
                     <label for="commercial_name" class="form-label">Commercial name</label>

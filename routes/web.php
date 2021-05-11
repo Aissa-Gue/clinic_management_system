@@ -77,6 +77,8 @@ Route::post('appointments/add_appointment', '\App\Http\Controllers\AppointmentsC
 Route::post('appointments/update_appointment/{id}', '\App\Http\Controllers\AppointmentsController@update');
 Route::get('appointments/delete_appointment/{id}', '\App\Http\Controllers\AppointmentsController@destroy');
 
+//**** Consultations ****//
+Route::get('consultations/{doc_id}', '\App\Http\Controllers\ConsultationsController@showData');
 
 
 

@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+<nav class="navbar navbar-expand-lg navbar-dark my_bg-danger my_bg-danger">
     <div class="container-fluid">
         <a class="navbar-brand" href="#">
             <img src="{{URL::asset('img/logo.png')}}" alt="" width="30" height="24">

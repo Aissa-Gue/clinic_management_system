@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('content')
-    <div class="alert alert-primary text-center fw-bold mt-2" role="alert">
+    <div class="alert alert-danger text-center fw-bold mt-2" role="alert">
         <h5>Doctors List</h5>
     </div>
     <div class="row mb-2">

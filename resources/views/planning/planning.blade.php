@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('content')
-    <div class="alert alert-primary text-center fw-bold mt-2" role="alert">
+    <div class="alert alert-danger text-center fw-bold mt-2" role="alert">
         <h5>Time Planning</h5>
     </div>
 
@@ -27,9 +27,10 @@
                         <button type="submit" class="btn btn-outline-success" onclick="return confirm('Are you sure?')">
                             <i class="fas fa-edit"></i>
                         </button>
-                        <a href="/planning/delete_time/{{$age->id}}" class="btn btn-outline-danger" onclick="return confirm('Are you sure?')">
+                        <a data-bs-toggle="modal" data-bs-target="#deletePlanModal{{$age->id}}" class="btn btn-outline-danger">
                             <i class="fas fa-trash-alt"></i>
                         </a>
+                        @include('planning.delete_planning')
                     </div>
                 </form>
             </div>

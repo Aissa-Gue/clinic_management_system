@@ -17,8 +17,9 @@ class CreateConsultationsTable extends Migration
             $table->id('id');
             $table->foreignId('app_id')->references('id')->on('appointments')->onDelete('cascade');
             $table->foreignId('pres_id')->references('id')->on('prescriptions')->onDelete('cascade');;
-            $table->integer('length')->nullable();
-            $table->integer('weight')->nullable();
+            $table->foreignId('cert_id')->references('id')->on('certificates')->onDelete('cascade');;
+            $table->float('length')->nullable();
+            $table->float('weight')->nullable();
             $table->float('temperature')->nullable();
             $table->string('description')->nullable();
             $table->integer('paid_amount')->nullable();

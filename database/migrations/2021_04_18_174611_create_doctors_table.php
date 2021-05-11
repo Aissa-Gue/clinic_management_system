@@ -22,7 +22,7 @@ class CreateDoctorsTable extends Migration
             $table->string('address',50)->nullable();
             $table->foreignId('city_id')->references('id')->on('cities');
             $table->foreignId('spec_id')->references('id')->on('specialisations');
-            $table->string('email',30)->unique();
+            $table->string('email',50)->unique();
             $table->integer('phone')->unique();
             $table->string('password',32)->default('admin');
             $table->timestamps();
