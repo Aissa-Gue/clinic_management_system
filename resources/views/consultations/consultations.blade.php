@@ -17,15 +17,14 @@
 
     <div class="row mb-2">
         <nav class="navbar navbar-dark bg-light">
-            <form action="/consultations/add_consultation" method="post" class="d-flex col-md-4">
+            <form action="/consultations/add" method="post" class="d-flex col-md-4">
                 @csrf
-                <input type="hidden" name="doctor_id" class="form-control" value="{{$currentDoc->id}}">
 
                 <div class="input-group mb-3">
-                    <input list="patients" name="patient_name" class="form-control" placeholder="Patient name">
+                    <input list="patients" name="patient" class="form-control" placeholder="Patient name">
                     <datalist id="patients">
                         @foreach($appointment as $app)
-                            <option value="{{$app->patient->id}} - {{$app->patient->first_name}} {{$app->patient->last_name}}"></option>
+                            <option value="{{$app->id}} - {{$app->patient->first_name}} {{$app->patient->last_name}}"></option>
                         @endforeach
                     </datalist>
                     @if(!empty($errors))
@@ -83,7 +82,7 @@
                         </a>
                     </td>
                     <td class="text-center">
-                        <a class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteAppModal{{$cons->id}}">
+                        <a class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteConsModal{{$cons->id}}">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                  fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
                                 <path
@@ -91,6 +90,7 @@
                             </svg>
                         </a>
                     </td>
+                    @include('consultations.delete_consultation')
                 </tr>
             @endforeach
             </tbody>

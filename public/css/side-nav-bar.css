@@ -80,4 +80,10 @@ legend.scheduler-border {
 }
 /****** END INDEX PAGE ******/
 
-
+/** consultation add page **/
+.input-group>.input-group-prepend {
+    flex: 0 0 30%;
+}
+.input-group .input-group-text {
+    width: 25%;
+}

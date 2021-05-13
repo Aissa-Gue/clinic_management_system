@@ -78,7 +78,29 @@ Route::post('appointments/update_appointment/{id}', '\App\Http\Controllers\Appoi
 Route::get('appointments/delete_appointment/{id}', '\App\Http\Controllers\AppointmentsController@destroy');
 
 //**** Consultations ****//
-Route::get('consultations/{doc_id}', '\App\Http\Controllers\ConsultationsController@showData');
+Route::get('consultations/{app_id}', '\App\Http\Controllers\ConsultationsController@showData');
+Route::get('consultations/preview/{app_id}', '\App\Http\Controllers\ConsultationsController@show');
+
+Route::post('consultations/add', '\App\Http\Controllers\ConsultationsController@add_cons_redirect');
+Route::get('consultations/add/{app_id}', '\App\Http\Controllers\ConsultationsController@insert_consultation');
+Route::post('consultations/add/{app_id}', '\App\Http\Controllers\ConsultationsController@store');
+
+Route::get('consultations/edit/{app_id}', '\App\Http\Controllers\ConsultationsController@update_consultation');
+Route::post('consultations/edit/{app_id}', '\App\Http\Controllers\ConsultationsController@update');
+
+Route::get('consultations/delete/{cons_id}', '\App\Http\Controllers\ConsultationsController@destroy');
+
+//Prescription
+Route::get('consultations/prescriptions/add/{cons_id}', '\App\Http\Controllers\PrescriptionsController@store');
+Route::get('consultations/prescriptions/edit/{cons_id}', '\App\Http\Controllers\PrescriptionsController@edit');
+Route::get('consultations/prescriptions/delete/{cons_id}', '\App\Http\Controllers\PrescriptionsController@destroy');
+
+//Certificate
+Route::get('consultations/certificates/add/{cons_id}', '\App\Http\Controllers\PrescriptionsController@store');
+Route::get('consultations/certificates/edit/{cons_id}', '\App\Http\Controllers\PrescriptionsController@edit');
+Route::get('consultations/certificates/delete/{cons_id}', '\App\Http\Controllers\PrescriptionsController@destroy');
+
+
 
 
 
