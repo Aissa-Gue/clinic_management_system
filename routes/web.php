@@ -88,11 +88,15 @@ Route::post('consultations/add/{app_id}', '\App\Http\Controllers\ConsultationsCo
 Route::get('consultations/edit/{app_id}', '\App\Http\Controllers\ConsultationsController@update_consultation');
 Route::post('consultations/edit/{app_id}', '\App\Http\Controllers\ConsultationsController@update');
 
-Route::get('consultations/delete/{cons_id}', '\App\Http\Controllers\ConsultationsController@destroy');
+Route::get('consultations/delete/{app_id}', '\App\Http\Controllers\ConsultationsController@destroy');
 
 //Prescription
-Route::get('consultations/prescriptions/add/{cons_id}', '\App\Http\Controllers\PrescriptionsController@store');
-Route::get('consultations/prescriptions/edit/{cons_id}', '\App\Http\Controllers\PrescriptionsController@edit');
+Route::get('consultations/prescriptions/add/{app_id}', '\App\Http\Controllers\PrescriptionsController@insert_prescription');
+Route::post('consultations/prescriptions/add/{app_id}', '\App\Http\Controllers\PrescriptionsController@store');
+
+Route::get('consultations/prescriptions/edit/{app_id}', '\App\Http\Controllers\PrescriptionsController@edit_prescription');
+Route::post('consultations/prescriptions/edit/{app_id}', '\App\Http\Controllers\PrescriptionsController@edit');
+Route::get('consultations/prescriptions/deleteMed/{pres_id}/{med_id}', '\App\Http\Controllers\PrescriptionsController@destroyMedic');
 Route::get('consultations/prescriptions/delete/{cons_id}', '\App\Http\Controllers\PrescriptionsController@destroy');
 
 //Certificate

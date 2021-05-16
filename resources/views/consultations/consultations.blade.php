@@ -66,14 +66,15 @@
                     <td class="text-center">{{$cons->appointment->date}}</td>
                     <td class="text-center">{{\Carbon\Carbon::parse($cons->appointment->time)->format('H:i')}}</td>
                     <td class="text-center">
-                        <a class="btn btn-outline-success" href="/patients/preview_patient/{{$cons->appointment->patient->id}}">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-lines-fill" viewBox="0 0 16 16">
-                                <path d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm-5 6s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H1zM11 3.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 1-.5-.5zm.5 2.5a.5.5 0 0 0 0 1h4a.5.5 0 0 0 0-1h-4zm2 3a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1h-2zm0 3a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1h-2z"/>
+                        <a class="btn btn-outline-success" href="/consultations/preview/{{$cons->appointment->id}}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
+                                <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z"/>
+                                <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z"/>
                             </svg>
                         </a>
                     </td>
                     <td class="text-center">
-                        <a class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editAppModal{{$cons->id}}">
+                        <a class="btn btn-outline-primary"  href="/consultations/edit/{{$cons->appointment->id}}">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                  fill="currentColor" class="bi bi-pencil-fill" viewBox="0 0 16 16">
                                 <path
@@ -82,7 +83,7 @@
                         </a>
                     </td>
                     <td class="text-center">
-                        <a class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteConsModal{{$cons->id}}">
+                        <a class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteConsModal{{$cons->appointment->id}}">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                  fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
                                 <path

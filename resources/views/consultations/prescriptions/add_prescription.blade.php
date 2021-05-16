@@ -2,26 +2,27 @@
 
 @section('content')
     <div class="alert alert-danger text-center" role="alert">
-        <h5>Add New Consultation</h5>
+        <h5>Add Prescription</h5>
     </div>
+
     @foreach($currentApp as $app)
         <div class="text-end mb-5">
-        <ul class="nav nav-pills">
-            <li class="nav-item fw-bold">
-                <a href="/consultations/add/{{$app->id}}" class="nav-link {{Request::is('consultations/add/'.$app->id) ? 'active':''}}" type="button" aria-selected="false">Consultations</a>
-            </li>
-            <li class="nav-item fw-bold">
-                <a href="/consultations/prescriptions/add/{{$app->id}}" class="nav-link {{Request::is('consultations/prescriptions/add/'.$app->id) ? 'active':''}}" type="button" aria-selected="false">Prescription</a>
-            </li>
-            <li class="nav-item fw-bold">
-                <a href="/consultations/certificates/add/{{$app->id}}" class="nav-link {{Request::is('consultations/prescriptions/add/'.$app->id) ? 'active':''}}" type="button" aria-selected="false">Certificate</a>
-            </li>
-        </ul>
-    </div>
-    <form action="/consultations/add/{{$app->id}}" method="post">
+            <ul class="nav nav-pills">
+                <li class="nav-item fw-bold">
+                    <a href="/consultations/add/{{$app->id}}" class="nav-link {{Request::is('consultations/add/'.$app->id) ? 'active':''}}" type="button" aria-selected="false">Consultations</a>
+                </li>
+                <li class="nav-item fw-bold">
+                    <a href="/consultations/prescriptions/add/{{$app->id}}" class="nav-link {{Request::is('consultations/prescriptions/add/'.$app->id) ? 'active':''}}" type="button" aria-selected="false">Prescription</a>
+                </li>
+                <li class="nav-item fw-bold">
+                    <a href="/consultations/certificates/add/{{$app->id}}" class="nav-link {{Request::is('consultations/certificates/add/'.$app->id) ? 'active':''}}" type="button" aria-selected="false">Certificate</a>
+                </li>
+            </ul>
+        </div>
+        <form action="/consultations/prescriptions/add/{{$app->id}}" method="post" id="pres_medic_form">
         @csrf
         <fieldset class="scheduler-border">
-            <legend class="scheduler-border bg-danger">General informations</legend>
+            <legend class="scheduler-border bg-danger">Patient informations</legend>
             <div class="row mb-3">
                 <div class="col-md-6 mb-1">
                     <div class="input-group">
@@ -92,80 +93,73 @@
                         <input type="text" name="diabetes" class="form-control" value="{{$diabetes}}">
                     </div>
                 </div>
-                <div class="col-md-6">
-                    <div class="input-group">
-                        <span class="input-group-text">Paid amount</span>
-                        <input type="text" maxlength="6" name="paid_amount" class="form-control" value="{{request()->get('paid_amount')}}">
-                    </div>
-                    @if(!empty($messages))
-                        @foreach ($messages->get('paid_amount') as $message)
-                            <div class="form-text text-danger">{{$message}}</div>
-                        @endforeach
-                    @endif
-                </div>
             </div>
         </fieldset>
 
         <fieldset class="scheduler-border">
-            <legend class="scheduler-border bg-danger">Consultation</legend>
-
-            <div class="row mb-3">
-                <div class="col-md-4">
-                    <label for="weight" class="form-label">Weight (Kg)</label>
-                    <input type="text" name="weight" class="form-control" id="weight" value="{{request()->get('weight')}}">
-                    @if(!empty($messages))
-                        @foreach ($messages->get('weight') as $message)
-                            <div class="form-text text-danger">{{$message}}</div>
-                        @endforeach
-                    @endif
-                </div>
-            </div>
-
-            <div class="row mb-3">
-                <div class="col-md-4">
-                    <label for="length" class="form-label">Length (Cm)</label>
-                    <input type="text" name="length" class="form-control" id="length" value="{{request()->get('length')}}">
-                    @if(!empty($messages))
-                        @foreach ($messages->get('length') as $message)
-                            <div class="form-text text-danger">{{$message}}</div>
-                        @endforeach
-                    @endif
-                </div>
-            </div>
-
-            <div class="row mb-3">
-                <div class="col-md-4">
-                    <label for="temperature" class="form-label">Temperature (°C)</label>
-                    <input type="text" name="temperature" class="form-control" id="temperature" value="{{request()->get('temperature')}}">
-                    @if(!empty($messages))
-                        @foreach ($messages->get('temperature') as $message)
-                            <div class="form-text text-danger">{{$message}}</div>
-                        @endforeach
-                    @endif
-                </div>
-            </div>
+            <legend class="scheduler-border bg-danger">Details</legend>
 
             <div class="row">
+                <div class="col-md-4">
+                    <label for="medication" class="form-label">Medication</label>
+                </div>
                 <div class="col-md-6">
-                    <label for="note" class="form-label">Description</label>
-                    <textarea type="text" name="description" class="form-control" id="note" rows="4">{{request()->get('description')}}</textarea>
+                    <label for="dosage" class="form-label">Dosage</label>
+                </div>
+                <div class="col-md-1">
+                    <label for="quantity" class="form-label">Qte</label>
+                </div>
+            </div>
+            @foreach($pres_medics as $pres_medic)
+                <div class="row">
+                    <div class="col-md-4 mb-1">
+                        <input type="text" class="form-control" value="{{$pres_medic->medication['commercial_name']}}">
+                    </div>
+                    <div class="col-md-6 mb-1">
+                        <input type="text" class="form-control" value="{{$pres_medic->dosage}}">
+                    </div>
+                    <div class="col-md-1 mb-1">
+                        <input type="text" class="form-control text-center" value="{{$pres_medic->quantity}}">
+                    </div>
+                    <div class="col-md-auto pt-1 my_cursor_pointer my_hover_del">
+                        <a href="/consultations/prescriptions/deleteMed/{{$pres_medic->pres_id}}/{{$pres_medic->medic_id}}"><i class="fas fa-minus-circle fs-3 text-danger"></i></a>
+                    </div>
+                </div>
+            @endforeach
+
+            <div class="row">
+                <div class="col-md-4 mb-1">
+                    <input list="medications" name="medication" class="form-control" id="medication" value="{{request()->get('medication')}}">
+                    <datalist id="medications">
+                        @foreach($medications as $medic)
+                            <option value="{{$medic->id}} - {{$medic->commercial_name}}"></option>
+                        @endforeach
+                    </datalist>
                     @if(!empty($messages))
-                        @foreach ($messages->get('description') as $message)
+                        @foreach ($messages->get('medication') as $message)
                             <div class="form-text text-danger">{{$message}}</div>
                         @endforeach
                     @endif
+                </div>
+                <div class="col-md-6 mb-1">
+                    <input type="text" name="dosage" class="form-control" id="dosage" value="{{request()->get('dosage')}}">
                     @if(!empty($messages))
-                        @foreach ($messages->get('app_id') as $message)
-                            <div class="form-text text-danger">Appointment: {{$message}}</div>
+                        @foreach ($messages->get('dosage') as $message)
+                            <div class="form-text text-danger">{{$message}}</div>
                         @endforeach
                     @endif
                 </div>
-            </div>
+                <div class="col-md-1 mb-1">
+                    <input type="text" name="quantity" class="form-control text-center" id="quantity" value="{{request()->get('quantity')}}">
+                    @if(!empty($messages))
+                        @foreach ($messages->get('quantity') as $message)
+                            <div class="form-text text-danger">{{$message}}</div>
+                        @endforeach
+                    @endif
+                </div>
 
-            <div class="row">
-                <div class="col-md-2">
-                    <label for="" class="form-label">&puncsp;</label>
-                    <input type="submit" class="form-control btn btn-success" value="SAVE">
+                <div class="col-md-auto pt-1 my_cursor_pointer my_hover_del" id="addMedication">
+                    <a href="javascript:document.getElementById('pres_medic_form').submit();"><i class="fas fa-plus-circle fs-3 text-success"></i></a>
                 </div>
             </div>
         </fieldset>

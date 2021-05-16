@@ -21,6 +21,7 @@
 }
 .my_bg-danger{
  background-color: #ff5959;
+    /*background-color: #33d176;*/
 }
 
 .nav-pills .nav-link.active
@@ -86,4 +87,13 @@ legend.scheduler-border {
 }
 .input-group .input-group-text {
     width: 25%;
+}
+
+/*** add prescription ***/
+.my_cursor_pointer{
+    cursor: pointer;
+}
+.my_hover_del:hover{
+    background-color: #e2e8f0;
+    border-radius: 10%;
 }

@@ -1,5 +1,5 @@
 <!-- START Modal Delete -->
-<div class="modal fade" id="deleteConsModal{{$cons->id}}" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="deleteConsModal{{$cons->appointment->id}}" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -11,7 +11,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cancel</button>
-                <a class="btn btn-danger" href="/consultations/delete/{{$cons->id}}">Delete</a>
+                <a class="btn btn-danger" href="/consultations/delete/{{$cons->appointment->id}}">Delete</a>
             </div>
         </div>
     </div>
