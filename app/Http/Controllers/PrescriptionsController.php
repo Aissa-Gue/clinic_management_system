@@ -15,11 +15,12 @@ class PrescriptionsController extends Controller
     public function insert_prescription($app_id){
          $currentPres = Consultation::where('app_id',$app_id)->first('pres_id');
          $pres_medic = prescriptions_medications::where('pres_id',$currentPres->pres_id)->get();
-        return view('consultations.prescriptions.add_prescription')
+        return view('consultations.prescriptions.prescription')
             ->with('currentApp',Appointment::where('id',$app_id)->get())
             ->with('pres_medics',$pres_medic)
             ->with('medications',Medication::all());
     }
+
 
     public function store(Request $req , $app_id){
         $currentPres = Consultation::where('app_id',$app_id)->first('pres_id');
@@ -48,14 +49,27 @@ class PrescriptionsController extends Controller
             'quantity'  => $req->input('quantity'),
             'dosage'    => $req->input('dosage')
         ]);
-        return redirect('consultations/prescriptions/add/'.$app_id);
+        return redirect('consultations/prescriptions/'.$app_id);
     }
 
     public function destroyMedic($pres_id, $med_id){
         $currentCons = Consultation::where('pres_id',$pres_id)->first('app_id');
-        prescriptions_medications::where('pres_id', '=', $pres_id)->where('medic_id',$med_id)->delete();
-        return redirect('consultations/prescriptions/add/'.$currentCons->app_id);
+        Prescriptions_medications::where('pres_id', '=', $pres_id)->where('medic_id',$med_id)->delete();
+
+        return redirect('consultations/prescriptions/'.$currentCons->app_id);
     }
+
+    public function destroy($pres_id){
+        $currentCons = Consultation::where('pres_id',$pres_id)->first('app_id');
+        Prescription::where('id', '=', $pres_id)->delete();
+        // set consultation prescription to null
+        // verify if all medications deleted delete prescription;
+        return redirect('consultations/prescriptions/'.$currentCons->app_id);
+    }
+
+
+
+
 
 
 }

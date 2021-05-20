@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class prescriptions_medications extends Model
+class Prescriptions_medications extends Model
 {
     use HasFactory;
     //protected $fillable = ['pres_id','medic_id'];

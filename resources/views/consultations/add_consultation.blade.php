@@ -11,10 +11,10 @@
                 <a href="/consultations/add/{{$app->id}}" class="nav-link {{Request::is('consultations/add/'.$app->id) ? 'active':''}}" type="button" aria-selected="false">Consultations</a>
             </li>
             <li class="nav-item fw-bold">
-                <a href="/consultations/prescriptions/add/{{$app->id}}" class="nav-link {{Request::is('consultations/prescriptions/add/'.$app->id) ? 'active':''}}" type="button" aria-selected="false">Prescription</a>
+                <a href="/consultations/prescriptions/{{$app->id}}" class="nav-link {{Request::is('consultations/prescriptions/'.$app->id) ? 'active':''}}" type="button" aria-selected="false">Prescription</a>
             </li>
             <li class="nav-item fw-bold">
-                <a href="/consultations/certificates/add/{{$app->id}}" class="nav-link {{Request::is('consultations/prescriptions/add/'.$app->id) ? 'active':''}}" type="button" aria-selected="false">Certificate</a>
+                <a href="/consultations/certificates/{{$app->id}}" class="nav-link {{Request::is('consultations/certificates/'.$app->id) ? 'active':''}}" type="button" aria-selected="false">Certificate</a>
             </li>
         </ul>
     </div>

@@ -11,17 +11,17 @@
                 <a href="/consultations/edit/{{$cons->appointment->id}}" class="nav-link {{Request::is('consultations/edit/'.$cons->appointment->id) ? 'active':''}}" type="button" aria-selected="false">Consultations</a>
             </li>
             <li class="nav-item fw-bold">
-                <a href="/consultations/prescriptions/edit/{{$cons->appointment->id}}" class="nav-link {{Request::is('consultations/prescriptions/edit/'.$cons->appointment->id) ? 'active':''}}" type="button" aria-selected="false">Prescription</a>
+                <a href="/consultations/prescriptions/{{$cons->appointment->id}}" class="nav-link {{Request::is('consultations/prescriptions/'.$cons->appointment->id) ? 'active':''}}" type="button" aria-selected="false">Prescription</a>
             </li>
             <li class="nav-item fw-bold">
-                <a href="/consultations/certificates/edit/{{$cons->appointment->id}}" class="nav-link {{Request::is('consultations/prescriptions/edit/'.$cons->appointment->id) ? 'active':''}}" type="button" aria-selected="false">Certificate</a>
+                <a href="/consultations/certificates/{{$cons->appointment->id}}" class="nav-link {{Request::is('consultations/certificates/'.$cons->appointment->id) ? 'active':''}}" type="button" aria-selected="false">Certificate</a>
             </li>
         </ul>
     </div>
     <form action="/consultations/edit/{{$cons->appointment->id}}" method="post">
         @csrf
         <fieldset class="scheduler-border">
-            <legend class="scheduler-border bg-danger">General informations</legend>
+            <legend class="scheduler-border bg-danger">Patient informations</legend>
             <div class="row mb-3">
                 <div class="col-md-6 mb-1">
                     <div class="input-group">
