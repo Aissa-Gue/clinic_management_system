@@ -1,14 +1,14 @@
 @extends('layouts.master')
 
 @section('content')
-    <div class="alert alert-danger text-center fw-bold mt-2" role="alert">
+    <div class="alert alert-success text-center fw-bold mt-2" role="alert">
         <h5>Doctors List</h5>
     </div>
     <div class="row mb-2">
         <nav class="navbar navbar-dark bg-light">
                 <form action="/doctors" method="GET" class="d-flex">
-                    <input class="form-control me-1" type="text" name="lname" placeholder="Last name" value="{{request()->get('lname')}}">
                     <input class="form-control me-1" type="text" name="fname" placeholder="First name" value="{{request()->get('fname')}}">
+                    <input class="form-control me-1" type="text" name="lname" placeholder="Last name" value="{{request()->get('lname')}}">
                     <button class="btn btn-outline-primary" type="submit"><i class="fas fa-search"></i></button>
                 </form>
                 <div class="d-flex">
@@ -21,9 +21,10 @@
             <thead>
             <tr>
                 <th scope="col">Id</th>
-                <th scope="col">Last name</th>
                 <th scope="col">First name</th>
+                <th scope="col">Last name</th>
                 <th scope="col">Gender</th>
+                <th scope="col">Speciality</th>
                 <th scope="col">Birthdate</th>
                 <th scope="col" class="text-center">Preview</th>
                 <th scope="col" class="text-center">Edit</th>
@@ -43,9 +44,10 @@
             @foreach($doctor as $doc)
             <tr>
                 <th scope="row">{{$doc->id}}</th>
-                <td>{{$doc->last_name}}</td>
                 <td>{{$doc->first_name}}</td>
+                <td>{{$doc->last_name}}</td>
                 <td>{{$doc->gender}}</td>
+                <td>{{$doc->speciality->speciality}}</td>
                 <td>{{$doc->birthdate}}</td>
                 <td class="text-center">
                     <a class="btn btn-outline-success" href="/doctors/preview_doctor/{{$doc->id}}">

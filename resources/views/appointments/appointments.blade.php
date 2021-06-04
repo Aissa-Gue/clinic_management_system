@@ -10,7 +10,7 @@
         @endforeach
     </ul>
 
-    <div class="alert alert-danger text-center fw-bold mt-2" role="alert">
+    <div class="alert alert-success text-center fw-bold mt-2" role="alert">
         Dr: {{$currentDoc->first_name}} {{$currentDoc->last_name}}
     </div>
 

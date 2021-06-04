@@ -1,39 +1,44 @@
 @extends('layouts.master')
 
 @section('content')
-    <div class="alert alert-danger text-center" role="alert">
+    <div class="alert alert-success text-center" role="alert">
         <h5>Edit Consultation</h5>
     </div>
     @foreach($consultation as $cons)
+
         <div class="text-end mb-5">
-        <ul class="nav nav-pills">
-            <li class="nav-item fw-bold">
-                <a href="/consultations/edit/{{$cons->appointment->id}}" class="nav-link {{Request::is('consultations/edit/'.$cons->appointment->id) ? 'active':''}}" type="button" aria-selected="false">Consultations</a>
-            </li>
-            <li class="nav-item fw-bold">
-                <a href="/consultations/prescriptions/{{$cons->appointment->id}}" class="nav-link {{Request::is('consultations/prescriptions/'.$cons->appointment->id) ? 'active':''}}" type="button" aria-selected="false">Prescription</a>
-            </li>
-            <li class="nav-item fw-bold">
-                <a href="/consultations/certificates/{{$cons->appointment->id}}" class="nav-link {{Request::is('consultations/certificates/'.$cons->appointment->id) ? 'active':''}}" type="button" aria-selected="false">Certificate</a>
-            </li>
-        </ul>
-    </div>
+            <ul class="nav nav-pills">
+                <li class="nav-item fw-bold">
+                    <a href="/consultations/edit/{{$cons->appointment->id}}" class="nav-link {{Request::is('consultations/edit/'.$cons->appointment->id) ? 'active':''}}" type="button" aria-selected="false"><i class="fas fa-file-medical-alt"></i> Consultations</a>
+                </li>
+                <li class="nav-item fw-bold">
+                    <a href="/consultations/prescriptions/{{$cons->appointment->id}}" class="nav-link {{Request::is('consultations/prescriptions/'.$cons->appointment->id) ? 'active':''}}" type="button" aria-selected="false"><i class="fas fa-capsules"></i> Prescription</a>
+                </li>
+                <li class="nav-item fw-bold">
+                    <a href="/consultations/certificates/{{$cons->appointment->id}}" class="nav-link {{Request::is('consultations/certificates/'.$cons->appointment->id) ? 'active':''}}" type="button" aria-selected="false"><i class="far fa-file-alt"></i> Certificate</a>
+                </li>
+                <li class="nav-item fw-bold">
+                    <a href="/consultations/history/{{$cons->appointment->id}}" class="nav-link {{Request::is('consultations/history/'.$cons->appointment->id) ? 'active':''}}" type="button" aria-selected="false"><i class="fas fa-history"></i> History</a>
+                </li>
+            </ul>
+        </div>
+
     <form action="/consultations/edit/{{$cons->appointment->id}}" method="post">
         @csrf
         <fieldset class="scheduler-border">
-            <legend class="scheduler-border bg-danger">Patient informations</legend>
+            <legend class="scheduler-border bg-success">Patient informations</legend>
             <div class="row mb-3">
                 <div class="col-md-6 mb-1">
                     <div class="input-group">
                         <span class="input-group-text">Patient name</span>
                         <input type="hidden" name="pat_id" value="{{$cons->appointment->patient->id}}">
-                        <input type="text" name="patient" class="form-control" value="{{$cons->appointment->patient->first_name}} {{$cons->appointment->patient->last_name}}">
+                        <input type="text" name="patient" class="form-control" value="{{$cons->appointment->patient->first_name}} {{$cons->appointment->patient->last_name}}" disabled>
                     </div>
                 </div>
                 <div class="col-md-6 mb-1">
                     <div class="input-group">
                         <span class="input-group-text">Age</span>
-                        <input type="text" name="birthdate" class="form-control" value="{{$cons->appointment->patient->birthdate}} / {{\Carbon\Carbon::parse($cons->appointment->patient->birthdate)->age}} years old">
+                        <input type="text" name="birthdate" class="form-control" value="{{$cons->appointment->patient->birthdate}} / {{\Carbon\Carbon::parse($cons->appointment->patient->birthdate)->age}} years old" disabled>
                     </div>
                 </div>
 
@@ -45,7 +50,17 @@
                             @php $blood_type = $cons->appointment->patient->blood_type; @endphp
                         @endif
                         <span class="input-group-text">Blood type</span>
-                        <input type="text" maxlength="3" name="blood_type" class="form-control" value="{{$blood_type}}">
+                        <select class="form-select" name="blood_type">
+                            <option value="" selected>Choose...</option>
+                            <option value="O+" @if($blood_type == 'O+') {{'selected'}} @endif>O+</option>
+                            <option value="O-" @if($blood_type == 'O-') {{'selected'}} @endif>O-</option>
+                            <option value="A+" @if($blood_type == 'A+') {{'selected'}} @endif>A+</option>
+                            <option value="A-" @if($blood_type == 'A-') {{'selected'}} @endif>A-</option>
+                            <option value="B+" @if($blood_type == 'B+') {{'selected'}} @endif>B+</option>
+                            <option value="B-" @if($blood_type == 'B-') {{'selected'}} @endif>B-</option>
+                            <option value="AB+" @if($blood_type == 'AB+') {{'selected'}} @endif>AB+</option>
+                            <option value="AB-" @if($blood_type == 'AB-') {{'selected'}} @endif>AB-</option>
+                        </select>
                         @if(!empty($messages))
                             @foreach ($messages->get('blood_type') as $message)
                                 <div class="form-text text-danger">{{$message}}</div>
@@ -59,7 +74,7 @@
                 <div class="col-md-6 mb-1">
                     <div class="input-group">
                         <span class="input-group-text">Doctor</span>
-                        <input type="text" name="doctor" class="form-control" value="{{$cons->appointment->doctor->first_name}} {{$cons->appointment->doctor->last_name}}">
+                        <input type="text" name="doctor" class="form-control" value="{{$cons->appointment->doctor->first_name}} {{$cons->appointment->doctor->last_name}}" disabled>
                     </div>
                 </div>
 
@@ -71,13 +86,17 @@
                             @php $blood_pressure = $cons->appointment->patient->blood_pressure; @endphp
                         @endif
                         <span class="input-group-text">Blood pressure</span>
-                        <input type="text" name="blood_pressure" class="form-control" value="{{$blood_pressure}}">
+                        <select class="form-select" name="blood_pressure">
+                            <option value="" selected>Choose...</option>
+                            <option value="yes" @if($blood_pressure == 'yes') {{'selected'}} @endif>Yes</option>
+                            <option value="no" @if($blood_pressure == 'no') {{'selected'}} @endif>No</option>
+                        </select>
                     </div>
                 </div>
                 <div class="col-md-6 mb-1">
                     <div class="input-group">
                         <span class="input-group-text">Date</span>
-                        <input type="text" name="date" class="form-control" value="{{$cons->appointment->date}} | {{\Carbon\Carbon::parse($cons->appointment->time)->format('H:i')}}">
+                        <input type="text" name="date" class="form-control" value="{{$cons->appointment->date}} | {{\Carbon\Carbon::parse($cons->appointment->time)->format('H:i')}}" disabled>
                     </div>
                 </div>
 
@@ -89,7 +108,11 @@
                             @php $diabetes = $cons->appointment->patient->diabetes; @endphp
                         @endif
                         <span class="input-group-text">Diabetes</span>
-                        <input type="text" name="diabetes" class="form-control" value="{{$diabetes}}">
+                        <select class="form-select" name="diabetes">
+                            <option value="" selected>Choose...</option>
+                            <option value="yes" @if($diabetes == 'yes') {{'selected'}} @endif>Yes</option>
+                            <option value="no" @if($diabetes == 'no') {{'selected'}} @endif>No</option>
+                        </select>
                     </div>
                 </div>
                 <div class="col-md-6">
@@ -112,7 +135,7 @@
         </fieldset>
 
         <fieldset class="scheduler-border">
-            <legend class="scheduler-border bg-danger">Consultation</legend>
+            <legend class="scheduler-border bg-success">Consultation</legend>
 
             <div class="row mb-3">
                 <div class="col-md-4">

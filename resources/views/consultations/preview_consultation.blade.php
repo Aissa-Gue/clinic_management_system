@@ -1,26 +1,29 @@
 @extends('layouts.master')
 
 @section('content')
-    <div class="alert alert-danger text-center" role="alert">
+    <div class="alert alert-success text-center" role="alert">
         <h5>Consultation Informations</h5>
     </div>
     @foreach($consultation as $cons)
         <div class="text-end mb-5">
             <ul class="nav nav-pills">
                 <li class="nav-item fw-bold">
-                    <a href="/consultations/preview/{{$cons->appointment->id}}" class="nav-link {{Request::is('consultations/preview/'.$cons->appointment->id) ? 'active':''}}" type="button" aria-selected="false">Consultations</a>
+                    <a href="/consultations/preview/{{$cons->appointment->id}}" class="nav-link {{Request::is('consultations/preview/'.$cons->appointment->id) ? 'active':''}}" type="button" aria-selected="false"><i class="fas fa-file-medical-alt"></i> Consultations</a>
                 </li>
                 <li class="nav-item fw-bold">
-                    <a href="/consultations/prescriptions/preview/{{$cons->appointment->id}}" class="nav-link {{Request::is('consultations/prescriptions/preview/'.$cons->appointment->id) ? 'active':''}}" type="button" aria-selected="false">Prescription</a>
+                    <a href="/consultations/prescriptions/preview/{{$cons->appointment->id}}" class="nav-link {{Request::is('consultations/prescriptions/preview/'.$cons->appointment->id) ? 'active':''}}" type="button" aria-selected="false"><i class="fas fa-capsules"></i> Prescription</a>
                 </li>
                 <li class="nav-item fw-bold">
-                    <a href="/consultations/certificates/preview/{{$cons->appointment->id}}" class="nav-link {{Request::is('consultations/prescriptions/preview/'.$cons->appointment->id) ? 'active':''}}" type="button" aria-selected="false">Certificate</a>
+                    <a href="/consultations/certificates/preview/{{$cons->appointment->id}}" class="nav-link {{Request::is('consultations/certificates/preview/'.$cons->appointment->id) ? 'active':''}}" type="button" aria-selected="false"><i class="far fa-file-alt"></i> Certificate</a>
+                </li>
+                <li class="nav-item fw-bold">
+                    <a href="/consultations/history/{{$cons->appointment->id}}" class="nav-link {{Request::is('consultations/history/'.$cons->appointment->id) ? 'active':''}}" type="button" aria-selected="false"><i class="fas fa-history"></i> History</a>
                 </li>
             </ul>
         </div>
 
             <fieldset class="scheduler-border">
-                <legend class="scheduler-border bg-danger">Patient informations</legend>
+                <legend class="scheduler-border bg-success">Patient informations</legend>
                 <div class="row mb-3">
                     <div class="col-md-6 mb-1">
                         <div class="input-group">
@@ -81,7 +84,7 @@
             </fieldset>
 
             <fieldset class="scheduler-border">
-                <legend class="scheduler-border bg-danger">Consultation</legend>
+                <legend class="scheduler-border bg-success">Consultation</legend>
 
                 <dl class="row">
                     <dt class="col-md-2">Weight (Kg):</dt>

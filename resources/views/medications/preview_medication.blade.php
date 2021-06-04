@@ -1,12 +1,12 @@
 @extends('layouts.master')
 
 @section('content')
-    <div class="alert alert-danger text-center mb-4" role="alert">
+    <div class="alert alert-success text-center mb-4" role="alert">
         <h5>Medication Informations</h5>
     </div>
 
     <fieldset class="scheduler-border">
-        <legend class="scheduler-border bg-danger">General informations</legend>
+        <legend class="scheduler-border bg-success">General informations</legend>
         <div class="row justify-content-md-end">
             <div class="col-md-auto">
                 <a href="/medications/update_medication/{{$medication->id}}" class="text-success">

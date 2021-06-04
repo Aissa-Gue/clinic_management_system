@@ -27,12 +27,12 @@
 <body>
 @include('includes.navbar')
 
-<div class="container-fluid py-2">
+<div class="container-fluid py-2 my_mt">
     <div class="row">
         <div class="sidebar_width">
             @include('includes.sidebar')
         </div>
-        <div class="col-md-10">
+        <div class="col-sm-10">
             @yield('content')
         </div>
     </div>

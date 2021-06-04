@@ -96,7 +96,7 @@ class PatientsController extends Controller
 
 
     public function destroy($id){
-        $patient = Patient::where('id', '=', $id)->delete();
+        Patient::where('id', '=', $id)->delete();
         return redirect('patients');
     }
 }

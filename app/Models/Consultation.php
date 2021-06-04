@@ -16,4 +16,7 @@ class Consultation extends Model
     public function prescription(){
         return $this->hasOne(Prescription::class,'id','pres_id');
     }
+    public function certificate(){
+        return $this->hasOne(Certificate::class,'id','cert_id');
+    }
 }

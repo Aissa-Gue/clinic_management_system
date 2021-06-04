@@ -91,6 +91,9 @@ Route::post('consultations/edit/{app_id}', '\App\Http\Controllers\ConsultationsC
 Route::get('consultations/delete/{app_id}', '\App\Http\Controllers\ConsultationsController@destroy');
 
 //Prescription (crud)
+Route::get('consultations/prescriptions/preview/{app_id}', '\App\Http\Controllers\PrescriptionsController@show');
+Route::get('consultations/prescriptions/print/{app_id}', '\App\Http\Controllers\PrescriptionsController@printPres');
+
 Route::get('consultations/prescriptions/{app_id}', '\App\Http\Controllers\PrescriptionsController@insert_prescription');
 Route::post('consultations/prescriptions/{app_id}', '\App\Http\Controllers\PrescriptionsController@store');
 
@@ -98,9 +101,15 @@ Route::get('consultations/prescriptions/deleteMed/{pres_id}/{med_id}', '\App\Htt
 Route::get('consultations/prescriptions/delete/{pres_id}', '\App\Http\Controllers\PrescriptionsController@destroy');
 
 //Certificate
+Route::get('consultations/certificates/preview/{app_id}', '\App\Http\Controllers\CertificatesController@show');
+Route::get('consultations/certificates/print/{app_id}', '\App\Http\Controllers\CertificatesController@printCert');
+
 Route::get('consultations/certificates/{cons_id}', '\App\Http\Controllers\CertificatesController@insert_certificate');
 Route::post('consultations/certificates/{cons_id}', '\App\Http\Controllers\CertificatesController@store');
 Route::get('consultations/certificates/delete/{cons_id}', '\App\Http\Controllers\CertificatesController@destroy');
+
+//history
+Route::get('consultations/history/{app_id}', '\App\Http\Controllers\ConsultationsController@history');
 
 
 

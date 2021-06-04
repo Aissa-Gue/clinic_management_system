@@ -1,14 +1,14 @@
 @extends('layouts.master')
 
 @section('content')
-    <div class="alert alert-danger text-center fw-bold mt-2" role="alert">
+    <div class="alert alert-success text-center fw-bold mt-2" role="alert">
         <h5>Patients List</h5>
     </div>
     <div class="row mb-2">
         <nav class="navbar navbar-dark bg-light">
                 <form action="/patients" method="GET" class="d-flex">
-                    <input class="form-control me-1" type="text" name="lname" placeholder="Last name" value="{{request()->get('lname')}}">
                     <input class="form-control me-1" type="text" name="fname" placeholder="First name" value="{{request()->get('fname')}}">
+                    <input class="form-control me-1" type="text" name="lname" placeholder="Last name" value="{{request()->get('lname')}}">
                     <button class="btn btn-outline-primary" type="submit"><i class="fas fa-search"></i></button>
                 </form>
                 <div class="d-flex">
@@ -21,8 +21,8 @@
             <thead>
             <tr>
                 <th scope="col">Id</th>
-                <th scope="col">Last name</th>
                 <th scope="col">First name</th>
+                <th scope="col">Last name</th>
                 <th scope="col">Gender</th>
                 <th scope="col">Birthdate</th>
                 <th scope="col" class="text-center">Preview</th>
@@ -44,8 +44,8 @@
             @foreach($patient as $pat)
             <tr>
                 <th scope="row">{{$pat->id}}</th>
-                <td>{{$pat->last_name}}</td>
                 <td>{{$pat->first_name}}</td>
+                <td>{{$pat->last_name}}</td>
                 <td>{{$pat->gender}}</td>
                 <td >{{$pat->birthdate}}</td>
                 <td class="text-center">

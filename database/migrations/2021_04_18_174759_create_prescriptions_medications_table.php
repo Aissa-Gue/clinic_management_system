@@ -18,6 +18,7 @@ class CreatePrescriptionsMedicationsTable extends Migration
             $table->foreignId('medic_id')->references('id')->on('medications')->onUpdate('cascade')->onDelete('cascade');
             $table->integer('quantity');
             $table->string('dosage');
+            $table->timestamps();
             $table->primary(array('pres_id', 'medic_id'));
             $table->charset = 'utf8';
             $table->collation = 'utf8_general_ci';

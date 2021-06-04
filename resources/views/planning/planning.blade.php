@@ -1,20 +1,25 @@
 @extends('layouts.master')
 
 @section('content')
-    <div class="alert alert-danger text-center fw-bold mt-2" role="alert">
+    <div class="alert alert-success text-center fw-bold mt-2" role="alert">
         <h5>Time Planning</h5>
     </div>
 
-    <div class="row mb-2">
+    <div class="row mb-3">
         <nav class="navbar navbar-dark bg-light">
             <form action="/planning/add_time" method="post" class="d-flex">
                 @csrf
-                <div class="input-group mb-3">
+                <div class="input-group">
                     <input type="time" name="time" class="form-control" placeholder="add time">
                     <button class="btn btn-success" type="submit">NEW <i class="fa fa-plus"></i></button>
                 </div>
             </form>
         </nav>
+        @if(!empty($messages))
+            @foreach ($messages->get('time') as $message)
+                <div class="form-text text-danger">{{$message}}</div>
+            @endforeach
+        @endif
     </div>
 
     <div class="row">

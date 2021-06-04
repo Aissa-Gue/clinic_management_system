@@ -26,6 +26,14 @@ class ConsultationsController extends Controller
         return view('consultations.preview_consultation')
             ->with('consultation',Consultation::all()->where('app_id',$app_id)->sortByDesc('created_at'));
     }
+    public function history($app_id){
+        $currentPat = Appointment::where('id',$app_id)->first('pat_id');
+        $currentApp = Appointment::where('id',$app_id)->get();
+
+        return view('consultations.history')
+            ->with('currentApp',$currentApp)
+            ->with('appointments',Appointment::where('pat_id',$currentPat['pat_id'])->whereHas('consultation')->get());
+    }
 
 
     public function add_cons_redirect(){
@@ -105,8 +113,8 @@ class ConsultationsController extends Controller
                     'diabetes' => $diabetes
                 ]);
 
-            $doc_id = request('doc_id');
-            return redirect('consultations/'.$doc_id);
+            //$doc_id = request('doc_id');
+            return redirect('consultations/prescriptions/'.$app_id);
         }
     }
 
@@ -148,7 +156,7 @@ class ConsultationsController extends Controller
         }else {
             //update patient info
             $pat_id = $req->pat_id;
-            $doc_id = $req->doc_id;
+            //$doc_id = $req->doc_id;
 
             Patient::where('id', '=', $pat_id)
                 ->update([
@@ -167,7 +175,7 @@ class ConsultationsController extends Controller
                     'description' => $req->description,
                 ]);
 
-            return redirect('consultations/'.$doc_id);
+            return redirect('consultations/prescriptions/'.$app_id);
         }
     }
 

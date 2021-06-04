@@ -1,32 +1,54 @@
+:root{
+    //--my_primaryColor: #ff5959;
+    //--my_fontColor: red;
+
+    //--my_primaryColor: #4154fe;
+    //--my_fontColor: blue;
+
+
+    --my_primaryColor: #009999;
+    --my_fontColor: #009973;
+}
+.form-control:disabled, .form-control[readonly]{
+    background-color: white;
+}
 /****** START SIDEBAR ******/
 .my_sidebar{
     font-size: 17px;
     font-weight: 600;
-    background-color: #17a2b8;
 }
 .sidebar_width{
     width: 180px;
     margin-right: 18px;
 }
+.my_sidebar_py {
+    padding-top: 0.91rem!important;
+    padding-bottom: 0.91rem!important;
+}
+.my_mt{
+    margin-top: 90px;
+}
 .my_sidebar i,
 .nav-item a{
-    color: red;
+    color: var(--my_fontColor);
+}
+.list-group-item{
+    color: #2d3748;
 }
 .list-group-item.active,
 .list-group-item.active i{
-    background-color: #F90f0F;
-    background-color: #ff5959;
     color: white;
-    border: #ff5959 solid 1px;
+    background-color: var(--my_primaryColor);
+    border: var(--my_primaryColor) solid 1px;
 }
+
 .my_bg-danger{
- background-color: #ff5959;
-    /*background-color: #33d176;*/
+    background-color: var(--my_primaryColor);
 }
 
 .nav-pills .nav-link.active
 {
-    background-color: #ff5959;
+    background-color: var(--my_primaryColor);
 
 }
 /****** START GENERAL ******/
@@ -36,7 +58,7 @@ body{
 
 fieldset.scheduler-border {
     /* border: 1px groove #ddd !important; */
-    border: 3px groove #ff5959 !important;
+    border: 3px groove var(--my_primaryColor) !important;
     padding: 0 1.4em 1.4em 1.4em !important;
     margin: 0 0 1.5em 0 !important;
     -webkit-box-shadow: 0px 0px 0px 0px #000;
@@ -52,6 +74,7 @@ legend.scheduler-border {
     font-weight: bold !important;
     text-align: right !important;
     margin-top: -15px;
+    border-radius: 4px;
 }
 /****** END GENERALE ******/
 
