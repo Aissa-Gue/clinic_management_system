@@ -70,7 +70,7 @@
                                     <td>{{$app->consultation->created_at}}</td>
                                     <td>{{$app->consultation->created_at}}</td>
                                     <td>{{$app->doctor->speciality->speciality}}</td>
-                                    <td>Mark</td>
+                                    <td>Dr. {{$app->doctor->first_name}} {{$app->doctor->last_name}}</td>
                                     <td class="text-center">
                                         <a class="btn btn-outline-success" href="/consultations/preview/{{$app->id}}">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-lines-fill" viewBox="0 0 16 16">
