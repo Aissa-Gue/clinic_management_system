@@ -111,6 +111,18 @@ Route::get('consultations/certificates/delete/{cons_id}', '\App\Http\Controllers
 //history
 Route::get('consultations/history/{app_id}', '\App\Http\Controllers\ConsultationsController@history');
 
+//settings
+
+Route::get('settings/', '\App\Http\Controllers\Controller@showSettings');
+Route::get('settings/export', '\App\Http\Controllers\Controller@export');
+Route::get('settings/drop', '\App\Http\Controllers\Controller@drop');
+Route::post('settings/import', '\App\Http\Controllers\Controller@import');
+
+//account
+Route::get('account/', '\App\Http\Controllers\Controller@showAccount');
+Route::post('account/', '\App\Http\Controllers\Controller@updateAccount');
+//login
+Route::get('login/', '\App\Http\Controllers\Controller@showLogin');
 
 
 

@@ -74,7 +74,7 @@
                 <th scope="col">Id</th>
                 <th scope="col"><i class="fa fa-user-injured"></i> Patient</th>
                 <th scope="col" class="text-center"><i class="fa fa-calendar-alt"></i> Birthdate</th>
-                <th scope="col" class="text-center"><i class="fa fa-info-circle"></i> Status</th>
+                <th scope="col"><i class="fa fa-info-circle"></i> Status</th>
                 <th scope="col" class="text-center"><i class="fa fa-calendar-alt"></i> Date</th>
                 <th scope="col" class="text-center"><i class="fa fa-clock"></i> Time</th>
                 <th scope="col" class="text-center">Preview</th>
@@ -88,9 +88,14 @@
                     <th scope="row">{{$app->id}}</th>
                     <td>{{$app->patient->first_name}} {{$app->patient->last_name}}</td>
                     <td class="text-center">{{$app->patient->birthdate}}</td>
-                    <td class="text-success text-center"><i class="fa fa-check-circle"></i> Done</td>
-                    <!-- <td class="text-warning"><i class="fa fa-pause-circle"></i> Waiting</td>
-                    <td class="text-danger"><i class="fa fa-times-circle"></i> Canceled</td>-->
+                    @php $cons = \App\Models\Consultation::where('app_id', $app->id)->first();
+                    if ($cons === null) {
+                        echo '<td style="color: #fd7e14;"><i class="fa fa-hourglass-half"></i> Waiting</td>';
+                    }else{
+                        echo '<td class="text-success"><i class="fa fa-check-circle"></i> Consulted</td>';
+                    }
+                    @endphp
+                    <!--<td class="text-danger"><i class="fa fa-times-circle"></i> Canceled</td>-->
                     <td class="text-center">{{$app->date}}</td>
                     <td class="text-center">{{\Carbon\Carbon::parse($app->time)->format('H:i')}}</td>
                     <td class="text-center">

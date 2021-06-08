@@ -9,7 +9,7 @@
         <div class="text-end mb-5">
             <ul class="nav nav-pills">
                 <li class="nav-item fw-bold">
-                    <a href="/consultations/edit/{{$app->id}}" class="nav-link {{Request::is('consultations/add/'.$app->id) ? 'active':''}}" type="button" aria-selected="false"><i class="fas fa-file-medical-alt"></i>  Consultations</a>
+                    <a href="/consultations/edit/{{$app->id}}" class="nav-link {{Request::is('consultations/add/'.$app->id) ? 'active':''}}" type="button" aria-selected="false"><i class="fas fa-file-medical-alt"></i>  Consultation</a>
                 </li>
                 <li class="nav-item fw-bold">
                     <a href="/consultations/prescriptions/{{$app->id}}" class="nav-link {{Request::is('consultations/prescriptions/'.$app->id) ? 'active':''}}" type="button" aria-selected="false"><i class="fas fa-capsules"></i> Prescription</a>
@@ -75,8 +75,8 @@
                     </div>
 
                     <div class="col-sm-12 text-end">
-                        <a href="{{ url('/consultations/prescriptions/print/'.$app->id) }}" class="btn btn-success px-4">Print</a>
-                        <a href="{{ url('/consultations/prescriptions/print/'.$app->id) }}" class="btn btn-primary">Download PDF</a>
+                        <a href="{{ url('/consultations/certificates/print/'.$app->id) }}" class="btn btn-success px-4">Print</a>
+                        <a href="{{ url('/consultations/certificates/print/'.$app->id) }}" class="btn btn-primary">Download PDF</a>
                     </div>
                 </div>
             </fieldset>

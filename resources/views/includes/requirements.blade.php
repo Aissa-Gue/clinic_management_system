@@ -16,7 +16,7 @@
 
 <!-- MY CSS -->
 <link href="{{URL::asset('css/side-nav-bar.css')}}" rel="stylesheet">
-
+<link href="{{URL::asset('css/print.css')}}" rel="stylesheet">
 
 
 

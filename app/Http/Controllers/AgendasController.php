@@ -35,10 +35,25 @@ class AgendasController extends Controller
         }
     }
 
-    public function update(Request $req){
-        $agenda = Agenda::where('id', '=', $req->id)
-            ->update(['time' => $req->time]);
-        return redirect('planning');
+    public function update(Request $req, $id){
+        $validator = Validator::make(
+            array(
+                'time' => $req->time
+            ),
+            array(
+                'time' => 'required|date_format:H:i'
+            )
+        );
+        $agenda = Agenda::where('id', $id);
+
+        if ($validator->fails()) {
+            $messages = $validator->messages();
+            return view('planning/planning')->with('messages',$messages)
+                ->with('agenda',Agenda::all());
+        }else {
+            $agenda->update(['time' => $req->time]);
+            return redirect('planning');
+        }
     }
 
 

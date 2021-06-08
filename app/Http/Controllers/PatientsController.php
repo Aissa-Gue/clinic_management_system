@@ -24,8 +24,7 @@ class PatientsController extends Controller
     }
 
     public function show($id){
-        //$patient = Patient::where('id', '=', $id)->firstOrFail();//same as where 'id' = 1
-        $patient = Patient::findOrFail($id);//same as where 'id' = 1
+        $patient = Patient::findOrFail($id);//where 'id' = 1
         return view('patients.preview_patient')->with('patient',$patient);
     }
 
@@ -45,11 +44,11 @@ class PatientsController extends Controller
                 'phone' => request('phone')
             ),
             array(
-                'first_name' => 'required:patients',
-                'last_name' => 'required:patients',
-                'birthdate' => 'required|date:patients',
-                'gender' => 'required:patients',
-                'city' => 'required:patients',
+                'first_name' => 'required',
+                'last_name' => 'required',
+                'birthdate' => 'required|date',
+                'gender' => 'required',
+                'city' => 'required',
                 'email' => 'required|email|unique:patients',
                 'phone' => 'required|numeric|digits:10|unique:patients'
             )
@@ -81,17 +80,49 @@ class PatientsController extends Controller
         return view('patients.update_patient')->with('patient',$patient)
                                           ->with('city',City::all());
     }
-    public function update(Request $req){
-        $patient = Patient::where('id', '=', $req->id)
-            ->update(['first_name' => $req->first_name,
+    public function update(Request $req, $id){
+        $validator = Validator::make(
+            array(
+                'first_name' => $req->first_name,
+                'last_name' =>  $req->last_name,
+                'birthdate' =>  $req->birthdate,
+                'gender' =>  $req->gender,
+                'city' =>  $req->city,
+                'email' =>  $req->email,
+                'phone' =>  $req->phone
+            ),
+            array(
+                'first_name' => 'required',
+                'last_name' => 'required',
+                'birthdate' => 'required|date',
+                'gender' => 'required',
+                'city' => 'required',
+                'email' => 'required|email|unique:patients,email,'.$id, //unique email except current patient
+                'phone' => 'required|numeric|digits:10|unique:patients,phone,'.$id //unique phone except current patient
+            )
+        );
+        $patient = Patient::where('id', $id)->firstOrFail();
+
+        if ($validator->fails()){
+            $messages = $validator->messages();
+
+            return view('patients.update_patient')->with('messages',$messages)
+                ->with('patient',$patient)
+                ->with('city',City::all());
+        }else {
+
+            $patient->update([
+                'first_name' => $req->first_name,
                 'last_name' => $req->last_name,
                 'birthdate' => $req->birthdate,
                 'gender' => $req->gender,
                 'address' => $req->address,
                 'city_id' => $req->city,
                 'email' => $req->email,
-                'phone' => $req->phone]);
-        return redirect('patients');
+                'phone' => $req->phone
+                ]);
+            return redirect('patients');
+        }
     }
 
 

@@ -46,28 +46,47 @@ class MedicationsController extends Controller
         {
             $messages = $validator->messages();
             return view('medications.add_medication')->with('messages',$messages);
+        }else{
+            $medication = new Medication();
+            $medication->scientific_name = request('scientific_name');
+            $medication->commercial_name = request('commercial_name');
+            $medication->description = request('description');
+            $medication->save();
+            //error_log($medication);
+            return redirect('medications');
         }
-
-        $medication = new Medication();
-        $medication->scientific_name = request('scientific_name');
-        $medication->commercial_name = request('commercial_name');
-        $medication->description = request('description');
-        $medication->save();
-        //error_log($medication);
-        return redirect('medications');
     }
 
 
     public function updateMedication($id){
-        $medication = Medication::where('id', '=', $id)->firstOrFail();
+        $medication = Medication::where('id', $id)->firstOrFail();
         return view('medications.update_medication')->with('medication',$medication);
     }
-    public function update(Request $req){
-        $medication = Medication::where('id', '=', $req->id)
-            ->update(['scientific_name' => $req->scientific_name,
+    public function update(Request $req, $id){
+        $validator = Validator::make(
+            array(
+                'scientific_name' => request('scientific_name'),
+                'commercial_name' => request('commercial_name')
+            ),
+            array(
+                'scientific_name' => 'required|unique:medications,scientific_name,'.$id,
+                'commercial_name' => 'required|unique:medications,commercial_name,'.$id,
+            )
+        );
+        $medication = Medication::where('id', $id)->firstOrFail();
+
+        if ($validator->fails())
+        {
+            $messages = $validator->messages();
+            return view('medications.update_medication')->with('messages',$messages)
+                ->with('medication',$medication);
+
+        }else{
+            $medication->update(['scientific_name' => $req->scientific_name,
                 'commercial_name' => $req->commercial_name,
                 'description' => $req->description]);
-        return redirect('medications');
+            return redirect('medications');
+        }
     }
 
 

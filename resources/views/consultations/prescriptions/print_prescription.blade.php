@@ -7,34 +7,12 @@ use Carbon\Carbon;
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Laravel</title>
-    <!-- jquery-->
-    <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js" integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous"></script>
+    <title>Prescription</title>
+    @include('includes.requirements')
 
-    <!-- bootstrap 5.0.0-beta3 -->
-    <!-- CSS only -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
-
-    <!-- Bootstrap icons
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css">-->
-
-    <!--font-awesome-->
-    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
-
-    <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
-
-    <!-- MY CSS -->
-    <link href="{{URL::asset('css/side-nav-bar.css')}}" rel="stylesheet">
-    <link href="{{URL::asset('css/print.css')}}" rel="stylesheet">
 </head>
 
 <body>
-<script type="text/javascript">
-    $(document).ready(function(){
-        $('.print_btn').printPage();
-    });
-</script>
 <div class="row my_A5">
     @foreach($currentCons as $cons)
         <div class="row text-center">

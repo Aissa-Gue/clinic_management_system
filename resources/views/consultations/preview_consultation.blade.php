@@ -8,7 +8,7 @@
         <div class="text-end mb-5">
             <ul class="nav nav-pills">
                 <li class="nav-item fw-bold">
-                    <a href="/consultations/preview/{{$cons->appointment->id}}" class="nav-link {{Request::is('consultations/preview/'.$cons->appointment->id) ? 'active':''}}" type="button" aria-selected="false"><i class="fas fa-file-medical-alt"></i> Consultations</a>
+                    <a href="/consultations/preview/{{$cons->appointment->id}}" class="nav-link {{Request::is('consultations/preview/'.$cons->appointment->id) ? 'active':''}}" type="button" aria-selected="false"><i class="fas fa-file-medical-alt"></i> Consultation</a>
                 </li>
                 <li class="nav-item fw-bold">
                     <a href="/consultations/prescriptions/preview/{{$cons->appointment->id}}" class="nav-link {{Request::is('consultations/prescriptions/preview/'.$cons->appointment->id) ? 'active':''}}" type="button" aria-selected="false"><i class="fas fa-capsules"></i> Prescription</a>

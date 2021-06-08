@@ -39,7 +39,7 @@ class AppointmentsController extends Controller
             ->get();
 
         return view('appointments.appointments')
-            ->with('appointment',Appointment::all()->where('doc_id','=',$doc_id)->sortByDesc('time')->sortByDesc('date'))
+            ->with('appointment',Appointment::where('doc_id','=',$doc_id)->whereDate('date',Carbon::today())->orderByDesc('time')->orderByDesc('date')->get())
             ->with('patient',Patient::all('id','first_name','last_name'))
             ->with('doctor',Doctor::all('id','first_name','last_name','spec_id'))
             ->with('currentDoc',Doctor::all('id','first_name','last_name')->where('id',$doc_id)->first())

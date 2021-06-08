@@ -48,12 +48,12 @@ class DoctorsController extends Controller
                 'phone' => request('phone')
             ),
             array(
-                'first_name' => 'required:doctors',
-                'last_name' => 'required:doctors',
-                'birthdate' => 'required|date:doctors',
-                'spec_id' => 'required:doctors',
-                'gender' => 'required:doctors',
-                'city' => 'required:doctors',
+                'first_name' => 'required',
+                'last_name' => 'required',
+                'birthdate' => 'required|date',
+                'spec_id' => 'required',
+                'gender' => 'required',
+                'city' => 'required',
                 'email' => 'required|email|unique:doctors',
                 'phone' => 'required|numeric|digits:10|unique:doctors'
             )
@@ -87,18 +87,52 @@ class DoctorsController extends Controller
                                          ->with('city',City::all())
                                          ->with('speciality',specialisation::all('id','speciality'));
     }
-    public function update(Request $req){
-        $doctor = Doctor::where('id', '=', $req->id)
-            ->update(['first_name' => $req->first_name,
-                'last_name' => $req->last_name,
-                'birthdate' => $req->birthdate,
-                'gender' => $req->gender,
-                'spec_id' => $req->speciality,
-                'address' => $req->address,
-                'city_id' => $req->city,
-                'email' => $req->email,
-                'phone' => $req->phone]);
-        return redirect('doctors');
+    public function update(Request $req, $id){
+
+        $validator = Validator::make(
+            array(
+                'first_name' => $req->first_name,
+                'last_name' =>  $req->last_name,
+                'birthdate' =>  $req->birthdate,
+                'speciality' =>  $req->speciality,
+                'gender' =>  $req->gender,
+                'city' =>  $req->city,
+                'email' =>  $req->email,
+                'phone' =>  $req->phone
+            ),
+            array(
+                'first_name' => 'required',
+                'last_name' => 'required',
+                'birthdate' => 'required|date',
+                'speciality' => 'required',
+                'gender' => 'required',
+                'city' => 'required',
+                'email' => 'required|email|unique:doctors,email,'.$id,
+                'phone' => 'required|numeric|digits:10|unique:doctors,phone,'.$id
+            )
+        );
+        $doctor = Doctor::where('id', $id)->firstOrFail();
+
+        if ($validator->fails()){
+            $messages = $validator->messages();
+            return view('doctors.update_doctor')->with('messages',$messages)
+                ->with('doctor',$doctor)
+                ->with('city',City::all())
+                ->with('speciality',specialisation::all('id','speciality'));
+        }else{
+                $doctor->update(
+                    ['first_name' => $req->first_name,
+                    'last_name' => $req->last_name,
+                    'birthdate' => $req->birthdate,
+                    'gender' => $req->gender,
+                    'spec_id' => $req->speciality,
+                    'address' => $req->address,
+                    'city_id' => $req->city,
+                    'email' => $req->email,
+                    'phone' => $req->phone]
+                );
+            return redirect('doctors');
+        }
     }
 
 

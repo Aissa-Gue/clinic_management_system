@@ -8,7 +8,7 @@
         <div class="text-end mb-5">
         <ul class="nav nav-pills">
             <li class="nav-item fw-bold">
-                <a href="/consultations/add/{{$app->id}}" class="nav-link {{Request::is('consultations/add/'.$app->id) ? 'active':''}}" type="button" aria-selected="false"><i class="fas fa-file-medical-alt"></i> Consultations</a>
+                <a href="/consultations/add/{{$app->id}}" class="nav-link {{Request::is('consultations/add/'.$app->id) ? 'active':''}}" type="button" aria-selected="false"><i class="fas fa-file-medical-alt"></i> Consultation</a>
             </li>
             <li class="nav-item fw-bold">
                 <a href="/consultations/prescriptions/{{$app->id}}" class="nav-link {{Request::is('consultations/prescriptions/'.$app->id) ? 'active':''}}" type="button" aria-selected="false"><i class="fas fa-capsules"></i> Prescription</a>
@@ -17,7 +17,7 @@
                 <a href="/consultations/certificates/{{$app->id}}" class="nav-link {{Request::is('consultations/certificates/'.$app->id) ? 'active':''}}" type="button" aria-selected="false"><i class="far fa-file-alt"></i> Certificate</a>
             </li>
             <li class="nav-item fw-bold">
-                <a href="/consultations/history/{{$cons->appointment->id}}" class="nav-link {{Request::is('consultations/history/'.$cons->appointment->patient->id) ? 'active':''}}" type="button" aria-selected="false"><i class="fas fa-history"></i> History</a>
+                <a href="/consultations/history/{{$app->id}}" class="nav-link {{Request::is('consultations/history/'.$app->patient->id) ? 'active':''}}" type="button" aria-selected="false"><i class="fas fa-history"></i> History</a>
             </li>
         </ul>
     </div>
@@ -33,6 +33,15 @@
                         <input type="text" name="patient" class="form-control" value="{{$app->patient->first_name}} {{$app->patient->last_name}}" disabled>
                     </div>
                 </div>
+
+                <div class="col-md-6 mb-1">
+                    <div class="input-group">
+                        <span class="input-group-text">Doctor</span>
+                        <input type="text" name="doctor" class="form-control" value="{{$app->doctor->first_name}} {{$app->doctor->last_name}}" disabled>
+                    </div>
+                </div>
+                <input type="hidden" name="doc_id" value="{{$app->doctor->id}}">
+
                 <div class="col-md-6 mb-1">
                     <div class="input-group">
                         <span class="input-group-text">Age</span>
@@ -42,79 +51,12 @@
 
                 <div class="col-md-6 mb-1">
                     <div class="input-group">
-                        @if(request()->get('blood_type') != "")
-                            @php $blood_type = request()->get('blood_type'); @endphp
-                        @else
-                            @php $blood_type = $app->patient->blood_type; @endphp
-                        @endif
-                        <span class="input-group-text">Blood type</span>
-                        <select class="form-select" name="blood_type">
-                            <option value="" selected>Choose...</option>
-                            <option value="O+" @if($blood_type == 'O+') {{'selected'}} @endif>O+</option>
-                            <option value="O-" @if($blood_type == 'O-') {{'selected'}} @endif>O-</option>
-                            <option value="A+" @if($blood_type == 'A+') {{'selected'}} @endif>A+</option>
-                            <option value="A-" @if($blood_type == 'A-') {{'selected'}} @endif>A-</option>
-                            <option value="B+" @if($blood_type == 'B+') {{'selected'}} @endif>B+</option>
-                            <option value="B-" @if($blood_type == 'B-') {{'selected'}} @endif>B-</option>
-                            <option value="AB+" @if($blood_type == 'AB+') {{'selected'}} @endif>AB+</option>
-                            <option value="AB-" @if($blood_type == 'AB-') {{'selected'}} @endif>AB-</option>
-                        </select>
-                        <!-- <input type="text" maxlength="3" name="blood_type" class="form-control" value="{{$blood_type}}"> -->
-                        @if(!empty($messages))
-                            @foreach ($messages->get('blood_type') as $message)
-                                <div class="form-text text-danger">{{$message}}</div>
-                            @endforeach
-                        @endif
-                    </div>
-                </div>
-
-                <input type="hidden" name="doc_id" value="{{$app->doctor->id}}">
-
-                <div class="col-md-6 mb-1">
-                    <div class="input-group">
-                        <span class="input-group-text">Doctor</span>
-                        <input type="text" name="doctor" class="form-control" value="{{$app->doctor->first_name}} {{$app->doctor->last_name}}" disabled>
-                    </div>
-                </div>
-
-                <div class="col-md-6 mb-1">
-                    <div class="input-group">
-                        @if(request()->get('blood_pressure') != "")
-                            @php $blood_pressure = request()->get('blood_pressure'); @endphp
-                        @else
-                            @php $blood_pressure = $app->patient->blood_pressure; @endphp
-                        @endif
-                        <span class="input-group-text">Blood pressure</span>
-                        <select class="form-select" name="blood_pressure">
-                            <option value="" selected>Choose...</option>
-                            <option value="yes" @if($blood_pressure == 'yes') {{'selected'}} @endif>Yes</option>
-                            <option value="no" @if($blood_pressure == 'no') {{'selected'}} @endif>No</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="col-md-6 mb-1">
-                    <div class="input-group">
                         <span class="input-group-text">Date</span>
                         <input type="text" name="date" class="form-control" value="{{$app->date}} | {{\Carbon\Carbon::parse($app->time)->format('H:i')}}" disabled>
                     </div>
                 </div>
 
-                <div class="col-md-6">
-                    <div class="input-group">
-                        @if(request()->get('diabetes') != "")
-                            @php $diabetes = request()->get('diabetes'); @endphp
-                        @else
-                            @php $diabetes = $app->patient->diabetes; @endphp
-                        @endif
-                        <span class="input-group-text">Diabetes</span>
-                        <select class="form-select" name="diabetes">
-                            <option value="" selected>Choose...</option>
-                            <option value="yes" @if($diabetes == 'yes') {{'selected'}} @endif>Yes</option>
-                            <option value="no" @if($diabetes == 'no') {{'selected'}} @endif>No</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="col-md-6">
+                <div class="col-md-6 offset-md-6">
                     <div class="input-group">
                         <span class="input-group-text">Paid amount</span>
                         <input type="text" maxlength="6" name="paid_amount" class="form-control" value="{{request()->get('paid_amount')}}">
@@ -131,12 +73,67 @@
         <fieldset class="scheduler-border">
             <legend class="scheduler-border bg-success">Consultation</legend>
 
-            <div class="row mb-3">
-                <div class="col-md-4">
-                    <label for="weight" class="form-label">Weight (Kg)</label>
-                    <input type="text" name="weight" class="form-control" id="weight" value="{{request()->get('weight')}}">
+            <div class="row mb-4">
+                <div class="col-md-3">
+                    <label for="blood_type" class="form-label">Blood type</label>
+                    @if(request()->get('blood_type') != "")
+                        @php $blood_type = request()->get('blood_type'); @endphp
+                    @else
+                        @php $blood_type = $app->patient->blood_type; @endphp
+                    @endif
+                    <select class="form-select" name="blood_type">
+                        <option value="" selected>Choose...</option>
+                        <option value="O+" @if($blood_type == 'O+') {{'selected'}} @endif>O+</option>
+                        <option value="O-" @if($blood_type == 'O-') {{'selected'}} @endif>O-</option>
+                        <option value="A+" @if($blood_type == 'A+') {{'selected'}} @endif>A+</option>
+                        <option value="A-" @if($blood_type == 'A-') {{'selected'}} @endif>A-</option>
+                        <option value="B+" @if($blood_type == 'B+') {{'selected'}} @endif>B+</option>
+                        <option value="B-" @if($blood_type == 'B-') {{'selected'}} @endif>B-</option>
+                        <option value="AB+" @if($blood_type == 'AB+') {{'selected'}} @endif>AB+</option>
+                        <option value="AB-" @if($blood_type == 'AB-') {{'selected'}} @endif>AB-</option>
+                    </select>
+                    <!-- <input type="text" maxlength="3" name="blood_type" class="form-control" value="{{$blood_type}}"> -->
                     @if(!empty($messages))
-                        @foreach ($messages->get('weight') as $message)
+                        @foreach ($messages->get('blood_type') as $message)
+                            <div class="form-text text-danger">{{$message}}</div>
+                        @endforeach
+                    @endif
+                </div>
+
+                <div class="col-md-3">
+                    <label for="blood_pressure" class="form-label">Blood pressure</label>
+                    @if(request()->get('blood_pressure') != "")
+                        @php $blood_pressure = request()->get('blood_pressure'); @endphp
+                    @else
+                        @php $blood_pressure = $app->patient->blood_pressure; @endphp
+                    @endif
+                    <select class="form-select" name="blood_pressure">
+                        <option value="" selected>Choose...</option>
+                        <option value="yes" @if($blood_pressure == 'yes') {{'selected'}} @endif>Yes</option>
+                        <option value="no" @if($blood_pressure == 'no') {{'selected'}} @endif>No</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-3">
+                    @if(request()->get('diabetes') != "")
+                        @php $diabetes = request()->get('diabetes'); @endphp
+                    @else
+                        @php $diabetes = $app->patient->diabetes; @endphp
+                    @endif
+                    <label for="diabetes" class="form-label">Diabetes</label>
+                    <select class="form-select" name="diabetes">
+                        <option value="" selected>Choose...</option>
+                        <option value="yes" @if($diabetes == 'yes') {{'selected'}} @endif>Yes</option>
+                        <option value="no" @if($diabetes == 'no') {{'selected'}} @endif>No</option>
+                    </select>
+                </div>
+
+                <div class="col-md-3">
+                    <label for="temperature" class="form-label">Temperature (°C)</label>
+                    <input type="text" name="temperature" class="form-control" id="temperature" value="{{request()->get('temperature')}}">
+                    @if(!empty($messages))
+                        @foreach ($messages->get('temperature') as $message)
                             <div class="form-text text-danger">{{$message}}</div>
                         @endforeach
                     @endif
@@ -144,7 +141,7 @@
             </div>
 
             <div class="row mb-3">
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <label for="length" class="form-label">Length (Cm)</label>
                     <input type="text" name="length" class="form-control" id="length" value="{{request()->get('length')}}">
                     @if(!empty($messages))
@@ -153,14 +150,12 @@
                         @endforeach
                     @endif
                 </div>
-            </div>
 
-            <div class="row mb-3">
-                <div class="col-md-4">
-                    <label for="temperature" class="form-label">Temperature (°C)</label>
-                    <input type="text" name="temperature" class="form-control" id="temperature" value="{{request()->get('temperature')}}">
+                <div class="col-md-3">
+                    <label for="weight" class="form-label">Weight (Kg)</label>
+                    <input type="text" name="weight" class="form-control" id="weight" value="{{request()->get('weight')}}">
                     @if(!empty($messages))
-                        @foreach ($messages->get('temperature') as $message)
+                        @foreach ($messages->get('weight') as $message)
                             <div class="form-text text-danger">{{$message}}</div>
                         @endforeach
                     @endif

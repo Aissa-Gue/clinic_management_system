@@ -11,6 +11,7 @@ use App\Models\Doctor;
 use App\Models\Appointment;
 use App\Models\Consultation;
 
+
 class ConsultationsController extends Controller
 {
     public function showData($doc_id){
@@ -19,7 +20,7 @@ class ConsultationsController extends Controller
             ->with('doctor',Doctor::all('id','first_name','last_name','spec_id'))
             ->with('currentDoc',Doctor::all('id','first_name','last_name')->where('id',$doc_id)->first())
             ->with('appointment',Appointment::where('doc_id', $doc_id)->where('date', Carbon::today())->doesntHave('consultation')->get())
-            ->with('consultation',Consultation::all()->where('appointment.doc_id',$doc_id)->sortByDesc('created_at'));
+            ->with('consultation',Consultation::join('appointments','appointments.id','consultations.app_id')->where('appointments.doc_id',$doc_id)->whereDate('appointments.date',Carbon::today())->orderByDesc('appointments.date')->get());
     }
 
     public function show($app_id){
@@ -27,21 +28,22 @@ class ConsultationsController extends Controller
             ->with('consultation',Consultation::all()->where('app_id',$app_id)->sortByDesc('created_at'));
     }
     public function history($app_id){
-        $currentPat = Appointment::where('id',$app_id)->first('pat_id');
+        $currentPat = Appointment::where('id',$app_id)->first();
         $currentApp = Appointment::where('id',$app_id)->get();
 
         return view('consultations.history')
             ->with('currentApp',$currentApp)
-            ->with('appointments',Appointment::where('pat_id',$currentPat['pat_id'])->whereHas('consultation')->get());
+            ->with('appointments',Appointment::where('pat_id',$currentPat['pat_id'])
+                                            ->where('doc_id',$currentPat['doc_id'])
+                                            ->whereHas('consultation')->get());
     }
-
 
     public function add_cons_redirect(){
         $app_id = explode(' - ', request('patient'));
         //dosent work in this moment
         $validator = Validator::make(
             array('app_id' => $app_id[0]),
-            array('app_id' => 'required|numeric|:appointments'));
+            array('app_id' => 'required|numeric'));
 
         if ($validator->fails()) {
             $messages = $validator->messages();

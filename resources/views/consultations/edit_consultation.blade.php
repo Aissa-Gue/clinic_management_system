@@ -9,7 +9,7 @@
         <div class="text-end mb-5">
             <ul class="nav nav-pills">
                 <li class="nav-item fw-bold">
-                    <a href="/consultations/edit/{{$cons->appointment->id}}" class="nav-link {{Request::is('consultations/edit/'.$cons->appointment->id) ? 'active':''}}" type="button" aria-selected="false"><i class="fas fa-file-medical-alt"></i> Consultations</a>
+                    <a href="/consultations/edit/{{$cons->appointment->id}}" class="nav-link {{Request::is('consultations/edit/'.$cons->appointment->id) ? 'active':''}}" type="button" aria-selected="false"><i class="fas fa-file-medical-alt"></i> Consultation</a>
                 </li>
                 <li class="nav-item fw-bold">
                     <a href="/consultations/prescriptions/{{$cons->appointment->id}}" class="nav-link {{Request::is('consultations/prescriptions/'.$cons->appointment->id) ? 'active':''}}" type="button" aria-selected="false"><i class="fas fa-capsules"></i> Prescription</a>
@@ -44,8 +44,8 @@
 
                 <div class="col-md-6 mb-1">
                     <div class="input-group">
-                        @if(request()->get('blood_type') != "")
-                            @php $blood_type = request()->get('blood_type'); @endphp
+                        @if(request('blood_type') != "")
+                            @php $blood_type = request('blood_type'); @endphp
                         @else
                             @php $blood_type = $cons->appointment->patient->blood_type; @endphp
                         @endif
@@ -80,8 +80,8 @@
 
                 <div class="col-md-6 mb-1">
                     <div class="input-group">
-                        @if(request()->get('blood_pressure') != "")
-                            @php $blood_pressure = request()->get('blood_pressure'); @endphp
+                        @if(request('blood_pressure') != "")
+                            @php $blood_pressure = request('blood_pressure'); @endphp
                         @else
                             @php $blood_pressure = $cons->appointment->patient->blood_pressure; @endphp
                         @endif
@@ -102,8 +102,8 @@
 
                 <div class="col-md-6">
                     <div class="input-group">
-                        @if(request()->get('diabetes') != "")
-                            @php $diabetes = request()->get('diabetes'); @endphp
+                        @if(request('diabetes') != "")
+                            @php $diabetes = request('diabetes'); @endphp
                         @else
                             @php $diabetes = $cons->appointment->patient->diabetes; @endphp
                         @endif
@@ -117,8 +117,8 @@
                 </div>
                 <div class="col-md-6">
                     <div class="input-group">
-                        @if(request()->get('paid_amount') != "")
-                            @php $paid_amount = request()->get('paid_amount'); @endphp
+                        @if(request('paid_amount') != "")
+                            @php $paid_amount = request('paid_amount'); @endphp
                         @else
                             @php $paid_amount = $cons->paid_amount; @endphp
                         @endif
@@ -139,8 +139,8 @@
 
             <div class="row mb-3">
                 <div class="col-md-4">
-                    @if(request()->get('weight') != "")
-                        @php $weight = request()->get('weight'); @endphp
+                    @if(request('weight') != "")
+                        @php $weight = request('weight'); @endphp
                     @else
                         @php $weight = $cons->weight; @endphp
                     @endif
@@ -156,8 +156,8 @@
 
             <div class="row mb-3">
                 <div class="col-md-4">
-                    @if(request()->get('length') != "")
-                        @php $length = request()->get('length'); @endphp
+                    @if(request('length') != "")
+                        @php $length = request('length'); @endphp
                     @else
                         @php $length = $cons->length; @endphp
                     @endif
@@ -173,8 +173,8 @@
 
             <div class="row mb-3">
                 <div class="col-md-4">
-                    @if(request()->get('temperature') != "")
-                        @php $temperature = request()->get('temperature'); @endphp
+                    @if(request('temperature') != "")
+                        @php $temperature = request('temperature'); @endphp
                     @else
                         @php $temperature = $cons->temperature; @endphp
                     @endif
@@ -190,8 +190,8 @@
 
             <div class="row">
                 <div class="col-md-6">
-                    @if(request()->get('description') != "")
-                        @php $description = request()->get('description'); @endphp
+                    @if(request('description') != "")
+                        @php $description = request('description'); @endphp
                     @else
                         @php $description = $cons->description; @endphp
                     @endif
