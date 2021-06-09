@@ -34,17 +34,23 @@ class CreateUsersTable extends Migration
             array(
                 'first_name' => 'Manager',
                 'last_name' => 'Man',
+                'birthdate' => '2000-01-01',
                 'gender' => 'Male',
-                'role' => 'admin',
+                'role' => 'man',
                 'email' => 'manager@clinic.com',
+                'phone' => '0500000001',
                 'password' => 'admin'
-            ),
+            )
+        );
+        DB::table('users')->insert(
             array(
                 'first_name' => 'Secritaire',
                 'last_name' => 'Sec',
+                'birthdate' => '2000-01-01',
                 'gender' => 'Female',
                 'role' => 'sec',
                 'email' => 'secritaire@clinic.com',
+                'phone' => '0500000000',
                 'password' => 'secritaire'
             )
         );
