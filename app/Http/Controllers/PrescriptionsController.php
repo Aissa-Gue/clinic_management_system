@@ -13,6 +13,10 @@ use App\Models\prescriptions_medications;
 
 class PrescriptionsController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
 
     public function show($app_id){
         $currentPres = Consultation::where('app_id',$app_id)->first('pres_id');

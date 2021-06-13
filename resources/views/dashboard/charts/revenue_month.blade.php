@@ -1,8 +1,5 @@
-<!-- chart.js Library -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
-
 <script>
-    let myChart = document.getElementById('monthly_revenue').getContext('2d');
+    let myChart = document.getElementById('revenue_month').getContext('2d');
 
     // Global Options
     Chart.defaults.global.defaultFontFamily = 'Lato';
@@ -10,19 +7,25 @@
     Chart.defaults.global.defaultFontColor = '#777';
 
     let massPopChart = new Chart(myChart, {
-        type:'bar', // bar, horizontalBar, pie, line, doughnut, radar, polarArea
+        type:'line', // bar, horizontalBar, pie, line, doughnut, radar, polarArea
         data:{
-            labels:['Jan', 'Fab', 'Mar', 'Apr', 'Mai', 'Jun'],
-            datasets:[{
-                label:'Revenue',
+            labels:[
+                @foreach($last_revenue_month as $last_rev_month)
+                '{{$last_rev_month->day_nbr}}',
+                @endforeach
+                    //'Jan', 'Fab', 'Mar', 'Apr', 'Mai', 'Jun'
+            ],
+            datasets:[
+                //First graph
+                {
+                label:'Revenue (DA)',
                 data:[
-                    640040,
-                    181045,
-                    153060,
-                    106519,
-                    105162,
-                    95072
+                    @foreach($last_revenue_month as $last_rev_month)
+                        {{$last_rev_month->day_revenue}},
+                    @endforeach
+                    //640040, 181045, 153060, 106519, 105162, 95072
                 ],
+
                 //backgroundColor:'green',
                 backgroundColor:[
                     'rgba(255, 99, 132, 0.6)',
@@ -37,13 +40,17 @@
                 borderColor:'#777',
                 hoverBorderWidth:3,
                 hoverBorderColor:'#000'
-            }]
+            },
+
+            ]
         },
+
+
         options:{
             title:{
-                display:true,
-                text:'Last six months revenue',
-                fontSize:25
+                display:false,
+                text:'Last 30 Days Revenue',
+                fontSize:25,
             },
             legend:{
                 display:true,
@@ -54,7 +61,7 @@
             },
             layout:{
                 padding:{
-                    left:50,
+                    left:20,
                     right:0,
                     bottom:0,
                     top:0

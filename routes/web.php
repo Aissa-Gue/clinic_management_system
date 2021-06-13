@@ -13,8 +13,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+//Authentication
+Auth::routes();
+
 //**** Index ****//
-Route::get('/', '\App\Http\Controllers\Controller@showAllData');
+Route::get('/', '\App\Http\Controllers\DashboardController@showAllData')->name('root');;
+
+//account
+Route::get('account/updateAccount', '\App\Http\Controllers\AccountController@showAccount')->name('account');
+Route::post('account/updateAccount/{id}', '\App\Http\Controllers\AccountController@update');
 
 //**** Patients ****//
 Route::get('patients', '\App\Http\Controllers\PatientsController@showAllData');
@@ -28,27 +35,6 @@ Route::get('patients/update_patient/{id}', '\App\Http\Controllers\PatientsContro
 Route::post('patients/update_patient/{id}', '\App\Http\Controllers\PatientsController@update');
 
 Route::get('patients/delete_patient/{id}', '\App\Http\Controllers\PatientsController@destroy');
-
-//**** Doctors ****//
-Route::get('doctors', '\App\Http\Controllers\DoctorsController@showAllData');
-Route::get('doctors', '\App\Http\Controllers\DoctorsController@search');
-Route::get('doctors/preview_doctor/{id}', '\App\Http\Controllers\DoctorsController@show');
-
-Route::get('doctors/add_doctor', '\App\Http\Controllers\DoctorsController@insertDoctor');
-Route::post('doctors/add_doctor', '\App\Http\Controllers\DoctorsController@store');
-
-Route::get('doctors/update_doctor/{id}', '\App\Http\Controllers\DoctorsController@updateDoctor');
-Route::post('doctors/update_doctor/{id}', '\App\Http\Controllers\DoctorsController@update');
-
-Route::get('doctors/delete_doctor/{id}', '\App\Http\Controllers\DoctorsController@destroy');
-
-//**** Specialisations ****//
-Route::get('specialisations', '\App\Http\Controllers\SpecialisationsController@showAllData');
-Route::get('specialisations', '\App\Http\Controllers\SpecialisationsController@search');
-
-Route::post('specialisations/add_specialisation', '\App\Http\Controllers\SpecialisationsController@store');
-Route::post('specialisations/update_specialisation/{id}', '\App\Http\Controllers\SpecialisationsController@update');
-Route::get('specialisations/delete_specialisation/{id}', '\App\Http\Controllers\SpecialisationsController@destroy');
 
 //**** Medications ****//
 Route::get('medications', '\App\Http\Controllers\MedicationsController@showAllData');
@@ -77,52 +63,76 @@ Route::post('appointments/add_appointment', '\App\Http\Controllers\AppointmentsC
 Route::post('appointments/update_appointment/{id}', '\App\Http\Controllers\AppointmentsController@update');
 Route::get('appointments/delete_appointment/{id}', '\App\Http\Controllers\AppointmentsController@destroy');
 
-//**** Consultations ****//
-Route::get('consultations/{app_id}', '\App\Http\Controllers\ConsultationsController@showData');
-Route::get('consultations/preview/{app_id}', '\App\Http\Controllers\ConsultationsController@show');
 
-Route::post('consultations/add', '\App\Http\Controllers\ConsultationsController@add_cons_redirect');
-Route::get('consultations/add/{app_id}', '\App\Http\Controllers\ConsultationsController@insert_consultation');
-Route::post('consultations/add/{app_id}', '\App\Http\Controllers\ConsultationsController@store');
 
-Route::get('consultations/edit/{app_id}', '\App\Http\Controllers\ConsultationsController@update_consultation');
-Route::post('consultations/edit/{app_id}', '\App\Http\Controllers\ConsultationsController@update');
+Route::group(['middleware' => ['auth', 'manager']], function() {
 
-Route::get('consultations/delete/{app_id}', '\App\Http\Controllers\ConsultationsController@destroy');
+    //settings
+    Route::get('settings/', '\App\Http\Controllers\SettingsController@showSettings');
+    Route::get('settings/export', '\App\Http\Controllers\SettingsController@export');
+    Route::get('settings/drop', '\App\Http\Controllers\SettingsController@drop');
+    Route::post('settings/import', '\App\Http\Controllers\SettingsController@import');
 
-//Prescription (crud)
-Route::get('consultations/prescriptions/preview/{app_id}', '\App\Http\Controllers\PrescriptionsController@show');
-Route::get('consultations/prescriptions/print/{app_id}', '\App\Http\Controllers\PrescriptionsController@printPres');
 
-Route::get('consultations/prescriptions/{app_id}', '\App\Http\Controllers\PrescriptionsController@insert_prescription');
-Route::post('consultations/prescriptions/{app_id}', '\App\Http\Controllers\PrescriptionsController@store');
+    //**** Doctors ****//
+    Route::get('doctors', '\App\Http\Controllers\UsersController@showAllData');
+    Route::get('doctors', '\App\Http\Controllers\UsersController@search');
+    Route::get('doctors/preview_doctor/{id}', '\App\Http\Controllers\UsersController@show');
 
-Route::get('consultations/prescriptions/deleteMed/{pres_id}/{med_id}', '\App\Http\Controllers\PrescriptionsController@destroyMedic');
-Route::get('consultations/prescriptions/delete/{pres_id}', '\App\Http\Controllers\PrescriptionsController@destroy');
+    Route::get('doctors/add_doctor', '\App\Http\Controllers\UsersController@insertDoctor');
+    Route::post('doctors/add_doctor', '\App\Http\Controllers\UsersController@store');
 
-//Certificate
-Route::get('consultations/certificates/preview/{app_id}', '\App\Http\Controllers\CertificatesController@show');
-Route::get('consultations/certificates/print/{app_id}', '\App\Http\Controllers\CertificatesController@printCert');
+    Route::get('doctors/update_doctor/{id}', '\App\Http\Controllers\UsersController@updateDoctor');
+    Route::post('doctors/update_doctor/{id}', '\App\Http\Controllers\UsersController@update');
 
-Route::get('consultations/certificates/{cons_id}', '\App\Http\Controllers\CertificatesController@insert_certificate');
-Route::post('consultations/certificates/{cons_id}', '\App\Http\Controllers\CertificatesController@store');
-Route::get('consultations/certificates/delete/{cons_id}', '\App\Http\Controllers\CertificatesController@destroy');
+    Route::get('doctors/delete_doctor/{id}', '\App\Http\Controllers\UsersController@destroy');
 
-//history
-Route::get('consultations/history/{app_id}', '\App\Http\Controllers\ConsultationsController@history');
+});
 
-//settings
 
-Route::get('settings/', '\App\Http\Controllers\Controller@showSettings');
-Route::get('settings/export', '\App\Http\Controllers\Controller@export');
-Route::get('settings/drop', '\App\Http\Controllers\Controller@drop');
-Route::post('settings/import', '\App\Http\Controllers\Controller@import');
 
-//account
-Route::get('account/', '\App\Http\Controllers\Controller@showAccount');
-Route::post('account/', '\App\Http\Controllers\Controller@updateAccount');
-//login
-Route::get('login/', '\App\Http\Controllers\Controller@showLogin');
+
+Route::group(['middleware' => ['auth', 'doctor']], function() {
+    //**** Consultations ****//
+    Route::get('consultations/{app_id}', '\App\Http\Controllers\ConsultationsController@showData');
+    Route::get('consultations/preview/{app_id}', '\App\Http\Controllers\ConsultationsController@show');
+
+    Route::post('consultations/add', '\App\Http\Controllers\ConsultationsController@add_cons_redirect');
+    Route::get('consultations/add/{app_id}', '\App\Http\Controllers\ConsultationsController@insert_consultation');
+    Route::post('consultations/add/{app_id}', '\App\Http\Controllers\ConsultationsController@store');
+
+    Route::get('consultations/edit/{app_id}', '\App\Http\Controllers\ConsultationsController@update_consultation');
+    Route::post('consultations/edit/{app_id}', '\App\Http\Controllers\ConsultationsController@update');
+
+    Route::get('consultations/delete/{app_id}', '\App\Http\Controllers\ConsultationsController@destroy');
+
+    //Prescription (crud)
+    Route::get('consultations/prescriptions/preview/{app_id}', '\App\Http\Controllers\PrescriptionsController@show');
+    Route::get('consultations/prescriptions/print/{app_id}', '\App\Http\Controllers\PrescriptionsController@printPres');
+
+    Route::get('consultations/prescriptions/{app_id}', '\App\Http\Controllers\PrescriptionsController@insert_prescription');
+    Route::post('consultations/prescriptions/{app_id}', '\App\Http\Controllers\PrescriptionsController@store');
+
+    Route::get('consultations/prescriptions/deleteMed/{pres_id}/{med_id}', '\App\Http\Controllers\PrescriptionsController@destroyMedic');
+    Route::get('consultations/prescriptions/delete/{pres_id}', '\App\Http\Controllers\PrescriptionsController@destroy');
+
+    //Certificate
+    Route::get('consultations/certificates/preview/{app_id}', '\App\Http\Controllers\CertificatesController@show');
+    Route::get('consultations/certificates/print/{app_id}', '\App\Http\Controllers\CertificatesController@printCert');
+
+    Route::get('consultations/certificates/{cons_id}', '\App\Http\Controllers\CertificatesController@insert_certificate');
+    Route::post('consultations/certificates/{cons_id}', '\App\Http\Controllers\CertificatesController@store');
+    Route::get('consultations/certificates/delete/{cons_id}', '\App\Http\Controllers\CertificatesController@destroy');
+
+    //history
+    Route::get('consultations/history/{app_id}', '\App\Http\Controllers\ConsultationsController@history');
+
+});
+
+
+
+
+
 
 
 

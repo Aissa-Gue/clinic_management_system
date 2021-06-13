@@ -1,15 +1,16 @@
 @extends('layouts.master')
 
 @section('content')
-    <ul class="nav nav-pills mt-2" id="pills-tab" role="tablist">
-        <li class="nav-link fw-bold">SPECIALITIES: </li>
-        @foreach($doctor as $doc)
-            <li class="nav-item fw-bold" role="presentation">
-                <a href="/consultations/{{$doc->id}}" class="nav-link {{Request::is('consultations/'.$doc->id) ? 'active':''}}" type="button" aria-selected="false">{{$doc->speciality->speciality}}</a>
-            </li>
-        @endforeach
-    </ul>
-
+    @if(Auth::id() <= 2)
+        <ul class="nav nav-pills mt-2" id="pills-tab" role="tablist">
+            <li class="nav-link fw-bold">SPECIALITIES: </li>
+            @foreach($doctor as $doc)
+                <li class="nav-item fw-bold" role="presentation">
+                    <a href="/consultations/{{$doc->id}}" class="nav-link {{Request::is('consultations/'.$doc->id) ? 'active':''}}" type="button" aria-selected="false">{{$doc->speciality}}</a>
+                </li>
+            @endforeach
+        </ul>
+    @endif
     <div class="alert alert-success text-center fw-bold mt-2" role="alert">
         Dr: {{$currentDoc->first_name}} {{$currentDoc->last_name}}
     </div>

@@ -8,6 +8,11 @@ use Validator;
 
 class MedicationsController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function showAllData(){
         return view('medications.medications')->with('medication',Medication::all());
     }

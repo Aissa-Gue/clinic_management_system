@@ -27,7 +27,7 @@
             <dd class="col-md-4">{{$doctor->last_name}}</dd>
 
             <dt class="col-md-2">Speciality:</dt>
-            <dd class="col-md-4">{{$doctor->speciality->speciality}}</dd>
+            <dd class="col-md-4">{{$doctor->speciality}}</dd>
         </dl>
 
         <dl class="row">

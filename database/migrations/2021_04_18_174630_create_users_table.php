@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Schema;
 
 class CreateUsersTable extends Migration
@@ -15,15 +16,16 @@ class CreateUsersTable extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id('id');
-            $table->string('last_name',50);
             $table->string('first_name',50);
+            $table->string('last_name',50);
             $table->string('gender',10);
             $table->date('birthdate');
+            $table->string('speciality',100)->nullable();
             $table->string('address',50)->nullable();
+            $table->foreignId('city_id')->nullable()->references('id')->on('cities');
             $table->string('email',30)->unique();
             $table->integer('phone')->unique();
-            $table->string('role',3);
-            $table->string('password',32)->default('admin');;
+            $table->string('password')->default(Hash::make('admin'));;
             $table->timestamps();
             $table->charset = 'utf8';
             $table->collation = 'utf8_general_ci';
@@ -32,26 +34,26 @@ class CreateUsersTable extends Migration
         // Insert manager and secritaire
         DB::table('users')->insert(
             array(
+                'id' => 1,
                 'first_name' => 'Manager',
                 'last_name' => 'Man',
                 'birthdate' => '2000-01-01',
                 'gender' => 'Male',
-                'role' => 'man',
                 'email' => 'manager@clinic.com',
                 'phone' => '0500000001',
-                'password' => 'admin'
+                'password' => Hash::make('admin')
             )
         );
         DB::table('users')->insert(
             array(
+                'id' => 2,
                 'first_name' => 'Secritaire',
                 'last_name' => 'Sec',
                 'birthdate' => '2000-01-01',
                 'gender' => 'Female',
-                'role' => 'sec',
                 'email' => 'secritaire@clinic.com',
                 'phone' => '0500000000',
-                'password' => 'secritaire'
+                'password' => Hash::make('secritaire')
             )
         );
     }

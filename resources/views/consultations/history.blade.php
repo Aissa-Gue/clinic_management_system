@@ -69,7 +69,7 @@
                                     <th scope="row" class="text-center">{{$app->consultation->id}}</th>
                                     <td>{{$app->consultation->created_at}}</td>
                                     <td>{{$app->consultation->created_at}}</td>
-                                    <td>{{$app->doctor->speciality->speciality}}</td>
+                                    <td>{{$app->doctor->speciality}}</td>
                                     <td>Dr. {{$app->doctor->first_name}} {{$app->doctor->last_name}}</td>
                                     <td class="text-center">
                                         <a class="btn btn-outline-success" href="/consultations/preview/{{$app->id}}">

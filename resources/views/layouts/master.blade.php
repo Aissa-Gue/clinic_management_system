@@ -13,7 +13,7 @@
 
 <div class="container-fluid py-2 my_mt">
     <div class="row">
-        <div class="sidebar_width">
+        <div class="sidebar_width ">
             @include('includes.sidebar')
         </div>
         <div class="col-sm-10">

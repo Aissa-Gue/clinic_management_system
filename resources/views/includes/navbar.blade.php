@@ -17,13 +17,19 @@
                 <div class="collapse navbar-collapse">
                     <ul class="navbar-nav">
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="account" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Aissa Gue
+                            <a class="nav-link active dropdown-toggle" href="#" id="account" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                {{ Auth::user()->first_name }} {{ Auth::user()->last_name }}
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#"><i class="fas fa-user-circle"></i> Profile</a></li>
+                                <li><a class="dropdown-item" href="{{Route('account')}}"><i class="fas fa-user-circle"></i> Profile</a></li>
                                 <li><a class="dropdown-item" href="#"><i class="fas fa-envelope"></i> Messages</a></li>
-                                <li><a class="dropdown-item" href="#"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+
+                                <li>
+                                    <a href="" class="dropdown-item" onclick="event.preventDefault();document.getElementById('logout-form').submit();"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                                </li>
+                                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                    @csrf
+                                </form>
                             </ul>
                         </li>
                     </ul>

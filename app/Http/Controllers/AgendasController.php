@@ -8,6 +8,11 @@ use App\Models\Agenda;
 
 class AgendasController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function showAllData(){
         return view('planning/planning')->with('agenda',Agenda::all());
     }

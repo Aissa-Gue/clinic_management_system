@@ -55,14 +55,16 @@
 
                 <div class="col-md-3">
                     <label for="speciality" class="form-label">speciality</label>
-                    <select name="spec_id" class="form-select" id="speciality" required>
+                    <select name="speciality" class="form-select" id="speciality" required>
                         <option disabled selected>- select Speciality -</option>
-                        @foreach($speciality as $spec)
-                            <option value="{{$spec->id}}" @if(request()->get('spec_id') == $spec->id) {{'selected'}} @endif>{{$spec->speciality}}</option>
-                        @endforeach
+                        <option value="Orthopedic" @if(request()->get('speciality') == 'Orthopedic') {{'selected'}} @endif>Orthopedic</option>
+                        <option value="Skin" @if(request()->get('speciality') == 'Skin') {{'selected'}} @endif>Skin</option>
+                        <option value="Generalist" @if(request()->get('speciality') == 'Generalist') {{'selected'}} @endif>Generalist</option>
+                        <option value="Dentist" @if(request()->get('speciality') == 'Dentist') {{'selected'}} @endif>Dentist</option>
+                        <option value="Optometrist" @if(request()->get('speciality') == 'Optometrist') {{'selected'}} @endif>Optometrist</option>
                     </select>
                     @if(!empty($messages))
-                        @foreach ($messages->get('spec_id') as $message)
+                        @foreach ($messages->get('speciality') as $message)
                             <div class="form-text text-danger">{{$message}}</div>
                         @endforeach
                     @endif

@@ -10,6 +10,11 @@ use App\Models\certificate;
 
 class CertificatesController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function show($app_id){
         $currentCert = Consultation::where('app_id',$app_id)->first('cert_id');
         $certificate = Certificate::where('id',$currentCert->cert_id)->first();

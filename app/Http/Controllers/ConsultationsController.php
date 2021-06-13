@@ -3,24 +3,37 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Validator;
 use Carbon\Carbon;
 
 use App\Models\Patient;
-use App\Models\Doctor;
+use App\Models\User;
 use App\Models\Appointment;
 use App\Models\Consultation;
 
 
 class ConsultationsController extends Controller
 {
-    public function showData($doc_id){
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
 
-        return view('consultations.consultations')
-            ->with('doctor',Doctor::all('id','first_name','last_name','spec_id'))
-            ->with('currentDoc',Doctor::all('id','first_name','last_name')->where('id',$doc_id)->first())
-            ->with('appointment',Appointment::where('doc_id', $doc_id)->where('date', Carbon::today())->doesntHave('consultation')->get())
-            ->with('consultation',Consultation::join('appointments','appointments.id','consultations.app_id')->where('appointments.doc_id',$doc_id)->whereDate('appointments.date',Carbon::today())->orderByDesc('appointments.date')->get());
+    public function showData($doc_id){
+        if(Auth::id() <= 2) {
+            return view('consultations.consultations')
+                ->with('doctor', User::where('id', '>', 2)->get())
+                ->with('currentDoc', User::where('id', $doc_id)->first())
+                ->with('appointment', Appointment::where('doc_id', $doc_id)->where('date', Carbon::today())->doesntHave('consultation')->get())
+                ->with('consultation', Consultation::join('appointments', 'appointments.id', 'consultations.app_id')->where('appointments.doc_id', $doc_id)->whereDate('appointments.date', Carbon::today())->orderByDesc('appointments.date')->get());
+        }else{
+            return view('consultations.consultations')
+                ->with('doctor', User::where('id', Auth::id())->get())
+                ->with('currentDoc', User::where('id', $doc_id)->first())
+                ->with('appointment', Appointment::where('doc_id', $doc_id)->where('date', Carbon::today())->doesntHave('consultation')->get())
+                ->with('consultation', Consultation::join('appointments', 'appointments.id', 'consultations.app_id')->where('appointments.doc_id', $doc_id)->whereDate('appointments.date', Carbon::today())->orderByDesc('appointments.date')->get());
+        }
     }
 
     public function show($app_id){
@@ -40,7 +53,7 @@ class ConsultationsController extends Controller
 
     public function add_cons_redirect(){
         $app_id = explode(' - ', request('patient'));
-        //dosent work in this moment
+        //doesn't work in this moment
         $validator = Validator::make(
             array('app_id' => $app_id[0]),
             array('app_id' => 'required|numeric'));
@@ -57,7 +70,7 @@ class ConsultationsController extends Controller
         return view('consultations.add_consultation')
             ->with('currentApp',Appointment::where('id',$app_id)->get())
             ->with('currentDoc',Appointment::all('doc_id')->where('id',$app_id)->first())
-            ->with('doctor',Doctor::all());
+            ->with('doctor',User::where('id','>',2));
     }
 
     public function store($app_id){
@@ -90,7 +103,7 @@ class ConsultationsController extends Controller
             return view('consultations.add_consultation')->with('messages',$messages)
                 ->with('currentApp',Appointment::where('id',$app_id)->get())
                 ->with('currentDoc',Appointment::all('doc_id')->where('id',$app_id)->first())
-                ->with('doctor',Doctor::all());
+                ->with('doctor',User::where('id','>',2));
 
         }else{
             $consultation = new Consultation();

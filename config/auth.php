@@ -46,6 +46,16 @@ return [
             'provider' => 'users',
             'hash' => false,
         ],
+        /* added by me
+        'user' => [
+            'driver' => 'session',
+            'provider' => 'users',
+        ],
+
+        'doctor' => [
+            'driver' => 'session',
+            'provider' => 'doctors',
+        ],*/
     ],
 
     /*
@@ -70,6 +80,11 @@ return [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
         ],
+        //added by me
+        /*'doctors'  => [
+            'driver' => 'eloquent',
+            'model'  => App\Models\Doctor::class,
+        ]*/
 
         // 'users' => [
         //     'driver' => 'database',

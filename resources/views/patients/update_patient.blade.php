@@ -131,7 +131,7 @@
                         if(request('phone') != ""){
                            $phone = request('phone');
                         }else{
-                            $phone = $patient->phone;
+                            $phone = '0'. $patient->phone;
                         }
                     @endphp
                     <label for="phone" class="form-label">Phone</label>

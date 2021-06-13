@@ -77,11 +77,11 @@
                     <label for="speciality" class="form-label">speciality</label>
                     <select name="speciality" class="form-select" id="speciality" required>
                         <option disabled selected>- select Speciality -</option>
-                        @foreach($speciality as $spec)
-                            <option value="{{$spec->id}}" @if($doctor->spec_id == $spec->id) {{'selected'}} @endif>
-                                {{$spec->speciality}}
-                            </option>
-                        @endforeach
+                        <option value="Orthopedic" @if($doctor->speciality == 'Orthopedic') {{'selected'}} @endif>Orthopedic</option>
+                        <option value="Skin" @if($doctor->speciality == 'Skin') {{'selected'}} @endif>Skin</option>
+                        <option value="Generalist" @if($doctor->speciality == 'Generalist') {{'selected'}} @endif>Generalist</option>
+                        <option value="Dentist" @if($doctor->speciality == 'Dentist') {{'selected'}} @endif>Dentist</option>
+                        <option value="Optometrist" @if($doctor->speciality == 'Optometrist') {{'selected'}} @endif>Optometrist</option>
                     </select>
                     @if(!empty($messages))
                         @foreach ($messages->get('speciality') as $message)
@@ -147,7 +147,7 @@
                         if(request('phone') != ""){
                            $phone = request('phone');
                         }else{
-                            $phone = $doctor->phone;
+                            $phone = '0'. $doctor->phone;
                         }
                     @endphp
                     <label for="phone" class="form-label">Phone</label>

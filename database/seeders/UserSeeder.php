@@ -2,9 +2,10 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+
 
 class UserSeeder extends Seeder
 {
@@ -22,10 +23,9 @@ class UserSeeder extends Seeder
                 'last_name' => 'Man',
                 'birthdate' => '2000-01-01',
                 'gender' => 'Male',
-                'role' => 'man',
                 'email' => 'manager@clinic.com',
                 'phone' => '0500000001',
-                'password' => 'admin'
+                'password' => Hash::make('admin')
                 ],
             [
                 'id' => 2,
@@ -33,10 +33,9 @@ class UserSeeder extends Seeder
                 'last_name' => 'Sec',
                 'birthdate' => '2000-01-01',
                 'gender' => 'Female',
-                'role' => 'sec',
                 'email' => 'secritaire@clinic.com',
                 'phone' => '0500000000',
-                'password' => 'secritaire'
+                'password' => Hash::make('secritaire')
             ]
         ]);
     }

@@ -8,6 +8,13 @@
 
     --my_primaryColor: #009999;
     --my_fontColor: #009973;
+
+
+
+
+}
+.my_gradient_bg{
+ background-color: rgba(0, 204, 153,0.03);
 }
 .form-control:disabled, .form-control[readonly]{
     background-color: white;

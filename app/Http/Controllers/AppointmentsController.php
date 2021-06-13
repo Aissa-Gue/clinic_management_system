@@ -3,25 +3,30 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Validator;
 use Redirect;
 use Carbon\Carbon;
 
 use App\Models\Appointment;
-use App\Models\Doctor;
-use App\Models\Specialisation;
+use App\Models\User;
 use App\Models\Patient;
 use App\Models\Agenda;
 
 
 class AppointmentsController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function showAllData(){
         return view('appointments.appointments')
             ->with('appointment',Appointment::all())
             ->with('patient',Patient::all())
-            ->with('doctor',Doctor::all())
+            ->with('doctor',User::where('id','>',2))
             ->with('agenda',Agenda::all());
     }
 
@@ -38,13 +43,21 @@ class AppointmentsController extends Controller
             ->select('agendas.time')
             ->get();
 
-        return view('appointments.appointments')
-            ->with('appointment',Appointment::where('doc_id','=',$doc_id)->whereDate('date',Carbon::today())->orderByDesc('time')->orderByDesc('date')->get())
-            ->with('patient',Patient::all('id','first_name','last_name'))
-            ->with('doctor',Doctor::all('id','first_name','last_name','spec_id'))
-            ->with('currentDoc',Doctor::all('id','first_name','last_name')->where('id',$doc_id)->first())
-            ->with('agenda',$agenda)
-            ->with('speciality',Specialisation::all());
+        if(Auth::id() <= 2){
+            return view('appointments.appointments')
+                ->with('appointment',Appointment::where('doc_id',$doc_id)->whereDate('date',Carbon::today())->orderByDesc('time')->orderByDesc('date')->get())
+                ->with('patient',Patient::all('id','first_name','last_name'))
+                ->with('doctor',User::where('id','>',2)->get())
+                ->with('currentDoc',User::where('id',$doc_id)->first())
+                ->with('agenda',$agenda);
+        }else{
+            return view('appointments.appointments')
+                ->with('appointment',Appointment::where('doc_id',$doc_id)->whereDate('date',Carbon::today())->orderByDesc('time')->orderByDesc('date')->get())
+                ->with('patient',Patient::all('id','first_name','last_name'))
+                ->with('doctor',User::where('id',Auth::id())->get())
+                ->with('currentDoc',User::where('id',$doc_id)->first())
+                ->with('agenda',$agenda);
+        }
     }
 
 

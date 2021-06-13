@@ -12,9 +12,10 @@ class Appointment extends Model
         return $this->hasOne(Patient::class,'id','pat_id');
     }
     public function doctor(){
-        return $this->hasOne(Doctor::class,'id','doc_id');
+        return $this->hasOne(User::class,'id','doc_id');
     }
     public function consultation(){
         return $this->hasOne(Consultation::class,'app_id','id');
     }
+
 }

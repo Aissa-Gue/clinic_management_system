@@ -5,10 +5,17 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Patient;
 use App\Models\City;
+use Illuminate\Support\Facades\Redirect;
 use Validator;
+use Auth;
 
 class PatientsController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function showAllData(){
         return view('patients.patients')->with('patient',Patient::all());
     }

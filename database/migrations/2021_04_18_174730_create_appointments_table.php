@@ -16,7 +16,7 @@ class CreateAppointmentsTable extends Migration
         Schema::create('appointments', function (Blueprint $table) {
             $table->id('id');
             $table->foreignId('pat_id')->references('id')->on('patients')->onUpdate('cascade')->onDelete('cascade');
-            $table->foreignId('doc_id')->references('id')->on('doctors')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignId('doc_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
             $table->date('date');
             $table->time('time');
             $table->timestamps();
