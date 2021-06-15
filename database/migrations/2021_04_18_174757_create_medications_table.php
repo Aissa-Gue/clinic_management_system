@@ -17,7 +17,6 @@ class CreateMedicationsTable extends Migration
             $table->id('id');
             $table->string('commercial_name',100)->unique();
             $table->string('scientific_name',100)->unique();
-            $table->string('form','50');
             $table->string('description');
             $table->timestamps();
             $table->charset = 'utf8';

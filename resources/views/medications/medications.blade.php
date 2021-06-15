@@ -33,7 +33,7 @@
             <tbody>
             @forelse($medication as $med)
             @empty
-                <div class="alert alert-success text-center" role="alert">
+                <div class="alert alert-danger text-center" role="alert">
                     No results found for:
                     <strong>{{request()->get('com_name')}} {{request()->get('sci_name')}}</strong>
                 </div>

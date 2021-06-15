@@ -1,7 +1,7 @@
 <div class="my_sidebar position-fixed">
     <div class="list-group">
         <a href="/" class="list-group-item list-group-item-action py-3 {{Request::is('/') ? 'active' : ''}}" aria-current="true">
-            <i class="fas fa-clinic-medical fs-5"></i> Dashboard
+            <i class="fas fa-clinic-medical fs-5"></i>@if(Auth::id() === 1)Dashboard @else Home @endif
         </a>
 
         <a href="/patients" class="list-group-item list-group-item-action py-3 {{Request::is('patients') || Request::is('patients/*') ? 'active' : ''}}">
@@ -12,23 +12,33 @@
             <a href="/doctors" class="list-group-item list-group-item-action py-3 {{Request::is('doctors') || Request::is('doctors/*') ? 'active' : ''}}">
                 <i class="fas fa-user-md fs-5"></i> Doctors
             </a>
+
+            <a href="/planning" class="list-group-item list-group-item-action py-3 {{Request::is('planning') || Request::is('planning/*') ? 'active' : ''}}">
+                <i class="fas fa-calendar-alt fs-5"></i> Planning
+            </a>
         @endif
 
         <a href="/medications" class="list-group-item list-group-item-action py-3 {{Request::is('medications') || Request::is('medications/*') ? 'active' : ''}}">
             <i class="fas fa-capsules fs-5"></i> Medications
         </a>
 
-        <a href="/planning" class="list-group-item list-group-item-action py-3 {{Request::is('planning') || Request::is('planning/*') ? 'active' : ''}}">
-            <i class="fas fa-calendar-alt fs-5"></i> Planning
-        </a>
-
+        @if(Auth::id() <= 2)
         <a href="/appointments/3" class="list-group-item list-group-item-action py-3 {{Request::is('appointments') || Request::is('appointments/*') ? 'active' : ''}}">
             <i class="fas fa-calendar-check fs-5"></i> Appointments
         </a>
+        @endif
 
         @if(Auth::id() > 2)
-            <a href="/consultations/3" class="list-group-item list-group-item-action py-3 {{Request::is('consultations') || Request::is('consultations/*') ? 'active' : ''}}">
+            <a href="/appointments/{{Auth::id()}}" class="list-group-item list-group-item-action py-3 {{Request::is('appointments') || Request::is('appointments/*') ? 'active' : ''}}">
+                <i class="fas fa-calendar-check fs-5"></i> Appointments
+            </a>
+
+            <a href="/consultations/{{Auth::id()}}" class="list-group-item list-group-item-action py-3 {{Request::is('consultations') || Request::is('consultations/*') ? 'active' : ''}}">
                 <i class="fas fa-stethoscope fs-5"></i> Consultations
+            </a>
+
+            <a href="/medical_records/{{Auth::id()}}" class="list-group-item list-group-item-action py-3 {{Request::is('medical_records') || Request::is('medical_records/*') ? 'active' : ''}}">
+                <i class="fas fa-file-medical-alt fs-5"></i> Medical Record
             </a>
         @endif
 

@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('content')
-    @if(Auth::id() <= 2)
+    @if(Auth::id() === 1)
         <ul class="nav nav-pills mt-2" id="pills-tab" role="tablist">
             <li class="nav-link fw-bold">SPECIALITIES: </li>
             @foreach($doctor as $doc)
@@ -28,15 +28,15 @@
                             <option value="{{$app->id}} - {{$app->patient->first_name}} {{$app->patient->last_name}}"></option>
                         @endforeach
                     </datalist>
-                    @if(!empty($errors))
-                        @foreach ($errors->get('patient_id') as $message)
-                            <div class="form-text text-danger">{{$message}}</div>
-                        @endforeach
-                    @endif
                     <button class="btn btn-success col-md-auto" type="submit">NEW <i class="fa fa-plus"></i></button>
                 </div>
             </form>
         </nav>
+        @if (Session::has('error'))
+            <div class="alert alert-danger text-center">
+                <h6>{{Session::get('error')}}</h6>
+            </div>
+        @endif
     </div>
 
 

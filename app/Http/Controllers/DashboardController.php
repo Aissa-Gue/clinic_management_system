@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Agenda;
 use App\Models\Appointment;
 use App\Models\Consultation;
+use App\Models\Medication;
 use App\Models\Patient;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Models\User;
 
@@ -18,18 +21,6 @@ class DashboardController extends Controller
     }
 
     public function showAllData(){
-        //using query Builder
-
-            $doctors_revenue = DB::table("consultations")
-            ->leftJoin("appointments", function($join){
-                $join->on("appointments.id", "=", "consultations.app_id");
-            })
-            ->leftJoin("users", function($join){
-                $join->on("users.id", "=", "appointments.doc_id");
-            })
-            ->select("users.id", "first_name", "last_name", "speciality", DB::raw('SUM(paid_amount) as paid_amount_sum'))
-            ->groupBy("users.id", "speciality","first_name", "last_name")
-            ->get();
 
         $doctors_revenue = DB::table("users")->where('users.id','>',2)
             ->leftJoin("appointments", function($join){
@@ -40,7 +31,7 @@ class DashboardController extends Controller
                     ->whereDate('consultations.created_at',Carbon::today());
             })
             ->select("users.id", "first_name", "last_name", "speciality", DB::raw('SUM(paid_amount) as paid_amount_sum'))
-            ->groupBy("users.id", "speciality","first_name", "last_name")
+            ->groupBy("users.id")
             ->get();
 
         //Using Eloquent
@@ -57,19 +48,44 @@ class DashboardController extends Controller
             ->whereMonth('created_at',Carbon::now()->month)
             ->first();
 
-        $current_appointments = Appointment::select(DB::raw('COUNT(*) as current_appointments'))
-            ->whereDate('date',Carbon::today())
-            ->first();
-        $monthly_appointments = Appointment::select(DB::raw('COUNT(*) as monthly_appointments'))
-            ->whereMonth('date',Carbon::now()->month)
-            ->first();
+        if(Auth::id() <= 2){ //manager (and Sec)
+            $current_appointments = Appointment::select(DB::raw('COUNT(*) as current_appointments'))
+                ->whereDate('date',Carbon::today())
+                ->first();
+            $monthly_appointments = Appointment::select(DB::raw('COUNT(*) as monthly_appointments'))
+                ->whereMonth('date',Carbon::now()->month)
+                ->first();
 
-        $current_consultations = Consultation::select(DB::raw('COUNT(*) as current_consultations'))
-            ->whereDate('created_at',Carbon::today())
-            ->first();
-        $monthly_consultations = Consultation::select(DB::raw('COUNT(*) as monthly_consultations'))
-            ->whereMonth('created_at',Carbon::now()->month)
-            ->first();
+            $current_consultations = Consultation::select(DB::raw('COUNT(*) as current_consultations'))
+                ->whereDate('created_at',Carbon::today())
+                ->first();
+            $monthly_consultations = Consultation::select(DB::raw('COUNT(*) as monthly_consultations'))
+                ->whereMonth('created_at',Carbon::now()->month)
+                ->first();
+
+        }elseif(Auth::id() > 2){ //doctors
+
+            $current_appointments = Appointment::select(DB::raw('COUNT(*) as current_appointments'))
+                ->whereDate('date',Carbon::today())
+                ->where('doc_id',Auth::id())
+                ->first();
+            $monthly_appointments = Appointment::select(DB::raw('COUNT(*) as monthly_appointments'))
+                ->whereMonth('date',Carbon::now()->month)
+                ->where('doc_id',Auth::id())
+                ->first();
+
+            $current_consultations = Consultation::leftJoin('appointments','consultations.app_id','=','appointments.id')
+                ->select(DB::raw('COUNT(*) as current_consultations'))
+                ->whereDate('consultations.created_at',Carbon::today())
+                ->where('doc_id',Auth::id())
+                ->first();
+            $monthly_consultations = Consultation::leftJoin('appointments','consultations.app_id','=','appointments.id')
+                ->select(DB::raw('COUNT(*) as monthly_consultations'))
+                ->whereMonth('consultations.created_at',Carbon::now()->month)
+                ->where('doc_id',Auth::id())
+                ->first();
+        }
+
 
         $current_revenue = Consultation::select(DB::raw('SUM(paid_amount) as current_revenue'))
             ->whereDate('created_at',Carbon::today())
@@ -78,31 +94,58 @@ class DashboardController extends Controller
             ->whereMonth('created_at',Carbon::now()->month)
             ->first();
 
+        $total_medications = Medication::select(DB::raw('count(*) as total_medic'))
+            ->first();
+
         //Charts.js
         $last_revenue_month= Consultation::select(DB::raw('SUM(paid_amount) as day_revenue, DAY(created_at) as day_nbr, DAYNAME(created_at) as day_name, created_at'))
                         ->where("created_at",">", Carbon::now()->subDay(30))
-                        ->groupBy("day_name","day_nbr","created_at")
+                        ->groupBy("day_nbr")
                         ->orderBy('created_at')
                         ->get();
         $last_revenue_year= Consultation::select(DB::raw('SUM(paid_amount) as month_revenue, MONTH(created_at) as month_nbr, MONTHNAME(created_at) as month_name'))
             ->whereYear("created_at","=", Carbon::now()->year)
-            ->groupBy("month_name","month_nbr")
+            ->groupBy("month_name")
             ->orderBy('month_nbr')
             ->get();
         $last_appointments= Appointment::select(DB::raw('COUNT(*) as appointments_nbr, MONTH(created_at) as month_nbr, MONTHNAME(created_at) as month_name'))
             ->whereYear("created_at","=", Carbon::now()->year)
-            ->groupBy("month_name","month_nbr")
+            ->groupBy("month_name")
             ->orderBy('month_nbr')
             ->get();
         $last_consultations= Consultation::select(DB::raw('COUNT(*) as consultations_nbr, MONTH(created_at) as month_nbr, MONTHNAME(created_at) as month_name'))
             ->whereYear("created_at","=", Carbon::now()->year)
-            ->groupBy("month_name","month_nbr")
+            ->groupBy("month_name")
             ->orderBy('month_nbr')
             ->get();
         $last_patients= Patient::select(DB::raw('COUNT(*) as patients_nbr, MONTH(created_at) as month_nbr, MONTHNAME(created_at) as month_name'))
             ->whereYear("created_at","=", Carbon::now()->year)
-            ->groupBy("month_name","month_nbr")
+            ->groupBy("month_name")
             ->orderBy('month_nbr')
+            ->get();
+        // End charts queries
+
+        /*** Available appointments
+        $available_app = Agenda::leftJoin('appointments','appointments.time','=','agendas.time')
+            ->leftJoin('users','users.id','=','appointments.doc_id')
+            ->where('users.id','>',2)
+            ->groupBy('doc_id')
+        ->WhereNotExists(function ($query){
+            $query->select(DB::raw(1))
+                ->from('appointments')
+                ->whereColumn('appointments.time','=','agendas.time')
+                ->where('date', Carbon::today());
+                //->groupBy('doc_id')
+        })
+            ->select('doc_id','first_name','last_name','speciality',DB::raw('COUNT(*) as app_nbr'))
+            ->get();
+**/
+
+        $times_count = Agenda::select(DB::raw('COUNT(*) as times_count'))->first();
+        $active_app = User::leftJoin('appointments','users.id','=','appointments.doc_id')
+            ->where('users.id','>',2)
+            ->select('users.id','first_name','last_name','speciality',DB::raw('SUM(date = CURDATE()) as active_app'))
+            ->groupBy('doc_id')
             ->get();
 
         return view('index')->with('doctors_revenue',$doctors_revenue)
@@ -118,7 +161,10 @@ class DashboardController extends Controller
             ->with('last_revenue_year',$last_revenue_year)
             ->with('last_consultations',$last_consultations)
             ->with('last_appointments',$last_appointments)
-            ->with('last_patients',$last_patients);
+            ->with('last_patients',$last_patients)
+            ->with('times_count',$times_count)
+            ->with('active_app',$active_app)
+            ->with('total_medications',$total_medications);
 
 
     }

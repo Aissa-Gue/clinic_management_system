@@ -7,8 +7,8 @@
     <div class="row mb-2">
         <nav class="navbar navbar-dark bg-light">
                 <form action="/doctors" method="GET" class="d-flex">
-                    <input class="form-control me-1" type="text" name="first_name" placeholder="First name" value="{{request()->get('first_name')}}">
-                    <input class="form-control me-1" type="text" name="last_name" placeholder="Last name" value="{{request()->get('last_name')}}">
+                    <input class="form-control me-1" type="text" name="fname" placeholder="First name" value="{{request()->get('fname')}}">
+                    <input class="form-control me-1" type="text" name="lname" placeholder="Last name" value="{{request()->get('lname')}}">
                     <button class="btn btn-outline-primary" type="submit"><i class="fas fa-search"></i></button>
                 </form>
                 <div class="d-flex">
@@ -37,7 +37,7 @@
             @empty
                 <div class="alert alert-danger text-center" role="alert">
                     No results found for:
-                    <strong>{{request()->get('last_name')}} {{request()->get('first_name')}}</strong>
+                    <strong>{{request()->get('fname')}} {{request()->get('lname')}}</strong>
                 </div>
             @endforelse
 

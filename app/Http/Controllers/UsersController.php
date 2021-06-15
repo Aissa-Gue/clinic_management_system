@@ -15,19 +15,15 @@ class UsersController extends Controller
         $this->middleware('auth');
     }
 
-    public function showAllData(){
-        return view('doctors.doctors')->with('doctor',User::where('id','>',2)->get());
-    }
-
-    public function search(Request $request){
-        $first_name = $request->get('first_name');
-        $last_name = $request->get('last_name');
+    public function showAllData(Request $request){
+        $first_name = $request->get('fname');
+        $last_name = $request->get('lname');
 
         $doctor = User::where('id','>',2)
             ->where('first_name','LIKE','%'.$first_name.'%')
             ->where('last_name','LIKE','%'.$last_name.'%')
             ->paginate(90);
-        return view('doctors.doctors')->with('doctor',$doctor);
+        return view('doctors.doctors')->with('doctor', $doctor);
     }
 
     public function show($id){

@@ -16,17 +16,13 @@ class PatientsController extends Controller
         $this->middleware('auth');
     }
 
-    public function showAllData(){
-        return view('patients.patients')->with('patient',Patient::all());
-    }
-
-    public function search(Request $request){
+    public function showAllData(Request $request){
         $first_name = $request->get('fname');
         $last_name = $request->get('lname');
 
         $patient = Patient::where('first_name','LIKE','%'.$first_name.'%')
-                          ->where('last_name','LIKE','%'.$last_name.'%')
-                          ->paginate(90);
+            ->where('last_name','LIKE','%'.$last_name.'%')
+            ->paginate(90);
         return view('patients.patients')->with('patient',$patient);
     }
 

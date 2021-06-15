@@ -1,3 +1,4 @@
+
 <script>
     let myChart = document.getElementById('revenue_month').getContext('2d');
 
@@ -73,3 +74,4 @@
         }
     });
 </script>
+

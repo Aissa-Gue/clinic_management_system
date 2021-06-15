@@ -37,7 +37,7 @@
             @empty
                 <div class="alert alert-danger text-center" role="alert">
                     No results found for:
-                    <strong>{{request()->get('lname')}} {{request()->get('fname')}}</strong>
+                    <strong>{{request()->get('fname')}} {{request()->get('lname')}}</strong>
                 </div>
             @endforelse
 

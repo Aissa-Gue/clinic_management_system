@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redirect;
 use Validator;
 use Carbon\Carbon;
 
@@ -21,13 +23,13 @@ class ConsultationsController extends Controller
     }
 
     public function showData($doc_id){
-        if(Auth::id() <= 2) {
+        if(Auth::id() === 1) { //manager only
             return view('consultations.consultations')
                 ->with('doctor', User::where('id', '>', 2)->get())
                 ->with('currentDoc', User::where('id', $doc_id)->first())
                 ->with('appointment', Appointment::where('doc_id', $doc_id)->where('date', Carbon::today())->doesntHave('consultation')->get())
                 ->with('consultation', Consultation::join('appointments', 'appointments.id', 'consultations.app_id')->where('appointments.doc_id', $doc_id)->whereDate('appointments.date', Carbon::today())->orderByDesc('appointments.date')->get());
-        }else{
+        }elseif(Auth::id() > 2){ //doctors only
             return view('consultations.consultations')
                 ->with('doctor', User::where('id', Auth::id())->get())
                 ->with('currentDoc', User::where('id', $doc_id)->first())
@@ -51,16 +53,17 @@ class ConsultationsController extends Controller
                                             ->whereHas('consultation')->get());
     }
 
-    public function add_cons_redirect(){
-        $app_id = explode(' - ', request('patient'));
-        //doesn't work in this moment
+
+    public function add_cons_redirect(Request $req){
+        $app_id = explode(' - ', $req->patient);
         $validator = Validator::make(
-            array('app_id' => $app_id[0]),
-            array('app_id' => 'required|numeric'));
+            array('patient' => $app_id[0]),
+            array('patient' => 'required|numeric'));
 
         if ($validator->fails()) {
             $messages = $validator->messages();
-            return redirect('consultations/' . $app_id[0])->with('messages', $messages);
+            return Redirect::back()->with('error', 'The patient field is required !');   ;
+            //return redirect('consultations/' . Auth::id())->with('messages', $messages);
         }else{
             return redirect('consultations/add/'.$app_id[0]);
         }
@@ -199,4 +202,39 @@ class ConsultationsController extends Controller
         Consultation::where('app_id', '=', $app_id)->delete();
         return redirect('consultations/'.$appointment['doc_id']);
     }
+
+
+    /*********** Medical Records *************/
+
+    public function medicalRecords($doc_id, Request $request){
+        $first_name = $request->get('fname');
+        $last_name = $request->get('lname');
+
+        $cons_records= Patient::join('appointments','patients.id','=','appointments.pat_id')
+            ->join('consultations','appointments.id','=','consultations.app_id')
+            ->where('first_name','LIKE','%'.$first_name.'%')
+            ->where('last_name','LIKE','%'.$last_name.'%')
+            ->where('doc_id',$doc_id)
+            ->groupBy('pat_id')
+            ->select('pat_id','first_name','last_name','birthdate','date','app_id',DB::raw('COUNT(*) as cons_nbr'))
+            ->get();
+
+        return view('consultations.medical_records')
+            ->with('doctor', User::where('id', Auth::id())->get())
+            ->with('currentDoc', User::where('id', $doc_id)->first())
+            ->with('cons_records', $cons_records);
+    }
+
+    public function PatientHistory($app_id){
+        $currentApp = Appointment::where('id',$app_id)->first();
+
+        return view('consultations.patient_history')
+            ->with('currentApp',$currentApp)
+            ->with('appointments',Appointment::where('pat_id',$currentApp['pat_id'])
+                ->where('doc_id',$currentApp['doc_id'])
+                ->whereHas('consultation')->get());
+    }
+
+    /*********** END Medical Records *************/
+
 }

@@ -25,7 +25,6 @@ Route::post('account/updateAccount/{id}', '\App\Http\Controllers\AccountControll
 
 //**** Patients ****//
 Route::get('patients', '\App\Http\Controllers\PatientsController@showAllData');
-Route::get('patients', '\App\Http\Controllers\PatientsController@search');
 Route::get('patients/preview_patient/{id}', '\App\Http\Controllers\PatientsController@show');
 
 Route::get('patients/add_patient', '\App\Http\Controllers\PatientsController@insertPatient');
@@ -38,7 +37,6 @@ Route::get('patients/delete_patient/{id}', '\App\Http\Controllers\PatientsContro
 
 //**** Medications ****//
 Route::get('medications', '\App\Http\Controllers\MedicationsController@showAllData');
-Route::get('medications', '\App\Http\Controllers\MedicationsController@search');
 Route::get('medications/preview_medication/{id}', '\App\Http\Controllers\MedicationsController@show');
 
 Route::get('medications/add_medication', '\App\Http\Controllers\MedicationsController@insertMedication');
@@ -48,12 +46,6 @@ Route::get('medications/update_medication/{id}', '\App\Http\Controllers\Medicati
 Route::post('medications/update_medication/{id}', '\App\Http\Controllers\MedicationsController@update');
 
 Route::get('medications/delete_medication/{id}', '\App\Http\Controllers\MedicationsController@destroy');
-
-//**** Planning ****//
-Route::get('planning', '\App\Http\Controllers\AgendasController@showAllData');
-Route::post('planning/add_time', '\App\Http\Controllers\AgendasController@store');
-Route::post('planning/update_time/{id}', '\App\Http\Controllers\AgendasController@update');
-Route::get('planning/delete_time/{id}', '\App\Http\Controllers\AgendasController@destroy');
 
 //**** Appointments ****//
 Route::get('appointments', '\App\Http\Controllers\AppointmentsController@showAllData');
@@ -67,16 +59,20 @@ Route::get('appointments/delete_appointment/{id}', '\App\Http\Controllers\Appoin
 
 Route::group(['middleware' => ['auth', 'manager']], function() {
 
+    //**** Planning ****//
+    Route::get('planning', '\App\Http\Controllers\AgendasController@showAllData');
+    Route::post('planning/add_time', '\App\Http\Controllers\AgendasController@store');
+    Route::post('planning/update_time/{id}', '\App\Http\Controllers\AgendasController@update');
+    Route::get('planning/delete_time/{id}', '\App\Http\Controllers\AgendasController@destroy');
+
     //settings
     Route::get('settings/', '\App\Http\Controllers\SettingsController@showSettings');
     Route::get('settings/export', '\App\Http\Controllers\SettingsController@export');
     Route::get('settings/drop', '\App\Http\Controllers\SettingsController@drop');
     Route::post('settings/import', '\App\Http\Controllers\SettingsController@import');
 
-
     //**** Doctors ****//
     Route::get('doctors', '\App\Http\Controllers\UsersController@showAllData');
-    Route::get('doctors', '\App\Http\Controllers\UsersController@search');
     Route::get('doctors/preview_doctor/{id}', '\App\Http\Controllers\UsersController@show');
 
     Route::get('doctors/add_doctor', '\App\Http\Controllers\UsersController@insertDoctor');
@@ -94,7 +90,7 @@ Route::group(['middleware' => ['auth', 'manager']], function() {
 
 Route::group(['middleware' => ['auth', 'doctor']], function() {
     //**** Consultations ****//
-    Route::get('consultations/{app_id}', '\App\Http\Controllers\ConsultationsController@showData');
+    Route::get('consultations/{doc_id}', '\App\Http\Controllers\ConsultationsController@showData');
     Route::get('consultations/preview/{app_id}', '\App\Http\Controllers\ConsultationsController@show');
 
     Route::post('consultations/add', '\App\Http\Controllers\ConsultationsController@add_cons_redirect');
@@ -105,6 +101,11 @@ Route::group(['middleware' => ['auth', 'doctor']], function() {
     Route::post('consultations/edit/{app_id}', '\App\Http\Controllers\ConsultationsController@update');
 
     Route::get('consultations/delete/{app_id}', '\App\Http\Controllers\ConsultationsController@destroy');
+
+    //medical reports
+    Route::get('medical_records/{doc_id}', '\App\Http\Controllers\ConsultationsController@medicalRecords');
+    Route::get('medical_records/patient_History/{app_id}', '\App\Http\Controllers\ConsultationsController@patientHistory');
+
 
     //Prescription (crud)
     Route::get('consultations/prescriptions/preview/{app_id}', '\App\Http\Controllers\PrescriptionsController@show');

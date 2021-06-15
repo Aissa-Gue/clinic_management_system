@@ -13,17 +13,14 @@ class MedicationsController extends Controller
         $this->middleware('auth');
     }
 
-    public function showAllData(){
-        return view('medications.medications')->with('medication',Medication::all());
-    }
-
-    public function search(Request $request){
+    public function showAllData(Request $request){
         $commercial_name = $request->get('com_name');
         $scientific_name = $request->get('sci_name');
 
         $medication = Medication::where('commercial_name','LIKE','%'.$commercial_name.'%')
             ->where('scientific_name','LIKE','%'.$scientific_name.'%')
             ->paginate(90);
+
         return view('medications.medications')->with('medication',$medication);
     }
 

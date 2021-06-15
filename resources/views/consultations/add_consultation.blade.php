@@ -5,20 +5,24 @@
         <h5>Add New Consultation</h5>
     </div>
     @foreach($currentApp as $app)
+
+
         <div class="text-end mb-5">
         <ul class="nav nav-pills">
             <li class="nav-item fw-bold">
                 <a href="/consultations/add/{{$app->id}}" class="nav-link {{Request::is('consultations/add/'.$app->id) ? 'active':''}}" type="button" aria-selected="false"><i class="fas fa-file-medical-alt"></i> Consultation</a>
             </li>
-            <li class="nav-item fw-bold">
-                <a href="/consultations/prescriptions/{{$app->id}}" class="nav-link {{Request::is('consultations/prescriptions/'.$app->id) ? 'active':''}}" type="button" aria-selected="false"><i class="fas fa-capsules"></i> Prescription</a>
-            </li>
-            <li class="nav-item fw-bold">
-                <a href="/consultations/certificates/{{$app->id}}" class="nav-link {{Request::is('consultations/certificates/'.$app->id) ? 'active':''}}" type="button" aria-selected="false"><i class="far fa-file-alt"></i> Certificate</a>
-            </li>
-            <li class="nav-item fw-bold">
-                <a href="/consultations/history/{{$app->id}}" class="nav-link {{Request::is('consultations/history/'.$app->patient->id) ? 'active':''}}" type="button" aria-selected="false"><i class="fas fa-history"></i> History</a>
-            </li>
+            @if($app->consultations)
+                <li class="nav-item fw-bold">
+                    <a href="/consultations/prescriptions/{{$app->id}}" class="nav-link {{Request::is('consultations/prescriptions/'.$app->id) ? 'active':''}}" type="button" aria-selected="false"><i class="fas fa-capsules"></i> Prescription</a>
+                </li>
+                <li class="nav-item fw-bold">
+                    <a href="/consultations/certificates/{{$app->id}}" class="nav-link {{Request::is('consultations/certificates/'.$app->id) ? 'active':''}}" type="button" aria-selected="false"><i class="far fa-file-alt"></i> Certificate</a>
+                </li>
+                <li class="nav-item fw-bold">
+                    <a href="/consultations/history/{{$app->id}}" class="nav-link {{Request::is('consultations/history/'.$app->patient->id) ? 'active':''}}" type="button" aria-selected="false"><i class="fas fa-history"></i> History</a>
+                </li>
+            @endif
         </ul>
     </div>
     <form action="/consultations/add/{{$app->id}}" method="post">
