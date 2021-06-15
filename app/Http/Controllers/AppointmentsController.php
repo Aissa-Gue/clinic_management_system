@@ -31,14 +31,14 @@ class AppointmentsController extends Controller
     }
 
 
-    public function showSpeciality($doc_id){
+    public function showSpeciality($doc_id, Request $req){
         $agenda = DB::table('agendas')
-            ->WhereNotExists(function ($query) use ($doc_id){
+            ->WhereNotExists(function ($query) use ($doc_id, $req){
                 $query->select(DB::raw(1))
                     ->from('appointments')
                     ->whereColumn('appointments.time','=','agendas.time')
                     ->where('doc_id','=',$doc_id)
-                    ->where('date', Carbon::today());
+                    ->where('date', $req->app_date);
             })
             ->select('agendas.time')
             ->get();
@@ -73,10 +73,10 @@ class AppointmentsController extends Controller
                 'time' => request('time')
             ),
             array(
-                'patient_id' => 'required|numeric:appointments',
-                'doctor_id' => 'required|numeric:appointments',
-                'date' => 'required|date:appointments',
-                'time' => 'required|date_format:H:i:s|:appointments'
+                'patient_id' => 'required|numeric',
+                'doctor_id' => 'required|numeric',
+                'date' => 'required|date',
+                'time' => 'required|date_format:H:i:s'
             )
         );
         if ($validator->fails())

@@ -16,56 +16,63 @@
         Dr: {{$currentDoc['first_name']}} {{$currentDoc['last_name']}}
     </div>
 
-    <div class="row mb-2">
-        <nav class="navbar navbar-dark bg-light">
-            <form action="/appointments/add_appointment" method="post" class="d-flex col-md-9">
-                @csrf
-                <div class="col-md-4">
-                    <input list="patients" name="patient_name" class="form-control me-1" placeholder="Patient name">
-                    <datalist id="patients">
-                        @foreach($patient as $pat)
-                            <option value="{{$pat->id}} - {{$pat->first_name}} {{$pat->last_name}}"></option>
-                        @endforeach
-                    </datalist>
-                    @if(!empty($errors))
-                        @foreach ($errors->get('patient_id') as $message)
-                            <div class="form-text text-danger">{{$message}}</div>
-                        @endforeach
-                    @endif
-                </div>
-
-                <input type="hidden" name="doctor_id" class="form-control me-1" value="{{$currentDoc['id']}}">
-
-                <div class="col-md-auto">
-                    <input type="date" name="date" class="form-control me-1">
-                    @if(!empty($errors))
-                        @foreach ($errors->get('date') as $message)
-                            <div class="form-text text-danger">{{$message}}</div>
-                        @endforeach
-                    @endif
-                </div>
-
-                <div class="col-md-auto">
-                    <select name="time" class="form-select" id="time" required>
-                        <option disabled selected>- select time -</option>
-                        @foreach($agenda as $tim)
-                            <option value="{{$tim->time}}">
-                                {{\Carbon\Carbon::parse($tim->time)->format('H:i')}}
-                            </option>
-                        @endforeach
-                    </select>
-                    @if(!empty($errors))
-                        @foreach ($errors->get('time') as $message)
-                            <div class="form-text text-danger">{{$message}}</div>
-                        @endforeach
-                    @endif
-                </div>
-                <div class="col-md-2">
-                    <button class="btn btn-success col-md-auto" type="submit">NEW <i class="fa fa-plus"></i></button>
+    @if (Request::missing('app_date') or Request::input('app_date') == null)
+        <div class="row justify-content-md-center">
+            <form action="{{URL('/appointments/'.$currentDoc['id'])}}" method="get" class="col-md-auto">
+                <div class="input-group mb-3">
+                    <input type="date" name="app_date" class="form-control" required>
+                    <button class="btn btn-success" type="submit">GO <i class="fa fa-sync-alt"></i></button>
                 </div>
             </form>
-        </nav>
-    </div>
+        </div>
+
+        @if(!empty($errors))
+            <div class="text-danger text-center fw-bold mb-3" role="alert">
+                @foreach ($errors->all() as $message)
+                    * {{$message}}
+                @endforeach
+            </div>
+        @endif
+
+    @else
+        <div class="row mb-2">
+            <nav class="navbar navbar-dark bg-light">
+                <form action="{{URL('/appointments/add_appointment')}}" method="post" class="d-flex col-md-9">
+                    @csrf
+                    <div class="col-md-auto">
+                        <a href="{{URL('/appointments/'.$currentDoc['id'])}}">
+                            <input type="date" name="date" class="form-control me-1" value="{{Request::input('app_date')}}" readonly>
+                        </a>
+                    </div>
+
+                    <div class="col-md-4">
+                        <input list="patients" name="patient_name" class="form-control me-1" placeholder="Patient name">
+                        <datalist id="patients">
+                            @foreach($patient as $pat)
+                                <option value="{{$pat->id}} - {{$pat->first_name}} {{$pat->last_name}}"></option>
+                            @endforeach
+                        </datalist>
+                    </div>
+
+                    <input type="hidden" name="doctor_id" class="form-control me-1" value="{{$currentDoc['id']}}">
+
+                    <div class="col-md-auto">
+                        <select name="time" class="form-select" id="time" required>
+                            <option disabled selected>- select time -</option>
+                            @foreach($agenda as $tim)
+                                <option value="{{$tim->time}}">
+                                    {{\Carbon\Carbon::parse($tim->time)->format('H:i')}}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <button class="btn btn-success col-md-auto" type="submit">NEW <i class="fa fa-plus"></i></button>
+                    </div>
+                </form>
+            </nav>
+        </div>
+    @endif
 
 
 
