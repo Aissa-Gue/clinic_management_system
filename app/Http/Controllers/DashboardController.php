@@ -97,6 +97,21 @@ class DashboardController extends Controller
         $total_medications = Medication::select(DB::raw('count(*) as total_medic'))
             ->first();
 
+        $doc_appointments = DB::table('appointments')
+            ->join('patients','patients.id','=','appointments.pat_id')
+            ->WhereNotExists(function ($query){
+                $query->select(DB::raw(1))
+                    ->from('consultations')
+                    ->whereColumn('appointments.id','=','consultations.app_id')
+                    ->where('doc_id','=',Auth::id())
+                    ->where('date', Carbon::today());
+            })
+            ->where('doc_id','=',Auth::id())
+            ->where('date', Carbon::today())
+            ->select('appointments.id', 'first_name', 'last_name','time')
+            ->orderBy('time')
+            ->get();
+
         //Charts.js
         $last_revenue_month= Consultation::select(DB::raw('SUM(paid_amount) as day_revenue, DAY(created_at) as day_nbr, DAYNAME(created_at) as day_name, created_at'))
                         ->where("created_at",">", Carbon::now()->subDay(30))
@@ -164,7 +179,9 @@ class DashboardController extends Controller
             ->with('last_patients',$last_patients)
             ->with('times_count',$times_count)
             ->with('active_app',$active_app)
-            ->with('total_medications',$total_medications);
+            ->with('total_medications',$total_medications)
+            ->with('doc_appointments',$doc_appointments);
+
 
 
     }
