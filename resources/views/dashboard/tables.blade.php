@@ -41,7 +41,7 @@
         <!-- START Monthly revenue chart -->
         <div class="flex-md-fill bd-highlight shadow bg-body rounded p-2">
             <div class="alert alert-warning text-center fw-bold" role="alert">
-                Last 30 Days Revenue
+                Last 15 Days Revenue
             </div>
 
             <!-- Button trigger modal -->

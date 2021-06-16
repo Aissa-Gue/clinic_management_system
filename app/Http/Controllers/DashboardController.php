@@ -114,7 +114,7 @@ class DashboardController extends Controller
 
         //Charts.js
         $last_revenue_month= Consultation::select(DB::raw('SUM(paid_amount) as day_revenue, DAY(created_at) as day_nbr, DAYNAME(created_at) as day_name, created_at'))
-                        ->where("created_at",">", Carbon::now()->subDay(30))
+                        ->where("created_at",">", Carbon::now()->subDay(15))
                         ->groupBy("day_nbr")
                         ->orderBy('created_at')
                         ->get();

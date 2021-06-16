@@ -2,8 +2,12 @@
 
 namespace App\Console;
 
+use App\Models\Patient;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+
+use App\Jobs\SendEmailJob;
+use Carbon\Carbon;
 
 class Kernel extends ConsoleKernel
 {
@@ -25,6 +29,9 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         // $schedule->command('inspire')->hourly();
+
+        $schedule->job(new SendEmailJob)->dailyAt('21:00');//->everyMinute();
+
     }
 
     /**
