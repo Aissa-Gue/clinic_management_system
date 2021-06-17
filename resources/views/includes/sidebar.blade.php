@@ -1,7 +1,13 @@
+<?php
+
+use App\Models\User;
+
+$first_doc= User::where('id','>',2)->first();
+?>
 <div class="my_sidebar position-fixed">
     <div class="list-group">
         <a href="/" class="list-group-item list-group-item-action py-3 {{Request::is('/') ? 'active' : ''}}" aria-current="true">
-            <i class="fas fa-clinic-medical fs-5"></i>@if(Auth::id() === 1)Dashboard @else Home @endif
+            <i class="fas fa-clinic-medical fs-5"></i>@if(Auth::id() === 1) Dashboard @else Home @endif
         </a>
 
         <a href="/patients" class="list-group-item list-group-item-action py-3 {{Request::is('patients') || Request::is('patients/*') ? 'active' : ''}}">
@@ -23,7 +29,7 @@
         </a>
 
         @if(Auth::id() <= 2)
-        <a href="/appointments/3" class="list-group-item list-group-item-action py-3 {{Request::is('appointments') || Request::is('appointments/*') ? 'active' : ''}}">
+        <a href="{{URL('/appointments/'.$first_doc['id'])}}" class="list-group-item list-group-item-action py-3 {{Request::is('appointments') || Request::is('appointments/*') ? 'active' : ''}}">
             <i class="fas fa-calendar-check fs-5"></i> Appointments
         </a>
         @endif

@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Consultation;
+use App\Models\Prescription;
+use App\Models\Prescriptions_medications;
 use Illuminate\Http\Request;
 use App\Models\Medication;
+use Illuminate\Support\Facades\DB;
 use Validator;
 
 class MedicationsController extends Controller
@@ -47,7 +51,7 @@ class MedicationsController extends Controller
         if ($validator->fails())
         {
             $messages = $validator->messages();
-            return view('medications.add_medication')->with('messages',$messages);
+            return $this->insertMedication()->with('messages',$messages);
         }else{
             $medication = new Medication();
             $medication->scientific_name = request('scientific_name');
@@ -75,25 +79,44 @@ class MedicationsController extends Controller
                 'commercial_name' => 'required|unique:medications,commercial_name,'.$id,
             )
         );
-        $medication = Medication::where('id', $id)->firstOrFail();
 
         if ($validator->fails())
         {
             $messages = $validator->messages();
-            return view('medications.update_medication')->with('messages',$messages)
-                ->with('medication',$medication);
+            return $this->updateMedication($id)->with('messages',$messages);
 
         }else{
-            $medication->update(['scientific_name' => $req->scientific_name,
+            Medication::where('id', $id)->update([
+                'scientific_name' => $req->scientific_name,
                 'commercial_name' => $req->commercial_name,
-                'description' => $req->description]);
+                'description' => $req->description
+            ]);
             return redirect('medications');
         }
     }
 
-
     public function destroy($id){
-        $medication = Medication::where('id', '=', $id)->delete();
+        //Delete medication
+        Medication::where('id', $id)->delete();
+
+        // if all medications of prescription deleted (empty prescription) -> delete prescription;
+        $pres_medics= Prescription::leftJoin('Prescriptions_medications','prescriptions.id','=','Prescriptions_medications.pres_id')
+            ->select('prescriptions.id',DB::raw('SUM(Prescriptions_medications.created_at) as medics_count'))
+            ->groupBy('prescriptions.id')
+            ->get();
+
+        foreach ($pres_medics as $data){
+            if($data->medics_count == null){
+                //Set consultation pres_id to null
+                Consultation::where('pres_id',$data->pres_id)->update([
+                    'pres_id' => null
+                ]);
+
+                // Delete prescription
+                Prescription::where('id',$data->id)->delete();
+            }
+        }
+
         return redirect('medications');
     }
 }

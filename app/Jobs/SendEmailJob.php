@@ -46,7 +46,8 @@ class SendEmailJob implements ShouldQueue
 
         $patients = Patient::join('appointments','patients.id','=','appointments.pat_id')
             ->whereDate('date',Carbon::tomorrow())
-            ->select('email','date','time','first_name','last_name')->get();
+            ->select('email','date','time','first_name','last_name')
+            ->get();
 
         foreach($patients as $patient) {
             $title = 'Hi '.$patient->first_name .' ' .$patient->last_name .' !';

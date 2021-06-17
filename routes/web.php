@@ -20,8 +20,8 @@ Auth::routes();
 Route::get('/', '\App\Http\Controllers\DashboardController@showAllData')->name('root');;
 
 //account
-Route::get('account/updateAccount', '\App\Http\Controllers\AccountController@showAccount')->name('account');
-Route::post('account/updateAccount/{id}', '\App\Http\Controllers\AccountController@update');
+Route::get('account/updateAccount', '\App\Http\Controllers\AccountController@updateAccount')->name('account');
+Route::post('account/updateAccount/', '\App\Http\Controllers\AccountController@update');
 
 //**** Patients ****//
 Route::get('patients', '\App\Http\Controllers\PatientsController@showAllData');
@@ -89,6 +89,7 @@ Route::group(['middleware' => ['auth', 'manager']], function() {
 
 
 Route::group(['middleware' => ['auth', 'doctor']], function() {
+
     //**** Consultations ****//
     Route::get('consultations/{doc_id}', '\App\Http\Controllers\ConsultationsController@showData');
     Route::get('consultations/preview/{app_id}', '\App\Http\Controllers\ConsultationsController@show');
@@ -121,9 +122,9 @@ Route::group(['middleware' => ['auth', 'doctor']], function() {
     Route::get('consultations/certificates/preview/{app_id}', '\App\Http\Controllers\CertificatesController@show');
     Route::get('consultations/certificates/print/{app_id}', '\App\Http\Controllers\CertificatesController@printCert');
 
-    Route::get('consultations/certificates/{cons_id}', '\App\Http\Controllers\CertificatesController@insert_certificate');
-    Route::post('consultations/certificates/{cons_id}', '\App\Http\Controllers\CertificatesController@store');
-    Route::get('consultations/certificates/delete/{cons_id}', '\App\Http\Controllers\CertificatesController@destroy');
+    Route::get('consultations/certificates/{app_id}', '\App\Http\Controllers\CertificatesController@insert_certificate');
+    Route::post('consultations/certificates/{app_id}', '\App\Http\Controllers\CertificatesController@store');
+    Route::get('consultations/certificates/delete/{cert_id}', '\App\Http\Controllers\CertificatesController@destroy');
 
     //history
     Route::get('consultations/history/{app_id}', '\App\Http\Controllers\ConsultationsController@history');

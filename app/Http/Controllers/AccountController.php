@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Validator;
 use Redirect;
@@ -15,14 +16,12 @@ class AccountController extends Controller
         $this->middleware('auth');
     }
 
-    public function showAccount(){
-        return view('account.account');
-    }
+
     public function updateAccount(){
         return view('account.account');
     }
 
-    public function update(Request $req, $id){
+    public function update(Request $req){
 
         $validator = Validator::make(
             array(
@@ -35,14 +34,14 @@ class AccountController extends Controller
             array(
                 'first_name' => 'required',
                 'last_name' => 'required',
-                'email' => 'required|email|unique:users,email,'.$id,
-                'phone' => 'required|numeric|digits:10|unique:users,phone,'.$id,
+                'email' => 'required|email|unique:users,email,'.Auth::id(),
+                'phone' => 'required|numeric|digits:10|unique:users,phone,'.Auth::id(),
                 'password' => 'min:5|required',
                 'password_confirmation' => 'min:5|same:password',
             )
         );
 
-        $user = User::where('id', $id)->firstOrFail();
+        $user = User::where('id', Auth::id())->firstOrFail();
 
         if ($validator->fails() or !hash::check($req->old_password,$user->password)){
             $messages = $validator->messages();
@@ -53,7 +52,7 @@ class AccountController extends Controller
                 $old_pwd_err = "incorrect password";
             }
 
-            return view('account.account')->with('messages', $messages)
+            return $this->updateAccount()->with('messages', $messages)
                 ->with('old_pwd_err', $old_pwd_err);
 
         }else{

@@ -16,8 +16,8 @@ class CreateConsultationsTable extends Migration
         Schema::create('consultations', function (Blueprint $table) {
             $table->id('id');
             $table->foreignId('app_id')->unique()->references('id')->on('appointments')->onUpdate('cascade')->onDelete('cascade');
-            $table->foreignId('pres_id')->nullable()->references('id')->on('prescriptions')->onUpdate('cascade')->onDelete('cascade');
-            $table->foreignId('cert_id')->nullable()->references('id')->on('certificates')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignId('pres_id')->nullable()->unique()->references('id')->on('prescriptions')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignId('cert_id')->nullable()->unique()->references('id')->on('certificates')->onUpdate('cascade')->onDelete('cascade');
             $table->float('length')->nullable();
             $table->float('weight')->nullable();
             $table->float('temperature')->nullable();

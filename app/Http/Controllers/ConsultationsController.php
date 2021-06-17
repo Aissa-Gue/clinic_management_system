@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Certificate;
+use App\Models\Prescription;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -30,6 +32,9 @@ class ConsultationsController extends Controller
                 ->with('appointment', Appointment::where('doc_id', $doc_id)->where('date', Carbon::today())->doesntHave('consultation')->get())
                 ->with('consultation', Consultation::join('appointments', 'appointments.id', 'consultations.app_id')->where('appointments.doc_id', $doc_id)->whereDate('appointments.date', Carbon::today())->orderByDesc('appointments.date')->get());
         }elseif(Auth::id() > 2){ //doctors only
+            if($doc_id != Auth::id()){
+                return redirect('consultations/'.Auth::id());
+            }
             return view('consultations.consultations')
                 ->with('doctor', User::where('id', Auth::id())->get())
                 ->with('currentDoc', User::where('id', $doc_id)->first())
@@ -103,10 +108,7 @@ class ConsultationsController extends Controller
         );
         if ($validator->fails()){
             $messages = $validator->messages();
-            return view('consultations.add_consultation')->with('messages',$messages)
-                ->with('currentApp',Appointment::where('id',$app_id)->get())
-                ->with('currentDoc',Appointment::all('doc_id')->where('id',$app_id)->first())
-                ->with('doctor',User::where('id','>',2));
+            return $this->insert_consultation($app_id)->with('messages',$messages);
 
         }else{
             $consultation = new Consultation();
@@ -168,8 +170,7 @@ class ConsultationsController extends Controller
         );
         if ($validator->fails()){
             $messages = $validator->messages();
-            return view('consultations.edit_consultation')->with('messages',$messages)
-                ->with('consultation',Consultation::all()->where('app_id',$app_id));
+            return $this->update_consultation($app_id)->with('messages',$messages);
 
         }else {
             //update patient info
@@ -198,15 +199,32 @@ class ConsultationsController extends Controller
     }
 
     public function destroy($app_id){
-        $appointment = Appointment::where('id', '=', $app_id)->first();
-        Consultation::where('app_id', '=', $app_id)->delete();
-        return redirect('consultations/'.$appointment['doc_id']);
+
+        //Delete prescription & certificate
+        $pres_cert= Appointment::join('consultations','appointments.id','=','consultations.app_id')
+            ->where('app_id', $app_id)
+            ->select('pres_id','cert_id','doc_id')
+            ->first();
+        if($pres_cert['pres_id'] != null){
+            Prescription::where('id',$pres_cert['pres_id'])->delete();
+        }
+        if($pres_cert['cert_id'] != null){
+            Certificate::where('id',$pres_cert['cert_id'])->delete();
+        }
+
+        //Delete consultations
+        Consultation::where('app_id', $app_id)->delete();
+        return redirect('consultations/'.$pres_cert['doc_id']);
     }
 
 
     /*********** Medical Records *************/
 
     public function medicalRecords($doc_id, Request $request){
+        if($doc_id != Auth::id()){
+            return redirect('medical_records/'.Auth::id());
+        }
+
         $first_name = $request->get('fname');
         $last_name = $request->get('lname');
 

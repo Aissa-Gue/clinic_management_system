@@ -14,25 +14,23 @@ use Carbon\Carbon;
 
 <body>
 <div class="row my_A5">
-    @foreach($currentCons as $cons)
-        <div class="row text-center">
-            <div class="col-sm-12 pt-5"><!-- 9 -->
-                <h4>IBN-SINA clinic</h4>
-            </div>
+    <div class="row text-center">
+        <div class="col-sm-12 pt-5"><!-- 9 -->
+            <h4>IBN-SINA clinic</h4>
         </div>
-        <div class="row text-center">
-            <div class="col-sm-6">
-                <h5>DR: {{$cons->appointment->doctor->first_name}} {{$cons->appointment->doctor->last_name}}</h5>
-                <h6>Speciality of {{$cons->appointment->doctor->speciality}}</h6>
-                <h6><strong>Prescription N°: </strong>{{$prescription['id']}}</h6>
-            </div>
-            <div class="col-sm-6">
-                <h6><strong>Le: </strong>{{Carbon::now()->toDateString()}}</h6>
-                <h6><strong>Patient: </strong>{{$cons->appointment->patient->first_name}} {{$cons->appointment->patient->last_name}}</h6>
-                <h6><strong>Age: </strong>{{Carbon::parse($cons->appointment->patient->birthdate)->age}} yo</h6>
-            </div>
+    </div>
+    <div class="row text-center">
+        <div class="col-sm-6">
+            <h5>DR: {{$currentCons->appointment->doctor->first_name}} {{$currentCons->appointment->doctor->last_name}}</h5>
+            <h6>Speciality of {{$currentCons->appointment->doctor->speciality}}</h6>
+            <h6><strong>Prescription N°: </strong>{{$prescription['pres_id']}}</h6>
         </div>
-    @endforeach
+        <div class="col-sm-6">
+            <h6><strong>Le: </strong>{{Carbon::now()->toDateString()}}</h6>
+            <h6><strong>Patient: </strong>{{$currentCons->appointment->patient->first_name}} {{$currentCons->appointment->patient->last_name}}</h6>
+            <h6><strong>Age: </strong>{{Carbon::parse($currentCons->appointment->patient->birthdate)->age}} yo</h6>
+        </div>
+    </div>
 
 
     <div class="row justify-content-center">
@@ -58,8 +56,8 @@ use Carbon\Carbon;
         <div class="text-center">
             <h6>________________________________________________________</h6>
             <h6>
-                <strong>Phone: </strong>0{{$cons->appointment->doctor->phone}}
-                <strong>&nbsp;&nbsp;&nbsp;Email: </strong>{{$cons->appointment->doctor->email}}
+                <strong>Phone: </strong>0{{$currentCons->appointment->doctor->phone}}
+                <strong>&nbsp;&nbsp;&nbsp;Email: </strong>{{$currentCons->appointment->doctor->email}}
             </h6>
         </div>
     </div>

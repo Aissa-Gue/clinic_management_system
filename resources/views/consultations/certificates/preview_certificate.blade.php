@@ -58,22 +58,30 @@
 
         <fieldset class="scheduler-border">
             <legend class="scheduler-border bg-success mb-3">Medical Certificate</legend>
-            <p class="fs-5">
-                I undersigned <strong> Dr. {{$cons->appointment->doctor->first_name}} {{$cons->appointment->doctor->last_name}}</strong>, certify that: <strong> {{$cons->appointment->patient->first_name}} {{$cons->appointment->patient->last_name}}</strong>  was born on <strong> {{$cons->appointment->patient->birthdate}} </strong> is present on this day for my consultation.
-            </p>
-            <p class="fs-5">
-                His/her state of health requires a <strong>{{$days_nbr}} days</strong> work stoppage, from <strong> {{$certificate['from_date']}}.</strong>
-            </p>
-            <p class="fs-5">
-                this certificate has been issued to the interested party to serve and validate what is right.
-            </p>
+            @if(empty($certificate['from_date']))
+                <table class="table table-hover">
+                    <tr class="text-danger text-center">
+                        <th colspan="4">Patient doesn't have medical certificate !</th>
+                    </tr>
+                </table>
+            @else
+                <p class="fs-5">
+                    I undersigned <strong> Dr. {{$cons->appointment->doctor->first_name}} {{$cons->appointment->doctor->last_name}}</strong>, certify that: <strong> {{$cons->appointment->patient->first_name}} {{$cons->appointment->patient->last_name}}</strong>  was born on <strong> {{$cons->appointment->patient->birthdate}} </strong> is present on this day for my consultation.
+                </p>
+                <p class="fs-5">
+                    His/her state of health requires a <strong>{{$days_nbr}} days</strong> work stoppage, from <strong> {{$certificate['from_date']}}.</strong>
+                </p>
+                <p class="fs-5">
+                    this certificate has been issued to the interested party to serve and validate what is right.
+                </p>
 
-            <div class="row">
-                <div class="col-sm-12 text-end">
-                    <a href="{{ url('/consultations/certificates/print/'.$cons->appointment->id) }}" class="btn btn-success px-4">Print</a>
-                    <a href="{{ url('/consultations/certificates/print/'.$cons->appointment->id) }}" class="btn btn-primary">Download PDF</a>
+                <div class="row">
+                    <div class="col-sm-12 text-end">
+                        <a href="{{ url('/consultations/certificates/print/'.$cons->appointment->id) }}" class="btn btn-success px-4">Print</a>
+                        <a href="{{ url('/consultations/certificates/print/'.$cons->appointment->id) }}" class="btn btn-primary">Download PDF</a>
+                    </div>
                 </div>
-            </div>
+            @endif
         </fieldset>
     @endforeach
 @stop

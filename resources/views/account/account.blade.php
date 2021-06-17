@@ -7,7 +7,7 @@
         <div class="col-md-12">
             <h4><i class="fas fa-user-circle fs-4"></i> Account Informations</h4>
             <hr>
-            <form method="post" action="{{ URL('account/updateAccount/'.Auth::user()->id) }}">
+            <form method="post" action="{{ URL('account/updateAccount/')}}">
             @csrf
             <!-- First row -->
                 <div class="row align-items-center mb-2">

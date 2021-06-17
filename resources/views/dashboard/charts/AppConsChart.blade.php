@@ -10,8 +10,8 @@
         type:'bar', // bar, horizontalBar, pie, line, doughnut, radar, polarArea
         data:{
             labels:[
-                @foreach($last_consultations as $last_cons)
-                    '{{$last_cons->month_name}}',
+                @foreach($last_app_cons as $app_cons)
+                    '{{$app_cons->month_name}}',
                 @endforeach
                     //'Jan', 'Fab', 'Mar', 'Apr', 'Mai', 'Jun'
             ],
@@ -20,8 +20,8 @@
                 {
                     label:'Appointments',
                     data:[
-                        @foreach($last_appointments as $last_app)
-                        {{$last_app->appointments_nbr}},
+                        @foreach($last_app_cons as $app_cons)
+                        {{$app_cons->appointments_nbr}},
                         @endforeach
                         //640040, 181045, 153060, 106519, 105162, 95072
                     ],
@@ -47,8 +47,8 @@
                 {
                 label:'Consultations',
                 data:[
-                    @foreach($last_consultations as $last_cons)
-                        {{$last_cons->consultations_nbr}},
+                    @foreach($last_app_cons as $app_cons)
+                        {{$app_cons->consultations_nbr}},
                     @endforeach
                     //640040, 181045, 153060, 106519, 105162, 95072
                 ],

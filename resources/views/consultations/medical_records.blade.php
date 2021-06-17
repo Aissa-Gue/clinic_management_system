@@ -24,7 +24,7 @@
                 <th scope="col"><i class="fa fa-user-injured"></i> Patient</th>
                 <th scope="col" class="text-center"><i class="fa fa-calendar-alt"></i> Birthdate</th>
                 <th scope="col" class="text-center"><i class="fa fa-calendar-alt"></i> Latest Consultation</th>
-                <th scope="col" class="text-center"><i class="fa fa-user-md"></i> Total Consultation</th>
+                <th scope="col" class="text-center"><i class="fa fa-user-md"></i> Total Consultations</th>
                 <th scope="col" class="text-center">Preview</th>
             </tr>
             </thead>

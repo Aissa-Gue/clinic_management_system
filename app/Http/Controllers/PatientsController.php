@@ -2,6 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Appointment;
+use App\Models\Certificate;
+use App\Models\Consultation;
+use App\Models\Prescription;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use App\Models\Patient;
 use App\Models\City;
@@ -51,7 +56,7 @@ class PatientsController extends Controller
                 'last_name' => 'required',
                 'birthdate' => 'required|date',
                 'gender' => 'required',
-                'city' => 'required',
+                'city' => 'required|numeric',
                 'email' => 'required|email|unique:patients',
                 'phone' => 'required|numeric|digits:10|unique:patients'
             )
@@ -59,29 +64,30 @@ class PatientsController extends Controller
         if ($validator->fails())
         {
             $messages = $validator->messages();
-            return view('patients.add_patient')->with('messages',$messages)
-                ->with('city',City::all());
-        }
+            return $this->insertPatient()->with('messages',$messages);
 
-        $patient = new Patient();
-        $patient->last_name = request('last_name');
-        $patient->first_name = request('first_name');
-        $patient->birthdate = request('birthdate');
-        $patient->gender = request('gender');
-        $patient->address = request('address');
-        $patient->city_id = request('city');
-        $patient->email = request('email');
-        $patient->phone = request('phone');
-        $patient->save();
-        //error_log($patient);
-        return redirect('patients');
+        }else{
+            $patient = new Patient();
+            $patient->last_name = request('last_name');
+            $patient->first_name = request('first_name');
+            $patient->birthdate = request('birthdate');
+            $patient->gender = request('gender');
+            $patient->address = request('address');
+            $patient->city_id = request('city');
+            $patient->email = request('email');
+            $patient->phone = request('phone');
+            $patient->save();
+            //error_log($patient);
+            return redirect('patients');
+        }
     }
 
 
     public function updatePatient($id){
-        $patient = Patient::where('id', '=', $id)->firstOrFail();
-        return view('patients.update_patient')->with('patient',$patient)
-                                          ->with('city',City::all());
+        $patient = Patient::where('id', $id)->firstOrFail();
+        return view('patients.update_patient')
+            ->with('patient',$patient)
+            ->with('city',City::all());
     }
     public function update(Request $req, $id){
         $validator = Validator::make(
@@ -104,17 +110,14 @@ class PatientsController extends Controller
                 'phone' => 'required|numeric|digits:10|unique:patients,phone,'.$id //unique phone except current patient
             )
         );
-        $patient = Patient::where('id', $id)->firstOrFail();
 
         if ($validator->fails()){
             $messages = $validator->messages();
 
-            return view('patients.update_patient')->with('messages',$messages)
-                ->with('patient',$patient)
-                ->with('city',City::all());
+            return $this->updatePatient($id)->with('messages',$messages);
         }else {
 
-            $patient->update([
+            Patient::where('id', $id)->update([
                 'first_name' => $req->first_name,
                 'last_name' => $req->last_name,
                 'birthdate' => $req->birthdate,
@@ -130,7 +133,24 @@ class PatientsController extends Controller
 
 
     public function destroy($id){
-        Patient::where('id', '=', $id)->delete();
+        //Delete all his prescriptions and medical certificates
+        $pat_pres_cert = Patient::join('appointments','appointments.pat_id','=','patients.id')
+            ->join('consultations','appointments.id','=','consultations.app_id')
+            ->where('pat_id',$id)
+            ->select('pat_id','pres_id','cert_id')
+            ->get();
+        foreach ($pat_pres_cert as $data) {
+            if ($data->pres_id != null) {
+                Prescription::where('id', $data->pres_id)->delete();
+            }
+            if ($data->cert_id != null) {
+                Certificate::where('id', $data->cert_id)->delete();
+            }
+        }
+
+        //Delete patient
+        Patient::where('id', $id)->delete();
+
         return redirect('patients');
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class SettingsController extends Controller
 {
@@ -27,6 +28,7 @@ class SettingsController extends Controller
         }
 
         $command = "C:/xampp/mysql/bin/mysqldump.exe -u $username $dbname >" . $path;
+
         exec($command . ' 2>&1', $output);
 
         if (count($output) == 0) {

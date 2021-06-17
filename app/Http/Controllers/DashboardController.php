@@ -123,13 +123,19 @@ class DashboardController extends Controller
             ->groupBy("month_name")
             ->orderBy('month_nbr')
             ->get();
-        $last_appointments= Appointment::select(DB::raw('COUNT(*) as appointments_nbr, MONTH(created_at) as month_nbr, MONTHNAME(created_at) as month_name'))
-            ->whereYear("created_at","=", Carbon::now()->year)
+        $last_appointments= Appointment::select(DB::raw('COUNT(*) as appointments_nbr, MONTH(date) as month_nbr, MONTHNAME(date) as month_name'))
+            ->whereYear("date","=", Carbon::now()->year)
             ->groupBy("month_name")
             ->orderBy('month_nbr')
             ->get();
         $last_consultations= Consultation::select(DB::raw('COUNT(*) as consultations_nbr, MONTH(created_at) as month_nbr, MONTHNAME(created_at) as month_name'))
             ->whereYear("created_at","=", Carbon::now()->year)
+            ->groupBy("month_name")
+            ->orderBy('month_nbr')
+            ->get();
+        $last_app_cons= Appointment::leftJoin('consultations','appointments.id','=','consultations.app_id')
+            ->select(DB::raw('SUM(YEAR(date) = YEAR(CURDATE())) as appointments_nbr, SUM(YEAR(consultations.created_at) = YEAR(CURDATE())) as consultations_nbr, MONTH(date) as month_nbr, MONTHNAME(date) as month_name'))
+            ->whereYear("date","=", Carbon::now()->year)
             ->groupBy("month_name")
             ->orderBy('month_nbr')
             ->get();
@@ -174,8 +180,9 @@ class DashboardController extends Controller
             ->with('monthly_revenue',$monthly_revenue)
             ->with('last_revenue_month',$last_revenue_month)
             ->with('last_revenue_year',$last_revenue_year)
-            ->with('last_consultations',$last_consultations)
-            ->with('last_appointments',$last_appointments)
+            //->with('last_consultations',$last_consultations)
+            //->with('last_appointments',$last_appointments)
+            ->with('last_app_cons',$last_app_cons)
             ->with('last_patients',$last_patients)
             ->with('times_count',$times_count)
             ->with('active_app',$active_app)

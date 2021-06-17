@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Certificate;
+use App\Models\Patient;
+use App\Models\Prescription;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\City;
@@ -61,8 +64,7 @@ class UsersController extends Controller
         if ($validator->fails())
         {
             $messages = $validator->messages();
-            return view('doctors.add_doctor')->with('messages',$messages)
-                ->with('city',City::all());
+            return $this->insertDoctor()->with('messages',$messages);
         }
 
         $doctor = new User();
@@ -109,32 +111,47 @@ class UsersController extends Controller
                 'phone' => 'required|numeric|digits:10|unique:users,phone,'.$id
             )
         );
-        $doctor = User::where('id', $id)->firstOrFail();
 
         if ($validator->fails()){
             $messages = $validator->messages();
-            return view('doctors.update_doctor')->with('messages',$messages)
-                ->with('doctor',$doctor)
-                ->with('city',City::all());
+            return $this->updateDoctor($id)->with('messages',$messages);
+
         }else{
-                $doctor->update(
-                    ['first_name' => $req->first_name,
-                    'last_name' => $req->last_name,
-                    'birthdate' => $req->birthdate,
-                    'gender' => $req->gender,
-                    'speciality' => $req->speciality,
-                    'address' => $req->address,
-                    'city_id' => $req->city,
-                    'email' => $req->email,
-                    'phone' => $req->phone]
-                );
+
+            User::where('id', $id)->update([
+                'first_name' => $req->first_name,
+                'last_name' => $req->last_name,
+                'birthdate' => $req->birthdate,
+                'gender' => $req->gender,
+                'speciality' => $req->speciality,
+                'address' => $req->address,
+                'city_id' => $req->city,
+                'email' => $req->email,
+                'phone' => $req->phone
+            ]);
             return redirect('doctors');
         }
     }
 
 
     public function destroy($id){
-        $doctor = User::where('id', $id)->delete();
+        //Delete all the prescriptions and medical certificates of his patients
+        $doc_pres_cert = User::join('appointments','appointments.doc_id','=','users.id')
+            ->join('consultations','appointments.id','=','consultations.app_id')
+            ->where('doc_id',$id)
+            ->select('doc_id','pres_id','cert_id')
+            ->get();
+        foreach ($doc_pres_cert as $data){
+            if($data->pres_id != null){
+                Prescription::where('id',$data->pres_id)->delete();
+            }
+            if($data->cert_id != null){
+                Certificate::where('id',$data->cert_id)->delete();
+            }
+        }
+
+        //Delete doctor
+        User::where('id', $id)->delete();
         return redirect('doctors');
     }
 }

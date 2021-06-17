@@ -28,8 +28,7 @@ class AgendasController extends Controller
 
         if ($validator->fails()) {
             $messages = $validator->messages();
-            return view('planning/planning')->with('messages',$messages)
-                ->with('agenda',Agenda::all());
+            return $this->showAllData()->with('messages',$messages);
 
         }else{
             $agenda = new Agenda();
@@ -53,8 +52,8 @@ class AgendasController extends Controller
 
         if ($validator->fails()) {
             $messages = $validator->messages();
-            return view('planning/planning')->with('messages',$messages)
-                ->with('agenda',Agenda::all());
+            return $this->showAllData()->with('messages',$messages);
+
         }else {
             $agenda->update(['time' => $req->time]);
             return redirect('planning');
@@ -63,7 +62,7 @@ class AgendasController extends Controller
 
 
     public function destroy($id){
-        $agenda = Agenda::where('id', '=', $id)->delete();
+        Agenda::where('id', '=', $id)->delete();
         return redirect('planning');
     }
 }

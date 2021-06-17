@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Certificate;
+use App\Models\Prescription;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Validator;
 use Redirect;
+use Validator;
 use Carbon\Carbon;
 
 use App\Models\Appointment;
@@ -51,6 +54,9 @@ class AppointmentsController extends Controller
                 ->with('currentDoc',User::where('id',$doc_id)->first())
                 ->with('agenda',$agenda);
         }else{
+            if($doc_id != Auth::id()){
+                return redirect('appointments/'.Auth::id());
+            }
             return view('appointments.appointments')
                 ->with('appointment',Appointment::where('doc_id',$doc_id)->whereDate('date',Carbon::today())->orderByDesc('time')->orderByDesc('date')->get())
                 ->with('patient',Patient::all('id','first_name','last_name'))
@@ -83,23 +89,25 @@ class AppointmentsController extends Controller
         {
             //$messages = $validator->messages();
             return Redirect::to('appointments/'.$doc_id)->withErrors($validator);
+
+        }else{
+
+            $appointment = new Appointment();
+            $patient_name = explode(' - ' ,request('patient_name'));
+
+            $appointment->pat_id = $patient_name[0];
+            $appointment->doc_id = request('doctor_id');
+            $appointment->date = request('date');
+            $appointment->time = request('time');
+            $appointment->save();
+            //error_log($appointment);
+            return Redirect('appointments/'.$appointment->doc_id);
         }
-
-        $appointment = new Appointment();
-        $patient_name = explode(' - ' ,request('patient_name'));
-
-        $appointment->pat_id = $patient_name[0];
-        $appointment->doc_id = request('doctor_id');
-        $appointment->date = request('date');
-        $appointment->time = request('time');
-        $appointment->save();
-        //error_log($appointment);
-        return redirect('appointments/'.$appointment->doc_id);
     }
 
 
     public function update($id,Request $req){
-        $appointment = Appointment::where('id', '=', $id)
+        Appointment::where('id', $id)
             ->update([
                 'date' => $req->date,
                 'time' => $req->time
@@ -109,8 +117,22 @@ class AppointmentsController extends Controller
 
 
     public function destroy($id){
-        $appDoctor = Appointment::all('id','doc_id')->where('id', '=', $id)->first();
-        $appointment = Appointment::where('id', '=', $id)->delete();
-        return redirect('appointments/'.$appDoctor->doc_id);
+
+        //Delete prescription & certificate
+        $pres_cert= Appointment::join('consultations','appointments.id','=','consultations.app_id')
+            ->where('app_id', $id)
+            ->select('pres_id','cert_id','doc_id')
+            ->first();
+        if($pres_cert['pres_id'] != null){
+            Prescription::where('id',$pres_cert['pres_id'])->delete();
+        }
+        if($pres_cert['cert_id'] != null){
+            Certificate::where('id',$pres_cert['cert_id'])->delete();
+        }
+
+        //Delete appointments
+        Appointment::where('id', $id)->delete();
+
+        return redirect('appointments/'.$pres_cert['doc_id']);
     }
 }

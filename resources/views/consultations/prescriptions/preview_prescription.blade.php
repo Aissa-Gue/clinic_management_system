@@ -88,11 +88,12 @@
                         </tbody>
                     </table>
                 </div>
-
-                <div class="col-sm-12 text-end">
-                    <a href="{{ url('/consultations/prescriptions/print/'.$cons->appointment->id) }}" class="btn btn-success px-4">Print</a>
-                    <a href="{{ url('/consultations/prescriptions/print/'.$cons->appointment->id) }}" class="btn btn-primary">Download PDF</a>
-                </div>
+                @if($pres_medics->isNotEmpty())
+                    <div class="col-sm-12 text-end">
+                        <a href="{{ url('/consultations/prescriptions/print/'.$cons->appointment->id) }}" class="btn btn-success px-4">Print</a>
+                        <a href="{{ url('/consultations/prescriptions/print/'.$cons->appointment->id) }}" class="btn btn-primary">Download PDF</a>
+                    </div>
+                @endif
             </div>
         </fieldset>
     @endforeach
