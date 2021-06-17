@@ -69,7 +69,7 @@ class PrescriptionsController extends Controller
             array(
                 'pres_id' => 'required|numeric',
                 'medication' => 'required|numeric',
-                'quantity' => 'required|numeric',
+                'quantity' => 'required|numeric|min:1',
                 'dosage' => 'required'
             )
         );
