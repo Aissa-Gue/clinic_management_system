@@ -24,11 +24,11 @@ class DashboardController extends Controller
 
         $doctors_revenue = DB::table("users")->where('users.id','>',2)
             ->leftJoin("appointments", function($join){
-                $join->on("appointments.doc_id", "=", "users.id");
+                $join->on("appointments.doc_id", "=", "users.id")
+                    ->whereDate('date',Carbon::today());
             })
             ->leftJoin("consultations", function($join){
-                $join->on("consultations.app_id", "=", "appointments.id")
-                    ->whereDate('consultations.created_at',Carbon::today());
+                $join->on("consultations.app_id", "=", "appointments.id");
             })
             ->select("users.id", "first_name", "last_name", "speciality", DB::raw('SUM(paid_amount) as paid_amount_sum'))
             ->groupBy("users.id")
@@ -43,7 +43,7 @@ class DashboardController extends Controller
             ->groupBy('users.id', "speciality","first_name", "last_name")
             ->get();*/
 
-        $total_patients = Patient::select(DB::raw('COUNT(*) as total_patients'))->first();
+        $total_patients = Patient::select(DB::raw('COUNT(*) as total_patients'))->whereDate('created_at',Carbon::today())->first();
         $monthly_patients = Patient::select(DB::raw('COUNT(*) as monthly_patients'))
             ->whereMonth('created_at',Carbon::now()->month)
             ->first();
@@ -87,11 +87,13 @@ class DashboardController extends Controller
         }
 
 
-        $current_revenue = Consultation::select(DB::raw('SUM(paid_amount) as current_revenue'))
-            ->whereDate('created_at',Carbon::today())
+        $current_revenue = Consultation::join('appointments','consultations.app_id','=','appointments.id')
+            ->select(DB::raw('SUM(paid_amount) as current_revenue'))
+            ->whereDate('date',Carbon::today())
             ->first();
-        $monthly_revenue = Consultation::select(DB::raw('SUM(paid_amount) as monthly_revenue'))
-            ->whereMonth('created_at',Carbon::now()->month)
+        $monthly_revenue = Consultation::join('appointments','consultations.app_id','=','appointments.id')
+            ->select(DB::raw('SUM(paid_amount) as monthly_revenue'))
+            ->whereMonth('date',Carbon::now()->month)
             ->first();
 
         $total_medications = Medication::select(DB::raw('count(*) as total_medic'))
@@ -113,10 +115,11 @@ class DashboardController extends Controller
             ->get();
 
         //Charts.js
-        $last_revenue_month= Consultation::select(DB::raw('SUM(paid_amount) as day_revenue, DAY(created_at) as day_nbr, DAYNAME(created_at) as day_name, created_at'))
-                        ->where("created_at",">", Carbon::now()->subDay(15))
+        $last_revenue_month= Consultation::join('appointments','consultations.app_id','=','appointments.id')
+            ->select(DB::raw('SUM(paid_amount) as day_revenue, DAY(date) as day_nbr, DAYNAME(date) as day_name, date'))
+                        ->where("date",">", Carbon::now()->subDay(15))
                         ->groupBy("day_nbr")
-                        ->orderBy('created_at')
+                        ->orderBy('consultations.created_at')
                         ->get();
         $last_revenue_year= Consultation::select(DB::raw('SUM(paid_amount) as month_revenue, MONTH(created_at) as month_nbr, MONTHNAME(created_at) as month_name'))
             ->whereYear("created_at","=", Carbon::now()->year)

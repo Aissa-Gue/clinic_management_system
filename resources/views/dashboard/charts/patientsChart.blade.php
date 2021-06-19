@@ -7,7 +7,7 @@
     Chart.defaults.global.defaultFontColor = '#777';
 
     let massPopChart3 = new Chart(myChart3, {
-        type:'line', // bar, horizontalBar, pie, line, doughnut, radar, polarArea
+        type:'bar', // bar, horizontalBar, pie, line, doughnut, radar, polarArea
         data:{
             labels:[
                 @foreach($last_patients as $last_pat)

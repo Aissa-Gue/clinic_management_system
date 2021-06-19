@@ -3,7 +3,7 @@
     <div class="col-md-4 col-xl-3">
         <div class="card bg-c-blue order-card">
             <div class="card-block">
-                <h5 class="mb-3">Total Patients</h5>
+                <h5 class="mb-3">New Patients</h5>
                 <h2 class="text-end"><i class="fa fa-user-injured float-start"></i><span>{{$total_patients->total_patients}}</span></h2>
                 <p class="mb-0">This month<span class="float-end">{{$monthly_patients->monthly_patients}}</span></p>
             </div>

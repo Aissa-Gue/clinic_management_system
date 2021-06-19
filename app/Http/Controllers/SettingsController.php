@@ -44,11 +44,11 @@ class SettingsController extends Controller
         // drop all the data from the database (no need for doctrine)
         DB::statement("SET foreign_key_checks=0");
         $databaseName = DB::getDatabaseName();
-        $tables = DB::select("SELECT * FROM information_schema.tables WHERE table_schema = '$databaseName'");
+        $tables = DB::select("SELECT *  FROM information_schema.tables WHERE table_schema = '$databaseName'");
         foreach ($tables as $table) {
             $name = $table->TABLE_NAME;
             //if you don't want to truncate migrations, cities
-            if ($name == 'migrations' or $name == 'cities') {
+            if ($name == 'migrations' or $name == 'cities' or $name == 'users') {
                 continue;
             }
             DB::table($name)->truncate();
