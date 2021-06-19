@@ -1,7 +1,7 @@
 <script>
     let myChart3 = document.getElementById('patientsChart').getContext('2d');
 
-    // Global Options
+    //Global Options
     Chart.defaults.global.defaultFontFamily = 'Lato';
     Chart.defaults.global.defaultFontSize = 18;
     Chart.defaults.global.defaultFontColor = '#777';
