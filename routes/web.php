@@ -52,7 +52,10 @@ Route::get('appointments', '\App\Http\Controllers\AppointmentsController@showAll
 Route::get('appointments/{doc_id}', '\App\Http\Controllers\AppointmentsController@showSpeciality');
 
 Route::post('appointments/add_appointment', '\App\Http\Controllers\AppointmentsController@store');
+
+Route::get('appointments/update_appointment/{id}', '\App\Http\Controllers\AppointmentsController@getAvailableTimes');
 Route::post('appointments/update_appointment/{id}', '\App\Http\Controllers\AppointmentsController@update');
+
 Route::get('appointments/delete_appointment/{id}', '\App\Http\Controllers\AppointmentsController@destroy');
 
 

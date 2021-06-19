@@ -105,19 +105,41 @@ class AppointmentsController extends Controller
         }
     }
 
+    // Update appointment
+    public function getAvailableTimes(Request $req){
+        $agenda = DB::table('agendas')
+            ->WhereNotExists(function ($query) use ($req){
+                $query->select(DB::raw(1))
+                    ->from('appointments')
+                    ->whereColumn('appointments.time','=','agendas.time')
+                    ->where('doc_id','=',$req->doc_id)
+                    ->where('date', $req->app_date);
+            })
+            ->select('agendas.time')
+            ->get();
 
-    public function update($id,Request $req){
-        Appointment::where('id', $id)
+        return view('appointments.edit_appointment')
+            ->with('patient_name',$req->patient_name)
+            ->with('doc_id',$req->doc_id)
+            ->with('app_id',$req->app_id)
+            ->with('app_date',$req->app_date)
+            ->with('app_time',$req->app_time)
+            ->with('agenda',$agenda);
+    }
+
+    public function update(Request $req){
+
+        Appointment::where('id', $req->app_id)
             ->update([
-                'date' => $req->date,
-                'time' => $req->time
+                'date' => $req->app_date,
+                'time' => $req->app_time
             ]);
-        return redirect('appointments/'.$req->doctor_id);
+        return redirect('appointments/'.$req->doc_id);
     }
 
 
+    // Delete appointment
     public function destroy($id){
-
         //Delete prescription & certificate
         $pres_cert= Appointment::join('consultations','appointments.id','=','consultations.app_id')
             ->where('app_id', $id)

@@ -1,23 +1,33 @@
-<!-- START Modal Edit -->
-<div class="modal fade" id="editAppModal{{$app->id}}" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Edit appointment</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+@extends('layouts.master')
+
+@section('content')
+    <div class="alert alert-success text-center" role="alert">
+        <h5>Edit Appointment</h5>
+    </div>
+
+
+    <form action="/appointments/update_appointment/{{$app_id}}" method="post" class="col-md-9">
+        @csrf
+        <fieldset class="scheduler-border">
+            <legend class="scheduler-border bg-success">Appointment informations</legend>
+
+            <input type="hidden" name="doc_id" class="form-control mb-2" value="{{$doc_id}}">
+            <input type="hidden" name="app_id" class="form-control mb-2" value="{{$app_id}}">
+
+            <div class="col-md-5 mb-3 mt-5">
+                <label for="patient" class="form-label">Patient</label>
+                <input type="text" name="patient_name" class="form-control" value="{{$patient_name}}" readonly>
             </div>
-            <!-- Modal form -->
-            <form action="/appointments/update_appointment/{{$app->id}}" method="post" class="col-md-9">
-                @csrf
-                <div class="modal-body">
-                    <input type="text" name="patient_name" class="form-control mb-2" value="{{$app->patient->first_name}} {{$app->patient->last_name}}" readonly>
 
-                    <input type="hidden" name="doctor_id" class="form-control mb-2" value="{{$currentDoc->id}}">
+            <div class="row">
+                <div class="col-md-3 mb-3">
+                    <label for="patient" class="form-label">Date</label>
+                    <input type="date" name="app_date" class="form-control" value="{{$app_date}}" readonly>
+                </div>
 
-                    <input type="date" name="date" class="form-control mb-2" value="{{$app->date}}">
-
-                    <select name="time" class="form-select" id="time" required>
-                        <option value="{{$app->time}}">{{\Carbon\Carbon::parse($app->time)->format('H:i')}}</option>
+                <div class="col-md-3 mb-4">
+                    <label for="patient" class="form-label">Times</label>
+                    <select name="app_time" class="form-select" id="time" required>
                         @foreach($agenda as $tim)
                             <option value="{{$tim->time}}">
                                 {{\Carbon\Carbon::parse($tim->time)->format('H:i')}}
@@ -25,13 +35,10 @@
                         @endforeach
                     </select>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-success">Save changes</button>
-                </div>
-            </form>
-            <!-- END Modal form -->
-        </div>
-    </div>
-</div>
-<!-- END Modal Edit -->
+            </div>
+
+            <a href="{{URL('/appointments/'.$doc_id)}}" class="btn btn-secondary">Cancel</a>
+            <button type="submit" class="btn btn-success">Save changes</button>
+        </fieldset>
+    </form>
+@stop

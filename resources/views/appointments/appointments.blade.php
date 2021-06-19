@@ -132,7 +132,7 @@
                             </svg>
                         </a>
                     </td>
-                    @include('appointments.edit_appointment')
+                    @include('appointments.edit_app_modal')
                     @include('appointments.delete_appointment')
                 </tr>
             @endforeach
