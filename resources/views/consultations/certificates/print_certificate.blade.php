@@ -22,7 +22,7 @@ use Carbon\Carbon;
         </div>
         <div class="row text-center">
             <div class="col-sm-6">
-                <h5>DR: {{$cons->appointment->doctor->first_name}} {{$cons->appointment->doctor->last_name}}</h5>
+                <h6>DR: {{$cons->appointment->doctor->first_name}} {{$cons->appointment->doctor->last_name}}</h6>
                 <h6>Speciality of {{$cons->appointment->doctor->speciality}}</h6>
                 <h6><strong>Certificate N°: </strong>{{$certificate['id']}}</h6>
             </div>

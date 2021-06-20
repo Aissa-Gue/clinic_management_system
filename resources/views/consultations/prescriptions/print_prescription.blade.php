@@ -21,7 +21,7 @@ use Carbon\Carbon;
     </div>
     <div class="row text-center">
         <div class="col-sm-6">
-            <h5>DR: {{$currentCons->appointment->doctor->first_name}} {{$currentCons->appointment->doctor->last_name}}</h5>
+            <h6>DR: {{$currentCons->appointment->doctor->first_name}} {{$currentCons->appointment->doctor->last_name}}</h6>
             <h6>Speciality of {{$currentCons->appointment->doctor->speciality}}</h6>
             <h6><strong>Prescription N°: </strong>{{$prescription['pres_id']}}</h6>
         </div>

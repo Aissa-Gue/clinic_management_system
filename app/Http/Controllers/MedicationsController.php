@@ -96,27 +96,38 @@ class MedicationsController extends Controller
     }
 
     public function destroy($id){
-        //Delete medication
-        Medication::where('id', $id)->delete();
+        //Test existence of medication in prescription
+        $pres_medic_list = Prescriptions_medications::where('medic_id',$id)->get();
+        if(!$pres_medic_list->isEmpty() and Request('confirm') != "ok"){
+            $notification= "Be Careful ! This medication exist in a prescription if you delete it, it will be deleted from the prescription also !";
+            return $this->show($id)->with('notification',$notification);
 
-        // if all medications of prescription deleted (empty prescription) -> delete prescription;
-        $pres_medics= Prescription::leftJoin('Prescriptions_medications','prescriptions.id','=','Prescriptions_medications.pres_id')
-            ->select('prescriptions.id',DB::raw('SUM(Prescriptions_medications.created_at) as medics_count'))
-            ->groupBy('prescriptions.id')
-            ->get();
+        }else{ //medication doesn't exist in a prescription
 
-        foreach ($pres_medics as $data){
-            if($data->medics_count == null){
-                //Set consultation pres_id to null
-                Consultation::where('pres_id',$data->pres_id)->update([
-                    'pres_id' => null
-                ]);
+            //Delete medication
+            Medication::where('id', $id)->delete();
 
-                // Delete prescription
-                Prescription::where('id',$data->id)->delete();
+            // if all medications of prescription deleted (empty prescription) -> delete prescription;
+            $pres_medics= Prescription::leftJoin('Prescriptions_medications','prescriptions.id','=','Prescriptions_medications.pres_id')
+                ->select('prescriptions.id',DB::raw('SUM(Prescriptions_medications.created_at) as medics_count'))
+                ->groupBy('prescriptions.id')
+                ->get();
+
+            foreach ($pres_medics as $data){
+                if($data->medics_count == null){
+                    //Set consultation pres_id to null
+                    Consultation::where('pres_id',$data->pres_id)->update([
+                        'pres_id' => null
+                    ]);
+
+                    // Delete prescription
+                    Prescription::where('id',$data->id)->delete();
+                }
             }
-        }
 
-        return redirect('medications');
+            return redirect('medications');
+        }
     }
+
+
 }

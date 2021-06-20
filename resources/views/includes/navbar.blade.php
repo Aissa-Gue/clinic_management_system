@@ -22,7 +22,7 @@
                             </a>
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item" href="{{Route('account')}}"><i class="fas fa-user-circle"></i> Profile</a></li>
-                                <li><a class="dropdown-item" href="#"><i class="fas fa-envelope"></i> Messages</a></li>
+                                <li><a class="dropdown-item" href="{{URL('/')}}"><i class="fas fa-home"></i> Home</a></li>
 
                                 <li>
                                     <a href="" class="dropdown-item" onclick="event.preventDefault();document.getElementById('logout-form').submit();"><i class="fas fa-sign-out-alt"></i> Logout</a>

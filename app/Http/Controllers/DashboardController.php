@@ -168,7 +168,7 @@ class DashboardController extends Controller
         $times_count = Agenda::select(DB::raw('COUNT(*) as times_count'))->first();
         $active_app = User::leftJoin('appointments','users.id','=','appointments.doc_id')
             ->where('users.id','>',2)
-            ->select('users.id','first_name','last_name','speciality',DB::raw('SUM(date = CURDATE()) as active_app'))
+            ->select('doc_id','first_name','last_name','speciality',DB::raw('SUM(date = CURDATE()) as active_app'))
             ->groupBy('doc_id')
             ->get();
 

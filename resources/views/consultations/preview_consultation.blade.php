@@ -80,16 +80,16 @@
                     <dt class="col-md-2">Diabetes:</dt>
                     <dd class="col-md-4">{{$cons->appointment->patient->diabetes}}</dd>
 
-                    <dt class="col-md-2">Temperature (°C):</dt>
-                    <dd class="col-md-4">{{$cons->temperature}}</dd>
+                    <dt class="col-md-2">Temperature:</dt>
+                    <dd class="col-md-4">{{$cons->temperature}} °C</dd>
                 </dl>
 
                 <dl class="row">
-                    <dt class="col-md-2">Length (Cm):</dt>
-                    <dd class="col-md-4">{{$cons->length}}</dd>
+                    <dt class="col-md-2">Length:</dt>
+                    <dd class="col-md-4">{{$cons->length}} Cm</dd>
 
-                    <dt class="col-md-2">Weight (Kg):</dt>
-                    <dd class="col-md-4">{{$cons->weight}}</dd>
+                    <dt class="col-md-2">Weight:</dt>
+                    <dd class="col-md-4">{{$cons->weight}} Kg</dd>
                 </dl>
 
 
