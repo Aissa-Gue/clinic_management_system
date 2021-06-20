@@ -24,7 +24,6 @@
                 <th scope="col">Id</th>
                 <th scope="col">Commercial name</th>
                 <th scope="col">Scientific name</th>
-                <th scope="col">Description</th>
                 <th scope="col" class="text-center">Preview</th>
                 <th scope="col" class="text-center">Edit</th>
                 <th scope="col" class="text-center">Delete</th>
@@ -44,7 +43,6 @@
                 <th scope="row">{{$med->id}}</th>
                 <td>{{$med->commercial_name}}</td>
                 <td>{{$med->scientific_name}}</td>
-                <td >{{$med->description}}</td>
                 <td class="text-center">
                     <a class="btn btn-outline-success" href="/medications/preview_medication/{{$med->id}}">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
