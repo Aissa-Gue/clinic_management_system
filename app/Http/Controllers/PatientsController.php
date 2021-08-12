@@ -27,7 +27,7 @@ class PatientsController extends Controller
 
         $patient = Patient::where('first_name','LIKE','%'.$first_name.'%')
             ->where('last_name','LIKE','%'.$last_name.'%')
-            ->paginate(90);
+            ->get();
         return view('patients.patients')->with('patient',$patient);
     }
 
